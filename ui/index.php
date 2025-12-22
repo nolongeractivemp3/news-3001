@@ -1,35 +1,30 @@
 <head>
     <link rel="stylesheet" href="css/pico.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    <table id="newsTable">
-        <thead>
-            <tr style="display: relative;">
-                <th style="width: 5%;">Source</th>
-                <th style="width: 20%;">Title</th>
-                <th style="">Description</th>
-                <th style="width: 3%;">Link</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $response = file_get_contents("http://backend:5000");
+    <main class="container">
+        <?php
+        $response = file_get_contents("http://backend:5000");
+        $news = json_decode($response, true);
 
-            $news = json_decode($response, true);
-            foreach ($news as $item) {
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($item["source"]) . "</td>";
-                echo "<td style='font-weight: bold;'>" .
-                    htmlspecialchars($item["title"]) .
-                    "</td>";
-                echo "<td>" . htmlspecialchars($item["description"]) . "</td>";
-                echo '<td><a style="scale: 80%;" role="button" href="' .
-                    htmlspecialchars($item["link"]) .
-                    '">Link</a></td>';
-                echo "</tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+        foreach ($news as $item) {
+            echo "<article>";
+            echo "<header>";
+            echo "<strong>" . htmlspecialchars($item["source"]) . "</strong>";
+            echo "</header>";
+
+            echo "<h5>" . htmlspecialchars($item["title"]) . "</h5>";
+            echo "<p>" . htmlspecialchars($item["description"]) . "</p>";
+
+            echo "<footer>";
+            echo '<a href="' .
+                htmlspecialchars($item["link"]) .
+                '" role="button" class="outline">Read More</a>';
+            echo "</footer>";
+            echo "</article>";
+        }
+        ?>
+    </main>
 
 </body>
