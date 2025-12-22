@@ -7,21 +7,42 @@ app = Flask(__name__)
 flask_cors.CORS(app)
 
 
-@app.route("/")
-def index():
-    data = []
+class News:
+    def __init__(self, source, title, description, link):
+        self.source = source
+        self.title = title
+        self.description = description
+        self.link = link
 
-    raw_datas = open("/app/data/news_data.json", "r").read()
+    def tojson(self):
+        return {
+            "source": self.source,
+            "title": self.title,
+            "description": self.description,
+            "link": self.link,
+        }
+
+
+def get_news(path) -> list[News]:
+    data = []
+    raw_datas = open(path, "r").read()
     print(json.loads(raw_datas))
     for raw_data in json.loads(raw_datas):
         title = raw_data["title"]
         description = raw_data["snippet"]
         link = raw_data["link"]
         source = raw_data["source"]
-        data.append(
-            {"source": source, "title": title, "description": description, "link": link}
-        )
+        data.append(News(source, title, description, link))
     return data
+
+
+data = get_news("/app/data/news_data.json")
+json_data = [news.tojson() for news in data]
+
+
+@app.route("/")
+def index():
+    return json_data
 
 
 # run server
