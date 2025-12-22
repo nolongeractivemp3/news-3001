@@ -19,7 +19,7 @@ searchy = search(params)
 results = searchy.as_dict()
 
 organic_results = results.get("organic_results", [])
-with open("../data/news_data.json", "w", encoding="utf-8") as f:
+with open("/news3001/data/news_data.json", "w", encoding="utf-8") as f:
     json.dump(organic_results, f, indent=4, ensure_ascii=False)
 
 print(f"Successfully saved {len(organic_results)} articles.")
