@@ -1,0 +1,29 @@
+services:
+  php_app:
+    image: php:8.3-fpm
+    volumes:
+      - ./ui:/var/www/html
+
+  nginx_server:
+    image: nginx:alpine
+    ports:
+      - "80:80" # Opens the server to the world
+    volumes:
+      - ./ui:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  backend:
+    build: ./server
+    command: uv run server.py # Change this from uvicorn to your filenam
+    volumes:
+      - ./data:/app/data # Shared folder
+    restart: always
+
+  scraper:
+    build: ./server
+    command: uv run python scrape.py
+    volumes:
+      - ./data:/app/data # Shared folder
+    profiles: ["tools"]
+
+volumes:
+  data_share: # This creates the persistent shared space1
