@@ -17,9 +17,9 @@
         <?php
         $response = file_get_contents("http://backend:5000");
         $news = json_decode($response, true);
-        echo "<div class='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'>";
+        echo "<div class='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4' >";
         foreach ($news as $item) {
-            echo "<div class='card bg-base-100 shadow-sm min-w-0'>";
+            echo "<div class='card bg-base-100 shadow-sm min-w-0'style='background-color: #3B4754;'>";
             echo "<div class='card-body'>";
             echo "<h2 class='card-title'>" .
                 htmlspecialchars($item["source"]) .
