@@ -3,6 +3,8 @@ import json
 import flask_cors
 from flask import Flask
 
+from openrouter import openrouter_client
+
 app = Flask(__name__)
 flask_cors.CORS(app)
 
@@ -36,6 +38,33 @@ def get_news(path) -> list[News]:
     return data
 
 
+def getreport():
+    api_key = (
+        "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"
+    )
+    system = """
+    You are a News reporter you get some news and you should write a german report about what happend in kopenick.
+    """
+    prompt = ""
+    for data in get_news("/app/data/news_data.json"):
+        prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
+
+    # Cache the response to avoid repeated API calls for the same data
+    cache_file = "/app/data/chache/report_cache.json"
+    try:
+        with open(cache_file, "r") as f:
+            cached_response = json.load(f)
+        return cached_response
+    except (FileNotFoundError, json.JSONDecodeError):
+        response = openrouter_client.query_openrouter(
+            query=prompt, api_key=api_key, system_prompt=system
+        )
+        # Cache the new response
+        with open(cache_file, "w") as f:
+            json.dump(response, f)
+        return response
+
+
 data = get_news("/app/data/news_data.json")
 json_data = [news.tojson() for news in data]
 
@@ -43,6 +72,13 @@ json_data = [news.tojson() for news in data]
 @app.route("/")
 def index():
     return json_data
+
+
+@app.route("/report")
+def report():
+    report = getreport()
+    print(report)
+    return report
 
 
 # run server

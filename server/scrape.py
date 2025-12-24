@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 
 from serpapi import search
 
@@ -54,3 +55,5 @@ with open(path, "w", encoding="utf-8") as f:
     json.dump(nicedata, f, indent=4, ensure_ascii=False)
 
 # print(f"Successfully saved {len(organic_results)} articles.")
+
+os.system("rm -rf /news3001/data/chache/report_cache.json")
