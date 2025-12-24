@@ -39,16 +39,6 @@ def get_news(path) -> list[News]:
 
 
 def getreport():
-    api_key = (
-        "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"
-    )
-    system = """
-    You are a News reporter you get some news and you should write a german report about what happend in kopenick.
-    """
-    prompt = ""
-    for data in get_news("/app/data/news_data.json"):
-        prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
-
     # Cache the response to avoid repeated API calls for the same data
     cache_file = "/app/data/chache/report_cache.json"
     try:
@@ -56,6 +46,21 @@ def getreport():
             cached_response = json.load(f)
         return cached_response
     except (FileNotFoundError, json.JSONDecodeError):
+        api_key = (
+            "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"
+        )
+        system = """
+    You are a News reporter you get some news and you should write a german report about what happend in kopenick.
+    Please keep your report short and concise.
+    Please respond with markdown.
+    only include a short summary of the news.
+    shouldent be longer than 1 min to read.
+    Keep the language simple and easy to understand but a bit jokey with a touch of humor.
+    be a bit left leaning and sarcastic.
+    """
+        prompt = ""
+        for data in get_news("/app/data/news_data.json"):
+            prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
         response = openrouter_client.query_openrouter(
             query=prompt, api_key=api_key, system_prompt=system
         )
