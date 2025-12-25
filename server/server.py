@@ -52,7 +52,7 @@ def getreport():
         system = """
     You are a News reporter you get some news and you should write a german report about what happend in kopenick.
     Please keep your report short and concise.
-    Please respond with markdown.
+    Please respond with formatted markdown with not too long lines.
     only include a short summary of the news.
     shouldent be longer than 1 min to read.
     Keep the language simple and easy to understand but a bit jokey with a touch of humor.
