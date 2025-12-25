@@ -62,7 +62,10 @@ def getreport():
         for data in get_news("/app/data/news_data.json"):
             prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
         response = openrouter_client.query_openrouter(
-            query=prompt, api_key=api_key, system_prompt=system
+            query=prompt,
+            api_key=api_key,
+            system_prompt=system,
+            model="nex-agi/deepseek-v3.1-nex-n1:free",
         )
         # Cache the new response
         with open(cache_file, "w") as f:
