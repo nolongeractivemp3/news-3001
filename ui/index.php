@@ -67,9 +67,8 @@
             <form method="dialog">
               <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-primary">✕</button>
             </form>
-                <article id="ReportContent" class="prose prose-invert prose-sm md:prose-lg max-w-none text-left">
-                </article>
-            </div>
+            <article id="ReportContent" class="prose prose-invert prose-sm md:prose-lg max-w-none text-left break-words overflow-x-hidden">
+            </article>            </div>
           <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
             <button>close</button>
           </form>
