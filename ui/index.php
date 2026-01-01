@@ -30,13 +30,16 @@
     </script>
     <style>
     #Report {
-      display: none; /* Keep this for logic */
-      opacity: 0;
-      position: absolute;
-      top: 5%;
-      left: 5%;
-      z-index: 9999;
-      width: 90%;
+      /* Remove the top/left/transform mess */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;      width: 90%;
       background-color: #3B4754;
       font-size: 28px;
       transform: translate(-50%, -50%) scale(0.9) translateY(20px);
