@@ -43,7 +43,7 @@ def getreport():
     be a bit left leaning and sarcastic.
     """
         prompt = ""
-        for data in get_news("/app/data/news_data.json"):
+        for data in get_news():
             prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
         response = openrouter_client.query_openrouter(
             query=prompt,
