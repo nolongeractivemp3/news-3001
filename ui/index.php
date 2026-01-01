@@ -63,20 +63,17 @@
 
 
         <dialog id="report_modal" class="modal">
-          <div class="modal-box w-11/12 max-w-3xl border border-primary/20 bg-neutral shadow-2xl">
+            <div class="modal-box w-full md:w-11/12 max-w-3xl border border-primary/20 bg-neutral shadow-2xl p-4 md:p-6">
             <form method="dialog">
               <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-primary">✕</button>
             </form>
-
-            <article id="ReportContent" class="prose prose-invert prose-lg max-w-none text-left">
+                <article id="ReportContent" class="prose prose-invert prose-sm md:prose-lg max-w-none text-left">
                 </article>
-          </div>
+            </div>
           <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
             <button>close</button>
           </form>
         </dialog>
-          </div>
-        </div>
         <div hx-get="/card.php" hx-trigger="load" hx-target="#news"></div>
         <div id='news'></div>
         </main>
