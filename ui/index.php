@@ -28,56 +28,15 @@
         document.getElementById("report_modal").showModal();
     }
     </script>
-    <style>
-    #Report {
-      /* Remove the top/left/transform mess */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;      width: 90%;
-      background-color: #3B4754;
-      font-size: 28px;
-      transform: translate(-50%, -50%) scale(0.9) translateY(20px);
-      transition: all 0.3s ease-out;
-    }
 
-    #Report.active {
-      display: block; /* Show it */
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-    </style>
     <main class="p-4">
-        <div class="navbar bg-base-100 shadow-sm">
-            <div class="navbar-start">
-                <a class="btn btn-ghost normal-case text-xl">News</a>
-            </div>
-            <div class="navbar-end">
-                <button class="btn btn-primary" onclick="getReport()">
-                    Get Report
-                </button>
-            </div>
-        </div>
 
-
-        <dialog id="report_modal" class="modal">
-            <div class="modal-box w-full md:w-11/12 max-w-3xl border border-primary/20 bg-neutral shadow-2xl p-4 md:p-6">
-            <form method="dialog">
-              <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-primary">✕</button>
-            </form>
-            <article id="ReportContent" class="prose prose-invert prose-sm md:prose-lg max-w-none text-left break-words overflow-x-hidden">
-            </article>            </div>
-          <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
-            <button>close</button>
-          </form>
-        </dialog>
-        <div hx-get="/card.php" hx-trigger="load" hx-target="#news"></div>
+        <div hx-get="components/navbar.php" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/card.php" hx-trigger="load" hx-target="#news"></div>
+        <div hx-get="components/report.php" hx-trigger="load" hx-target="#report"></div>
+        <div id="navbar"> </div>
         <div id='news'></div>
+        <div id="report"> </div>
         </main>
 
 </body>
