@@ -4,7 +4,7 @@ from sqlite3.dbapi2 import Time
 import feedparser
 from bs4 import BeautifulSoup as bs
 
-from objects import News
+from myclasses import News
 
 url = "https://www.google.de/alerts/feeds/17016683277093386427/7293694784079144231"
 
@@ -35,6 +35,7 @@ def get_rss_feed() -> list[News]:
                     bs(rawnews[i].title, "html.parser").get_text(),
                     bs(rawnews[i].content[0]["value"], "html.parser").get_text(),
                     rawnews[i].link,
+                    rawnews[i].published,
                 )
             )
         print(rawnews[i])

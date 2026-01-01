@@ -1,6 +1,6 @@
-def main():
-    print("Hello from server!")
-
+from db import CRUD
+from myclasses import News
 
 if __name__ == "__main__":
-    main()
+    database = CRUD.connection("http://localhost:8080")
+    database.get_news_from_day("")

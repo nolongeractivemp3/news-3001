@@ -2,13 +2,19 @@ import datetime
 import json
 import os
 
+#
 from serpapi import search
 
+#
+import myclasses
+from db import CRUD
 from openrouter import openrouter_client
 
-day = int(datetime.datetime.now().strftime("%d")) - 1
-date = datetime.datetime.now().strftime("%Y-%m-") + str(day)
-query = f"köpenick news after:{date}"
+database = CRUD.connection("http://localhost:8080")
+#
+yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+date = datetime.datetime.now().strftime("%Y-%m-%d")
+query = f"köpenick news after:{yesterdate}"
 params = {
     "api_key": "a1f2e133812cbca2dde9173b10d00aed814a914762efb200e568625feccab514",
     "engine": "google",
@@ -23,14 +29,8 @@ print(query)
 # 1. Fetch data
 searchy = search(params)
 results = searchy.as_dict()
-path = "/news3001/data/news_data.json"
-# local
-# path = "../data/news_data.json"
-organic_results = results.get("organic_results", [])
-with open(path, "w", encoding="utf-8") as f:
-    json.dump(organic_results, f, indent=4, ensure_ascii=False)
-savedresponse = open(path, "r", encoding="utf-8")
-data = json.load(savedresponse)
+savedresponse = results.get("organic_results", [])
+
 api_key = "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"
 querry = """You are a News expert.
 Following is the description and link of the website.
@@ -40,7 +40,8 @@ Please respond with Smart if
 2. the website is about Köpenick or the wider area like Treptow around it.
 """
 nicedata = []
-for item in data:
+ids = []
+for item in savedresponse:
     # print(f"Description: {item['snippet']} Link: {item['link']}")
     response = openrouter_client.query_openrouter(
         f"Description: {item['snippet']} Link: {item['link']}",
@@ -50,9 +51,20 @@ for item in data:
     if response == "Smart":
         nicedata.append(item)
 
+    news = myclasses.News(
+        source=item["source"],
+        title=item["title"],
+        description=item["snippet"],
+        link=item["link"],
+        date=date,
+    )
+    ids.append(database.save_news(news))
 
-with open(path, "w", encoding="utf-8") as f:
-    json.dump(nicedata, f, indent=4, ensure_ascii=False)
+news = myclasses.Day(
+    date=date,
+    NewsIds=ids,
+)
+database.save_day(news)
 
 # print(f"Successfully saved {len(organic_results)} articles.")
 

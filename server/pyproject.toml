@@ -10,6 +10,7 @@ dependencies = [
     "flask>=3.1.2",
     "flask-cors>=6.0.2",
     "openai>=2.14.0",
+    "pocketbase>=0.15.0",
     "serpapi>=0.1.5",
     "uvicorn>=0.40.0",
 ]

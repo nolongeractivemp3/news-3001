@@ -7,8 +7,8 @@ $news = json_decode($response, true);
     <div class='card bg-base-100 shadow-sm min-w-0' style='background-color: #3B4754;'>
         <div class='card-body'>
             <h2 class='card-title'><?php echo $item["title"]; ?></h2>
-            <p><?php echo $item["description"]; ?></p>
             <p><?php echo $item["source"]; ?></p>
+            <p><?php echo $item["description"]; ?></p>
             <div class='card-actions justify-end'>
                 <button class="btn btn-primary">
                     <a target="_blank" href="<?php echo htmlspecialchars(

@@ -1,26 +1,23 @@
+import datetime
 import json
 
 import flask_cors
 from flask import Flask
 
 import rss
-from objects import News
+from db import CRUD
+from myclasses import News
 from openrouter import openrouter_client
+
+database = CRUD.connection("http://pocketbase:8080")
 
 app = Flask(__name__)
 flask_cors.CORS(app)
 
 
-def get_news(path) -> list[News]:
-    data = []
-    raw_datas = open(path, "r").read()
-    print(json.loads(raw_datas))
-    for raw_data in json.loads(raw_datas):
-        title = raw_data["title"]
-        description = raw_data["snippet"]
-        link = raw_data["link"]
-        source = raw_data["source"]
-        data.append(News(source, title, description, link))
+def get_news() -> list[News]:
+    data = database.get_news_from_day(datetime.datetime.now().strftime("%Y-%m-%d"))
+    print(data)
     data = data + rss.get_rss_feed()
     return data
 
@@ -62,6 +59,8 @@ def getreport():
 
 @app.route("/")
 def index():
+    data = get_news()
+    json_data = [news.tojson() for news in data]
     return json_data
 
 
@@ -73,8 +72,5 @@ def report():
 
 
 if __name__ == "__main__":
-    data = get_news("/app/data/news_data.json")
-    json_data = [news.tojson() for news in data]
-
     # run server
     app.run(host="0.0.0.0", port=5000)
