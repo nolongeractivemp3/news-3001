@@ -13,7 +13,7 @@ $news = json_decode($response, true);
                 <button class="btn btn-primary">
                     <a target="_blank" href="<?php echo htmlspecialchars(
                         $item["link"],
-                    ); ?>">Read More</a>
+                    ); ?>">Mehr lesen</a>
                 </button>
             </div>
         </div>

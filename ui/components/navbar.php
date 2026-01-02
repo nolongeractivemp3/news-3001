@@ -4,7 +4,7 @@
     </div>
     <div class="navbar-end">
         <button class="btn btn-primary" onclick="getReport()">
-            Get Report
+           Zusammenfassung
         </button>
     </div>
 </div>
