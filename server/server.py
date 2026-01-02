@@ -17,8 +17,8 @@ flask_cors.CORS(app)
 
 def get_news() -> list[News]:
     data = database.get_news_from_day(datetime.datetime.now().strftime("%Y-%m-%d"))
-    print(data)
     data = data + rss.get_rss_feed()
+
     return data
 
 
@@ -36,7 +36,7 @@ def getreport():
         system = """
     You are a News reporter you get some news and you should write a german report about what happend in kopenick.
     Please keep your report short and concise.
-    Please respond with formatted markdown with not too long lines.
+    Please respond with simple html only using things like h1, h2, h3 strong p img (img only if you must im not sure it works) with not too long lines.
     only include a short summary of the news.
     shouldent be longer than 1 min to read.
     Keep the language simple and easy to understand but a bit jokey with a touch of humor.

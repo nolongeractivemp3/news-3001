@@ -12,5 +12,6 @@ dependencies = [
     "openai>=2.14.0",
     "pocketbase>=0.15.0",
     "serpapi>=0.1.5",
+    "tldextract>=5.3.1",
     "uvicorn>=0.40.0",
 ]

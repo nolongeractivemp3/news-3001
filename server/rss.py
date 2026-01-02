@@ -2,6 +2,7 @@ import datetime
 from sqlite3.dbapi2 import Time
 
 import feedparser
+import tldextract
 from bs4 import BeautifulSoup as bs
 
 from myclasses import News
@@ -31,7 +32,7 @@ def get_rss_feed() -> list[News]:
         if check_date(rawnews[i].published):
             news.append(
                 News(
-                    "RSS feed",
+                    str(tldextract.extract(rawnews[i].link).domain.capitalize()),
                     bs(rawnews[i].title, "html.parser").get_text(),
                     bs(rawnews[i].content[0]["value"], "html.parser").get_text(),
                     rawnews[i].link,

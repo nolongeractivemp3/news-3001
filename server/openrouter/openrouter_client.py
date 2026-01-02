@@ -1,3 +1,4 @@
+from http.client import PRECONDITION_FAILED
 from typing import Optional
 
 from openai import OpenAI
@@ -27,15 +28,17 @@ def query_openrouter(
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key,
     )
-
+    if not system_prompt:
+        system_prompt = "You are a helpful assistant."
     extra_headers = {}
     if site_name:
         extra_headers["X-Title"] = site_name
 
-    messages = [{"role": "user", "content": query}]
-    if system_prompt:
-        messages.insert(0, {"role": "system", "content": system_prompt})
-
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": query},
+    ]
+    print(messages)
     completion = client.chat.completions.create(
         extra_headers=extra_headers,
         extra_body={},
