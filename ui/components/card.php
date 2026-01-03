@@ -1,5 +1,6 @@
 <?php
-$response = file_get_contents("http://backend:5000");
+$mode = $_GET["domain"] ?? "";
+$domain = $response = file_get_contents("http://backend:5000/" . $mode);
 $news = json_decode($response, true);
 ?>
 <div class='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'>

@@ -1,5 +1,6 @@
 <?php
-$reportstr = file_get_contents("http://backend:5000/report");
+$name = $_GET["name"];
+$reportstr = $_GET["textstr"];
 ?>
 
 <style>
@@ -23,7 +24,7 @@ h3 {
 
 </style>
 
-<dialog id="report_modal" class="modal block overflow-y-auto bg-black/60 backdrop-blur-sm">
+<dialog id="<?php echo $name; ?>" class="modal block overflow-y-auto bg-black/60 backdrop-blur-sm">
   <div class="relative w-[95%] max-w-3xl my-8 mx-auto border border-primary/20 bg-neutral shadow-2xl p-6 rounded-2xl">
 
     <form method="dialog">
