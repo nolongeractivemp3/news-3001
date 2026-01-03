@@ -5,7 +5,7 @@ $rss = $_GET["rss"]; ?>
     <div class="navbar-start">
         <a href="/" class="btn btn-ghost normal-case text-xl">News</a>
         <a href="rss.php" class="btn btn-ghost normal-case ">RSS</a>
-        <?php if ($rss): ?>
+        <?php if ($rss == "true"): ?>
             <a onclick="getExplanation()" class="btn btn-ghost small">?</a>
         <?php endif; ?>
     </div>
