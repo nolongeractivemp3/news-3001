@@ -5,6 +5,7 @@ from serpapi import search
 import myclasses
 from db import CRUD
 from openrouter import openrouter_client
+from server import get_news
 
 
 def create_and_save_report(db: CRUD.connection):
@@ -22,7 +23,7 @@ def create_and_save_report(db: CRUD.connection):
     be a bit left leaning and sarcastic."""
     prompt = ""
     print("found news")
-    for data in get_news(db):
+    for data in get_news(database):
         prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
     response = openrouter_client.query_openrouter(
         query=prompt,
@@ -84,7 +85,8 @@ for item in savedresponse:
     )
     ids.append(database.save_news(news))
 
-report_id = report.create_and_save_report(database)
+report_id = create_and_save_report(database)
+
 print(report_id)
 news = myclasses.Day(date=date, NewsIds=ids, Report=report_id)
 
