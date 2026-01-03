@@ -1,2 +1,6 @@
 data/news_data.json
 data/news_data.json
+pb_data/
+server/__pycache__
+server/db/__pycache__/
+server/openrouter/__pycache__/

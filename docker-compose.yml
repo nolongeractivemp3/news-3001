@@ -14,16 +14,13 @@ services:
   backend:
     build: ./server
     command: uv run server.py # Change this from uvicorn to your filenam
-    volumes:
-      - ./data:/app/data # Shared folder
     restart: always
 
   scraper:
     build: ./server
     command: uv run python scrape.py
-    volumes:
-      - ./data:/app/data # Shared folder
     profiles: ["tools"]
+
   pocketbase:
     image: ghcr.io/muchobien/pocketbase:latest
     ports:

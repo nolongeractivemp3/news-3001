@@ -1,4 +1,3 @@
-from http.client import PRECONDITION_FAILED
 from typing import Optional
 
 from openai import OpenAI
