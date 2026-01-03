@@ -1,10 +1,11 @@
 class News:
-    def __init__(self, source, title, description, link, date):
+    def __init__(self, source, title, description, link, date, full_content=None):
         self.source = source
         self.title = title
         self.description = description
         self.link = link
         self.date = date
+        self.full_content = full_content
 
     def tojson(self):
         return {
@@ -13,6 +14,7 @@ class News:
             "description": self.description,
             "link": self.link,
             "date": self.date,
+            "full_content": self.full_content,
         }
 
     def todict(self):
@@ -22,6 +24,7 @@ class News:
             "description": self.description,
             "link": self.link,
             "date": self.date,
+            "full_content": self.full_content,
         }
 
 

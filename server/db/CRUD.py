@@ -32,6 +32,9 @@ class connection:
             rawnews.description,
             rawnews.link,
             rawnews.date,
+            # getattr safely gets attribute or returns None if it doesn't exist
+            # (for backwards compatibility with old records without full_content)
+            getattr(rawnews, "full_content", None),
         )
 
     def get_news(
@@ -53,6 +56,8 @@ class connection:
                     rawnew.description,
                     rawnew.link,
                     rawnew.date,
+                    # getattr: safely returns None for old records without full_content
+                    getattr(rawnew, "full_content", None),
                 )
             )
 
