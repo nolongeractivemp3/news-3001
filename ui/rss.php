@@ -31,7 +31,7 @@
             file_get_contents("http://backend:5000/report"),
         ); ?>" hx-trigger="load" hx-target="#report"></div>
         <div hx-get="components/report.php?name=rssexplanation&textstr=<?php echo urlencode(
-            "<p>RSS liefert Nachrichten schneller in Echtzeit, wird jedoch nicht gefiltert und enthält keine Zusammenfassungen (vielleicht später wenn ich mehr lust darauf habe ;) </p>",
+            "<p>RSS liefert Nachrichten schneller in Echtzeit, werden aber nicht gefiltert und sind nicht in der Zusammenfassung. (vielleicht später wenn ich mehr lust darauf habe ;) </p>",
         ); ?>" hx-trigger="load" hx-target="#rss"></div>
 
         <div id="navbar"> </div>

@@ -48,7 +48,8 @@ Please respond with Smart if
 """
     response = openrouter_client.query_openrouter(
         f"Description: {snippet} Link: {link}",
-        api_key,
+        model="nex-agi/deepseek-v3.1-nex-n1:free",
+        api_key=api_key,
         system_prompt=system_prompt,
     )
     return response.strip() == "Smart"
