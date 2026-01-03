@@ -22,7 +22,7 @@
     </script>
 
     <main class="p-4">
-        <div hx-get="components/navbar.php" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/navbar.php?rss=false" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/card.php" hx-trigger="load" hx-target="#news"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
             file_get_contents("http://backend:5000/report"),
