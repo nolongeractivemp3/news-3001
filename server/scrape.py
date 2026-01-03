@@ -36,7 +36,7 @@ def create_and_save_report(db: CRUD.connection):
     #
 
 
-database = CRUD.connection("http://localhost:8080")
+database = CRUD.connection("http://pocketbase:8080")
 yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 date = datetime.datetime.now().strftime("%Y-%m-%d")
 query = f"köpenick news after:{yesterdate}"
