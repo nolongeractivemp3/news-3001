@@ -17,9 +17,12 @@ class connection:
     def save_day(self, day: myclasses.Day) -> str:
         return (
             self.client.collection("days")
-            .create({"date": day.date, "News": day.NewsIds})
+            .create({"date": day.date, "News": day.NewsIds, "Report": day.Report})
             .id
         )
+
+    def create_report(self, report: myclasses.Report) -> str:
+        return self.client.collection("report").create({"text": report.Summary}).id
 
     def get_news_from_id(self, id: str) -> myclasses.News:
         rawnews = self.client.collection("news").get_one(id)
@@ -55,6 +58,16 @@ class connection:
 
             print(rawnew.source)
         return news
+
+    def get_todays_report(self) -> myclasses.Report:
+        reportid = (
+            self.client.collection("days")
+            .get_list(1, query_params={"sort": "-date"})
+            .items[0]
+            .report
+        )
+        report = self.client.collection("report").get_one(reportid)
+        return myclasses.Report(report.text)
 
     def get_news_from_day(self, date: str) -> list[myclasses.News]:
         rawday = self.client.collection("days").get_full_list(

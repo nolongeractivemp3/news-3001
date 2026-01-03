@@ -1,17 +1,12 @@
 import datetime
-import json
-import os
 
-#
 from serpapi import search
 
-#
 import myclasses
 from db import CRUD
-from openrouter import openrouter_client
+from openrouter import openrouter_client, report
 
 database = CRUD.connection("http://localhost:8080")
-#
 yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 date = datetime.datetime.now().strftime("%Y-%m-%d")
 query = f"köpenick news after:{yesterdate}"
@@ -60,12 +55,14 @@ for item in savedresponse:
     )
     ids.append(database.save_news(news))
 
-news = myclasses.Day(
-    date=date,
-    NewsIds=ids,
-)
+report_id = report.create_and_save_report(database)
+print(report_id)
+news = myclasses.Day(date=date, NewsIds=ids, Report=report_id)
+
 database.save_day(news)
 
-# print(f"Successfully saved {len(organic_results)} articles.")
+# Generate and save the report
 
-os.system("rm -rf /news3001/data/chache/report_cache.json")
+print(
+    f"Successfully saved {len(nicedata)} articles from {len(savedresponse)} total results."
+)

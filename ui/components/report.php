@@ -1,3 +1,7 @@
+<?php
+$reportstr = file_get_contents("http://backend:5000/report");
+?>
+
 <style>
 h1 {
  font-size: 1rem;

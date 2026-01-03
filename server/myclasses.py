@@ -25,19 +25,27 @@ class News:
         }
 
 
+class Report:
+    def __init__(self, Summary: str):
+        self.Summary: str = Summary
+
+
 class Day:
-    def __init__(self, date, NewsIds):
+    def __init__(self, date, NewsIds, Report: str):
         self.date = date
         self.NewsIds = NewsIds
+        self.Report: str = Report
 
     def tojson(self):
         return {
             "date": self.date,
             "News": self.NewsIds,
+            "Report": self.Report,
         }
 
     def todict(self):
         return {
             "date": self.date,
             "News": self.NewsIds,
+            "Report": self.Report,
         }
