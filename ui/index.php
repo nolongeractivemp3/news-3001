@@ -1,6 +1,12 @@
+<?php
+$isRss = isset($_GET["rss"]);
+$pageTitle = $isRss ? "RSS Feed" : "News Feed 3001";
+$navbarRss = $isRss ? "true" : "false";
+$cardDomain = $isRss ? "?domain=rss" : "";
+?>
 <!DOCTYPE html>
 <head>
-    <title>News Feed 3001</title>
+    <title><?php echo $pageTitle; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -15,6 +21,11 @@
         }
     </style>
     <script>
+    <?php if ($isRss): ?>
+    function getExplanation() {
+      document.getElementById("rssexplanation").showModal();
+    }
+    <?php endif; ?>
     function getReport() {
         // Open the modal properly
         document.getElementById("report_modal").showModal();
@@ -22,14 +33,23 @@
     </script>
 
     <main class="p-4">
-        <div hx-get="components/navbar.php?rss=false" hx-trigger="load" hx-target="#navbar"></div>
-        <div hx-get="components/card.php" hx-trigger="load" hx-target="#news"></div>
+        <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/card.php<?php echo $cardDomain; ?>" hx-trigger="load" hx-target="#news"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
             file_get_contents("http://backend:5000/report"),
         ); ?>" hx-trigger="load" hx-target="#report"></div>
+        <?php if ($isRss): ?>
+        <div hx-get="components/report.php?name=rssexplanation&textstr=<?php echo urlencode(
+            "<p>RSS liefert Nachrichten schneller in Echtzeit, werden aber nicht gefiltert und sind nicht in der Zusammenfassung. (vielleicht später wenn ich mehr lust darauf habe ;) </p>",
+        ); ?>" hx-trigger="load" hx-target="#rss"></div>
+        <?php endif; ?>
+
         <div id="navbar"> </div>
         <div id='news'></div>
         <div id="report"> </div>
-        </main>
+        <?php if ($isRss): ?>
+        <div id="rss"> </div>
+        <?php endif; ?>
+    </main>
 
 </body>
