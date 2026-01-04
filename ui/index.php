@@ -5,7 +5,9 @@ $navbarRss = $isRss ? "true" : "false";
 $cardDomain = $isRss ? "?domain=rss" : "";
 ?>
 <!DOCTYPE html>
+<html lang="de">
 <head>
+    <meta name="description" content="Alle Koepenick News in einem Feed">
     <title><?php echo $pageTitle; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
@@ -53,3 +55,4 @@ $cardDomain = $isRss ? "?domain=rss" : "";
     </main>
 
 </body>
+</html>

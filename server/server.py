@@ -1,8 +1,8 @@
 import datetime
 import json
 
-import flask_cors
-from flask import Flask
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 import rss
 from db import CRUD
@@ -11,8 +11,14 @@ from openrouter import openrouter_client
 
 database = CRUD.connection("http://pocketbase:8080")
 
-app = Flask(__name__)
-flask_cors.CORS(app)
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_news(connection: CRUD.connection) -> list[News]:
@@ -20,21 +26,21 @@ def get_news(connection: CRUD.connection) -> list[News]:
     return data
 
 
-@app.route("/")
+@app.get("/")
 def index():
     data = get_news(database)
     json_data = [news.tojson() for news in data]
     return json_data
 
 
-@app.route("/rss")
+@app.get("/rss")
 def rssserver():
     data = rss.get_rss_feed()
     json_data = [news.tojson() for news in data]
     return json_data
 
 
-@app.route("/report")
+@app.get("/report")
 def report():
     report = database.get_todays_report()
     print(report)
@@ -43,4 +49,6 @@ def report():
 
 if __name__ == "__main__":
     # run server
-    app.run(host="0.0.0.0", port=5000)
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=5000)

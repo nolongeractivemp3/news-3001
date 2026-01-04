@@ -1,13 +1,15 @@
-FROM python:3.12-slim
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvbin/uv
+FROM python:3.12-slim-trixie
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Add uv to the system PATH
-ENV PATH="/uvbin:${PATH}"
+# Copy the project into the image
+COPY . /app
 
+# Disable development dependencies
+ENV UV_NO_DEV=1
+
+# Sync the project into a new environment, asserting the lockfile is up to date
 WORKDIR /app
-COPY . .
+RUN uv sync --locked
 
-# Install deps if you have the files, otherwise skip
-RUN if [ -f pyproject.toml ]; then uv sync --frozen; fi
-
-CMD ["uv", "run", "python", "server.py"]
+# Presuming there is a `my_app` command provided by the project
+CMD ["uv", "run", "server.py"]
