@@ -29,7 +29,7 @@ def create_and_save_report(db: CRUD.connection, news: list[myclasses.News]):
         query=prompt,
         api_key=api_key,
         system_prompt=system,
-        model="nex-agi/deepseek-v3.1-nex-n1:free",
+        model="xiaomi/mimo-v2-flash:free",
     )
     report = myclasses.Report(response)
     return db.create_report(report)
@@ -49,7 +49,7 @@ Please respond with Smart if
 """
     response = openrouter_client.query_openrouter(
         f"Description: {snippet} Link: {link}",
-        model="nex-agi/deepseek-v3.1-nex-n1:free",
+        model="xiaomi/mimo-v2-flash:free",
         api_key=api_key,
         system_prompt=system_prompt,
     )
