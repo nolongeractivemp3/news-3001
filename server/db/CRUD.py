@@ -9,6 +9,10 @@ import myclasses
 class connection:
     def __init__(self, url: str):
         self.client = pocketbase.Client(url)
+        # Hardcoded credentials as requested
+        admin_email = "handyjason053@gmail.com"
+        admin_password = "handyjason053@gmail.com"
+        self.client.admins.auth_with_password(admin_email, admin_password)
 
     def save_news(self, news: myclasses.News) -> str:
         # news.todict()
