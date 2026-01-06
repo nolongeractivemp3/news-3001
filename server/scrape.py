@@ -1,4 +1,5 @@
 import datetime
+from turtle import goto
 
 from serpapi import search
 
@@ -6,10 +7,9 @@ import myclasses
 from content_scraper import scrape_article_simple
 from db import CRUD
 from openrouter import openrouter_client
-from server import get_news
 
 
-def create_and_save_report(db: CRUD.connection):
+def create_and_save_report(db: CRUD.connection, news: list[myclasses.News]):
     api_key = (
         "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"
     )
@@ -23,12 +23,13 @@ def create_and_save_report(db: CRUD.connection):
     be a bit left leaning and sarcastic."""
     prompt = ""
     print("found news")
-    for data in get_news(database):
+    for data in news:
         prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
     response = openrouter_client.query_openrouter(
         query=prompt,
         api_key=api_key,
         system_prompt=system,
+        model="nex-agi/deepseek-v3.1-nex-n1:free",
     )
     report = myclasses.Report(response)
     return db.create_report(report)
@@ -110,7 +111,6 @@ api_key = "sk-or-v1-0f7ae9562698dd7831fb4276f6afe88520cf2fca80637de01699067dc112
 
 local_articles = []
 ids = []
-
 for item in savedresponse:
     print(f"\n--- Checking: {item['title']} ---")
 
@@ -163,7 +163,7 @@ print(
 
 # Only create report and day if we have local articles
 if ids:
-    report_id = create_and_save_report(database)
+    report_id = create_and_save_report(database, local_articles)
     print(f"Report created: {report_id}")
 
     day = myclasses.Day(date=date, NewsIds=ids, Report=report_id)
