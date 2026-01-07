@@ -1,12 +1,8 @@
 import openrouter.openrouter_client
-from db.CRUD import connection
-from myclasses import Report
-from server import get_news
+from myclasses import News, Report
 
 
-def create_and_save_report(db: connection):
-    # Cache the response to avoid repeated API calls for the same data
-    cache_file = "/app/data/chache/report_cache.json"
+def create_and_save_report(db: connection, news: list[News]):
     api_key = (
         "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"
     )
@@ -20,14 +16,13 @@ def create_and_save_report(db: connection):
     be a bit left leaning and sarcastic."""
     prompt = ""
     print("found news")
-    for data in get_news(db):
+    for data in news:
         prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
     response = openrouter.openrouter_client.query_openrouter(
         query=prompt,
         api_key=api_key,
         system_prompt=system,
+        model="xiaomi/mimo-v2-flash:free",
     )
     report = Report(response)
     return db.create_report(report)
-    # Cache the new response
-    #
