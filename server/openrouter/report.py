@@ -24,7 +24,7 @@ def create_and_save_report(db: CRUD.connection, news: list[News]):
         query=prompt,
         api_key=api_key,
         system_prompt=system,
-        model="xiaomi/mimo-v2-flash:free",
+        model="tngtech/deepseek-r1t2-chimera:free",
     )
     report = Report(response)
     return db.create_report(report)
