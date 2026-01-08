@@ -1,8 +1,9 @@
 import openrouter.openrouter_client
+from db import CRUD
 from myclasses import News, Report
 
 
-def create_and_save_report(db: connection, news: list[News]):
+def create_and_save_report(db: CRUD.connection, news: list[News]):
     api_key = (
         "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"
     )
