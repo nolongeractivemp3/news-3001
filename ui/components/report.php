@@ -1,8 +1,7 @@
 <?php
 $name = $_GET["name"];
-$reportstr = $_GET["textstr"];
+$reportstr = str_replace('\n', "<br />", $_GET["textstr"]);
 ?>
-
 <style>
 h1 {
  font-size: 1rem;
@@ -32,7 +31,7 @@ h3 {
     </form>
 
     <article id="ReportContent" class="prose prose-invert prose-sm max-w-none text-left break-words">
-       <?php echo $reportstr; ?>
+       <?php echo nl2br($reportstr); ?>
     </article>
 
   </div>
