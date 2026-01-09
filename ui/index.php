@@ -39,7 +39,7 @@ $cardDomain = $isRss ? "?domain=rss" : "";
         <div hx-get="components/card.php<?php echo $cardDomain; ?>" hx-trigger="load" hx-target="#news"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
             str_replace(
-                ["\r", "\n"],
+                ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
                 "",
                 file_get_contents("http://backend:5000/report"),
             ),
