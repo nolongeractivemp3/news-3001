@@ -1,6 +1,6 @@
 <?php
 $name = $_GET["name"];
-$reportstr = str_replace('\n', "<br />", $_GET["textstr"]);
+$reportstr = $_GET["textstr"];
 ?>
 <style>
 h1 {
