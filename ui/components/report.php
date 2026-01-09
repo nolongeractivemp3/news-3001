@@ -31,7 +31,7 @@ h3 {
     </form>
 
     <article id="ReportContent" class="prose prose-invert prose-sm max-w-none text-left break-words">
-       <?php echo nl2br($reportstr); ?>
+       <?php echo $reportstr; ?>
     </article>
 
   </div>
