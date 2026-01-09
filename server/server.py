@@ -9,7 +9,12 @@ from db import CRUD
 from myclasses import News
 from openrouter import openrouter_client
 
-database = CRUD.connection("http://pocketbase:8080")
+
+def get_database():
+    return CRUD.connection("http://pocketbase:8080")
+
+
+database = None
 
 app = FastAPI()
 app.add_middleware(
@@ -21,14 +26,16 @@ app.add_middleware(
 )
 
 
-def get_news(connection: CRUD.connection) -> list[News]:
+def get_news(connection: CRUD.connection | None = None) -> list[News]:
+    if connection is None:
+        connection = get_database()
     data = connection.get_news_from_day(datetime.datetime.now().strftime("%Y-%m-%d"))
     return data
 
 
 @app.get("/")
 def index():
-    data = get_news(database)
+    data = get_news()
     json_data = [news.tojson() for news in data]
     return json_data
 
@@ -42,9 +49,17 @@ def rssserver():
 
 @app.get("/report")
 def report():
-    report = database.get_todays_report()
+    db = get_database()
+    report = db.get_todays_report()
     print(report)
     return report.Summary
+
+
+@app.get("/badges")
+def badges():
+    db = get_database()
+    all_badges = db.getallbadges()
+    return [badge.todict() for badge in all_badges]
 
 
 if __name__ == "__main__":

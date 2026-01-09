@@ -37,7 +37,6 @@ def query_openrouter(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": query},
     ]
-    print(messages)
     completion = client.chat.completions.create(
         extra_headers=extra_headers,
         extra_body={},

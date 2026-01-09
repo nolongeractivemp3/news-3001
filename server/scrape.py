@@ -126,6 +126,12 @@ for item in savedresponse:
         date=date,
         full_content=full_content,
     )
+    # Step 4: Classify badges and save
+    badges = database.getbadgefornews(news, api_key)
+    print(news)
+    # Filter out None values from badge classification
+    news.badges = [badge for badge in badges if badge is not None]  # tf
+
     news_id = database.save_news(news)
     ids.append(news_id)
     local_articles.append(news)
