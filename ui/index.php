@@ -38,7 +38,11 @@ $cardDomain = $isRss ? "?domain=rss" : "";
         <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/card.php<?php echo $cardDomain; ?>" hx-trigger="load" hx-target="#news"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
-            file_get_contents("http://backend:5000/report"),
+            str_replace(
+                ["\r", "\n"],
+                "",
+                file_get_contents("http://backend:5000/report"),
+            ),
         ); ?>" hx-trigger="load" hx-target="#report"></div>
         <?php if ($isRss): ?>
         <div hx-get="components/report.php?name=rssexplanation&textstr=<?php echo urlencode(
