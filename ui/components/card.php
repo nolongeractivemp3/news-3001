@@ -10,7 +10,23 @@ $news = json_decode($response, true);
             <h2 class='card-title'><?php echo $item["Title"]; ?></h2>
             <p><?php echo $item["Source"]; ?></p>
             <p><?php echo $item["description"]; ?></p>
-            <div class='card-actions justify-end'>
+            <div class='card-actions flex items-center '>
+
+                <div class="flex items-center  mr-auto">
+                    <?php if ($mode != "rss"): ?>
+                    <div hx-get="/components/badge.php?badge=<?php echo htmlspecialchars(
+                        urlencode(json_encode($item["badges"])),
+                    ); ?>"
+                         hx-trigger="load"
+                         hx-target="next .badgeslot">
+                    </div>
+                    <?php endif; ?>
+                    <div class="badgeslot flex gap-1">
+                    <?php if ($mode == "rss"): ?>
+                <?php endif; ?>
+                    </div>
+                </div>
+
                 <button class="btn btn-primary">
                     <a target="_blank" href="<?php echo htmlspecialchars(
                         $item["link"],

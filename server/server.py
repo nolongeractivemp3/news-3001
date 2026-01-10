@@ -55,13 +55,6 @@ def report():
     return report.Summary
 
 
-@app.get("/badges")
-def badges():
-    db = get_database()
-    all_badges = db.getallbadges()
-    return [badge.todict() for badge in all_badges]
-
-
 if __name__ == "__main__":
     # run server
     import uvicorn
