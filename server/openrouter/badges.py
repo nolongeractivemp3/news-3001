@@ -15,7 +15,7 @@ def get_badges(news: News, badges: list[Badge], key: str):
     response = query_openrouter(prompt, key, system_prompt=systemprompt)
     rawtags = response.split(",")
     tags = []
-    print(rawtags)
     for tag in rawtags:
         tags.append(next((tagreal for tagreal in badges if tagreal.id == tag), None))
+    print(tags)
     return tags
