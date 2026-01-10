@@ -16,6 +16,6 @@ if __name__ == "__main__":
         source="Example Source",
         link="https://example.com",
         date=str(datetime.now()),
-        badges=[Badge("Example Badge", "https://example.com/badge", "zeitung")],
+        badges=[Badge("Example Badge", "https://example.com/badge", "zeitung", "red")],
     )
     database.save_news(example_news)

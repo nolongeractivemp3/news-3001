@@ -36,7 +36,9 @@ class connection:
     def get_badge_by_id(self, badge_id: str) -> myclasses.Badge:
         """Fetch a single badge by ID."""
         raw_badge = self.client.collection("badges").get_one(badge_id)
-        return myclasses.Badge(raw_badge.name, raw_badge.description, raw_badge.id)
+        return myclasses.Badge(
+            raw_badge.name, raw_badge.description, raw_badge.id, raw_badge.hexcolor
+        )
 
     def get_news_from_id(self, id: str) -> myclasses.News:
         rawnews = self.client.collection("news").get_one(id)
@@ -58,7 +60,9 @@ class connection:
     def getallbadges(self) -> list[myclasses.Badge]:
         badges = []
         for badge in self.client.collection("badges").get_full_list():
-            badges.append(myclasses.Badge(badge.name, badge.description, badge.id))
+            badges.append(
+                myclasses.Badge(badge.name, badge.description, badge.id, badge.hexcolor)
+            )
         return badges
 
     def getbadgefornews(self, news: myclasses.News, key: str):

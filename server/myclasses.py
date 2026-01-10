@@ -2,23 +2,26 @@ from typing_extensions import List
 
 
 class Badge:
-    def __init__(self, name: str, description: str, id: str):
+    def __init__(self, name: str, description: str, id: str, color: str):
         """Initialize a badge object.
 
         Args:
             name (str): The name of the badge.
             description (str): The description of the badge.
             id (str): The unique identifier of the badge.
+            color (str): The color of the badge.
         """
         self.id: str = id
         self.name: str = name
         self.description: str = description
+        self.color: str = color
 
     def todict(self):
         return {
             "Id": self.id,
             "Name": self.name,
             "Description": self.description,
+            "Color": self.color,
         }
 
 
