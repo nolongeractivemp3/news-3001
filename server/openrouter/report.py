@@ -26,5 +26,6 @@ def create_and_save_report(db: CRUD.connection, news: list[News]):
         system_prompt=system,
         model="tngtech/deepseek-r1t2-chimera:free",
     )
+    response += "<p>Hinweis: Diese Zusammenfassung wurde automatisch mit KI erstellt und nicht auf faktische Richtigkeit überprüft.</p>"
     report = Report(response)
     return db.create_report(report)

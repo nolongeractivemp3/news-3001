@@ -32,7 +32,6 @@ h3 {
 
     <article id="ReportContent" class="prose prose-invert prose-sm max-w-none text-left break-words">
        <?php echo $reportstr; ?>
-       <p>Hinweis: Diese Zusammenfassung wurde automatisch mit KI erstellt und nicht auf faktische Richtigkeit überprüft.</p>
     </article>
 
   </div>
