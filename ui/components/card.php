@@ -21,13 +21,10 @@ $news = json_decode($response, true);
                          hx-target="next .badgeslot">
                     </div>
                     <?php endif; ?>
-                    <div class="badgeslot flex gap-1">
-                    <?php if ($mode == "rss"): ?>
-                <?php endif; ?>
-                    </div>
+                    <div class="badgeslot flex gap-1 flex-nowrap"></div>
                 </div>
 
-                <button class="btn btn-primary">
+                <button class="btn btn-primary btn-sm flex-shrink-0">
                     <a target="_blank" href="<?php echo htmlspecialchars(
                         $item["link"],
                     ); ?>">Mehr lesen</a>
