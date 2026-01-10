@@ -1,9 +1,9 @@
 <?php
 $badges = json_decode($_GET["badge"], true);
 foreach ($badges as $badge) {
-    echo "<span class='badge badge-soft badge-" .
+    echo "<span class='mr-2 badge badge-soft badge-" .
         $badge["Color"] .
-        " mr-2'><strong>" .
+        " '><strong>" .
         $badge["Name"] .
         "</strong></span>";
 }

@@ -5,7 +5,7 @@ from openrouter.openrouter_client import query_openrouter
 def get_badges(news: News, badges: list[Badge], key: str):
     systemprompt = """You are a helpful newsassistant that is given a list of News and some information about them
     your task to is to find all topics that fit the news. the user will give you a a news artical and a list of topics and your
-   goal is to find the best topics for the news article. return the topics in this format topic1id,topic2id,topic3id """
+   goal is to find the best topics for the news article. return the topics in this format topic1id,topic2id,topic3id keep in mind to not do more than 2 topics"""
     prompt = f"""#News
     {news.tojson()}
     # badges
