@@ -27,7 +27,7 @@ $news = json_decode($response, true);
                 <button class="btn btn-primary btn-sm flex-shrink-0">
                     <a target="_blank" href="<?php echo htmlspecialchars(
                         $item["link"],
-                    ); ?>">Mehr lesen</a>
+                    ); ?>">Öffnen</a>
                 </button>
             </div>
         </div>

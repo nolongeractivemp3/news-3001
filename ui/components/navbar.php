@@ -12,7 +12,9 @@ $rss = $_GET["rss"]; ?>
 
     <div class="navbar-end">
         <button class="btn btn-primary" onclick="getReport()">
-           Zusammenfassung
+            <span class="hidden sm:inline">Zusammenfassung</span>
+            <span class="sm:hidden">📋</span>
+
         </button>
     </div>
 </div>
