@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from typing_extensions import List
 
 
@@ -28,57 +30,75 @@ class Badge:
 class News:
     def __init__(
         self,
-        source,
-        title,
-        description,
-        link,
-        date,
-        full_content=None,
+        id: str,
+        type: str,
+        title: str,
+        description: str,
+        full_text: str,
+        source: str,
+        link: str,
         badges: List[Badge] = [],
     ):
-        self.source = source
+        """Initialize a News object.
+
+        Args:
+            id (str): The unique identifier of the news item.
+            type (str): The type of the news item.
+            title (str): The title of the news item.
+            description (str): The description of the news item.
+            full_text (str): The full text of the news item.
+            source (str): The source of the news item.
+            link (str): The link to the news item.
+            badges (List[Badge]): The badges associated with the news item.
+        """
+        self.id = id
+        self.type = type
         self.title = title
         self.description = description
+        self.full_text = full_text
+        self.source = source
         self.link = link
-        self.date = date
-        self.full_content = full_content
         self.badges = badges
 
     def tojson(self):
         returndict = {
-            "Source": self.source,
-            "Title": self.title,
+            "id": self.id,
+            "type": self.type,
+            "title": self.title,
             "description": self.description,
+            "full_text": self.full_text,
+            "source": self.source,
             "link": self.link,
-            "date": self.date,
-            "full_content": self.full_content,
+            "badges": [badge.id for badge in self.badges],
         }
-        if self.badges:
-            returndict["badges"] = [badge.todict() for badge in self.badges]
         return returndict
 
 
 class Report:
-    def __init__(self, Summary: str):
-        self.Summary: str = Summary
-
-
-class Day:
-    def __init__(self, date, NewsIds, Report: str):
-        self.date = date
-        self.NewsIds = NewsIds
-        self.Report: str = Report
+    def __init__(
+        self,
+        id: str = datetime.now().strftime("%Y-%m-%d"),
+        text: str = "somethings fucked",
+    ):
+        self.id: str = id
+        self.text: str = text
 
     def tojson(self):
         return {
-            "date": self.date,
-            "News": self.NewsIds,
-            "Report": self.Report,
+            "id": self.id,
+            "text": self.text,
         }
 
-    def todict(self):
+
+class Day:
+    def __init__(self, id, news, reportid):
+        self.id = id
+        self.news = news
+        self.reportid = reportid
+
+    def tojson(self):
         return {
-            "date": self.date,
-            "News": self.NewsIds,
-            "Report": self.Report,
+            "id": self.id,
+            "news": self.news,
+            "report": self.reportid,
         }

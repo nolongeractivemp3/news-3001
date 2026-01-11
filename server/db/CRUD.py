@@ -18,20 +18,13 @@ class connection:
     def save_news(self, news: myclasses.News) -> str:
         data = news.tojson()
         # Get badge IDs from the news object
-        if news.badges:
-            data["badges"] = [badge.id for badge in news.badges]
-        print(data)
         return self.client.collection("news").create(data).id
 
     def save_day(self, day: myclasses.Day) -> str:
-        return (
-            self.client.collection("days")
-            .create({"date": day.date, "News": day.NewsIds, "Report": day.Report})
-            .id
-        )
+        return self.client.collection("days").create(day.tojson()).id
 
     def create_report(self, report: myclasses.Report) -> str:
-        return self.client.collection("report").create({"text": report.Summary}).id
+        return self.client.collection("report").create(report.tojson()).id
 
     def get_badge_by_id(self, badge_id: str) -> myclasses.Badge:
         """Fetch a single badge by ID."""
@@ -41,19 +34,24 @@ class connection:
         )
 
     def get_news_from_id(self, id: str) -> myclasses.News:
+        """Fetch a single news item by ID.
+        Args:
+            id (str): The ID of the news item to fetch.
+        Returns:
+            myclasses.News: The news item with the specified ID.
+        """
         rawnews = self.client.collection("news").get_one(id)
         # Get badge IDs from the news record and fetch each badge
         badge_ids = getattr(rawnews, "badges", []) or []
         badges = [self.get_badge_by_id(bid) for bid in badge_ids]
         return myclasses.News(
-            rawnews.source,
+            rawnews.id,
+            rawnews.type,
             rawnews.title,
             rawnews.description,
+            rawnews.full_text,
+            rawnews.source,
             rawnews.link,
-            rawnews.date,
-            # getattr safely gets attribute or returns None if it doesn't exist
-            # (for backwards compatibility with old records without full_content)
-            getattr(rawnews, "full_content", None),
             badges,
         )
 
@@ -68,56 +66,36 @@ class connection:
     def getbadgefornews(self, news: myclasses.News, key: str):
         return get_badges(news, self.getallbadges(), key)
 
-    def get_news(
-        self,
-    ) -> list[myclasses.News]:
-        rawnews = self.client.collection("news").get_full_list(
-            query_params={
-                "sort": "-date",  # The minus '-' means DESCENDING (last ones first)
-                "filter": "date != ''",  # Optional: only if title isn't empty
-            }
-        )
-        news = []
-        for rawnew in rawnews:
-            print(rawnew)
-            # Get badge IDs from the news record and fetch each badge
-            badge_ids = getattr(rawnew, "badges", []) or []
-            badges = [self.get_badge_by_id(bid) for bid in badge_ids]
-            news.append(
-                myclasses.News(
-                    rawnew.source,
-                    rawnew.title,
-                    rawnew.description,
-                    rawnew.link,
-                    rawnew.date,
-                    # getattr: safely returns None for old records without full_content
-                    getattr(rawnew, "full_content", None),
-                    badges,
-                )
-            )
-
-            print(rawnew.source)
-        return news
-
     def get_todays_report(self) -> myclasses.Report:
+        print("Getting today's report...")
         reportid = (
-            self.client.collection("days")
-            .get_list(1, query_params={"sort": "-date"})
+            self.client.collection("Days")
+            .get_list(1, query_params={"sort": "-id"})
             .items[0]
             .report
         )
-        report = self.client.collection("report").get_one(reportid)
-        return myclasses.Report(report.text)
+        print(reportid)
+        report = self.client.collection("Report").get_one(reportid)
+        return myclasses.Report(report.id, report.text)
 
     def get_news_from_day(self, date: str) -> list[myclasses.News]:
-        rawday = self.client.collection("days").get_full_list(
-            batch=1, query_params={"filter": f"date = '{date}'"}
+        """Get news from a specific day.
+        args:
+            date (str): The date in the format 'YYYY-MM-DD'.
+        returns:
+            list[myclasses.News]: A list of news articles from the specified day.
+        """
+        print(date)
+        rawday = self.client.collection("Days").get_full_list(
+            query_params={"filter": f"id = '{date}'"}
         )
+        print(rawday)
         news = []
         for rawday in rawday:
             for newsid in rawday.news:
                 news.append(self.get_news_from_id(newsid))
                 print(self.get_news_from_id(newsid))  # ??
+
         return news
 
 

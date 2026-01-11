@@ -48,11 +48,15 @@ def get_rss_feed() -> list[News]:
             real_link = extract_real_url(rawnews[i].link)
             news.append(
                 News(
-                    str(tldextract.extract(real_link).domain.capitalize()),
-                    bs(rawnews[i].title, "html.parser").get_text(),
-                    bs(rawnews[i].content[0]["value"], "html.parser").get_text(),
-                    real_link,
-                    rawnews[i].published,
+                    full_text="",
+                    type="rss",
+                    source=str(tldextract.extract(real_link).domain.capitalize()),
+                    title=bs(rawnews[i].title, "html.parser").get_text(),
+                    description=bs(
+                        rawnews[i].content[0]["value"], "html.parser"
+                    ).get_text(),
+                    link=real_link,
+                    id=rawnews[i].published,
                 )
             )
         print(rawnews[i])

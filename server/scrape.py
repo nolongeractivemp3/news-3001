@@ -119,18 +119,20 @@ for item in savedresponse:
 
     # Step 4: Save only if truly local
     news = myclasses.News(
+        id="",
+        type="google",
         source=item["source"],
         title=item["title"],
         description=item["snippet"],
         link=item["link"],
-        date=date,
-        full_content=full_content,
+        full_text=full_content,
     )
     # Step 4: Classify badges and save
     badges = database.getbadgefornews(news, api_key)
-    print(news)
+    print(badges[0].id)
     # Filter out None values from badge classification
-    news.badges = [badge for badge in badges if badge is not None]  # tf
+    news.badges = badges
+    print(news.tojson())
     print("  saving to the database")
     news_id = database.save_news(news)
     ids.append(news_id)
@@ -143,10 +145,8 @@ print(
 
 # Only create report and day if we have local articles
 if ids:
-    report_id = report.create_and_save_report(database, local_articles)
-    print(f"Report created: {report_id}")
-
-    day = myclasses.Day(date=date, NewsIds=ids, Report=report_id)
+    report = report.create_and_save_report(database, local_articles)
+    day = myclasses.Day(id=date, news=ids, reportid=report.id)
     database.save_day(day)
     print(f"Day saved with {len(ids)} local articles")
 else:

@@ -52,7 +52,7 @@ def report():
     db = get_database()
     report = db.get_todays_report()
     print(report)
-    return report.Summary
+    return report.text
 
 
 if __name__ == "__main__":

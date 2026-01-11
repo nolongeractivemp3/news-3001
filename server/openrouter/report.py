@@ -3,7 +3,14 @@ from db import CRUD
 from myclasses import News, Report
 
 
-def create_and_save_report(db: CRUD.connection, news: list[News]):
+def create_and_save_report(db: CRUD.connection, news: list[News]) -> Report:
+    """Create and save a report in the database.
+    Args:
+        db (CRUD.connection): The database connection.
+        news (list[News]): The news items to include in the report.
+    Returns:
+        Report: The created report.
+    """
     api_key = (
         "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"
     )
@@ -19,7 +26,7 @@ def create_and_save_report(db: CRUD.connection, news: list[News]):
     prompt = ""
     print("found news")
     for data in news:
-        prompt += f"Title: {data.title} Description: {data.description} Source: {data.source} Link: {data.link}\n"
+        prompt += str(data.tojson())
     response = openrouter.openrouter_client.query_openrouter(
         query=prompt,
         api_key=api_key,
@@ -27,5 +34,8 @@ def create_and_save_report(db: CRUD.connection, news: list[News]):
         model="tngtech/deepseek-r1t2-chimera:free",
     )
     response += "<p>Hinweis: Diese Zusammenfassung wurde automatisch mit KI erstellt und nicht auf faktische Richtigkeit überprüft.</p>"
-    report = Report(response)
-    return db.create_report(report)
+    print(f"response: {response}")
+    report = Report(text=response)
+    report_id = db.create_report(report)
+    report.id = report_id
+    return report
