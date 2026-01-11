@@ -15,5 +15,5 @@ if __name__ == "__main__":
     news = database.get_news_from_id("5nf3e4lxchz2dmk")
     news.id = ""
     news.badges = database.getbadgefornews(news, api_key)
-    print(news.tojson())
+    print(news.tojson(False))
     database.save_news(news)

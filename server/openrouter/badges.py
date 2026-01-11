@@ -7,7 +7,7 @@ def get_badges(news: News, badges: list[Badge], key: str):
     your task to is to find all topics that fit the news. the user will give you a a news artical and a list of topics and your
    goal is to find the best topics for the news article. return the topics in this format topic1id,topic2id,topic3id"""
     prompt = f"""#News
-    {news.tojson()}
+    {news.tojson(True)}
     # badges
     """
     for badge in badges:

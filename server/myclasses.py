@@ -60,7 +60,7 @@ class News:
         self.link = link
         self.badges = badges
 
-    def tojson(self):
+    def tojson(self, badgeid: bool):
         returndict = {
             "id": self.id,
             "type": self.type,
@@ -69,8 +69,10 @@ class News:
             "full_text": self.full_text,
             "source": self.source,
             "link": self.link,
-            "badges": [badge.id for badge in self.badges],
+            "badges": [badge.todict() for badge in self.badges],
         }
+        if badgeid:
+            returndict["badges"] = [badge.id for badge in self.badges]
         return returndict
 
 

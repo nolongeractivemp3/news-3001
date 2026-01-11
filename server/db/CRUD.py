@@ -16,7 +16,7 @@ class connection:
         self.client.admins.auth_with_password(admin_email, admin_password)
 
     def save_news(self, news: myclasses.News) -> str:
-        data = news.tojson()
+        data = news.tojson(True)
         # Get badge IDs from the news object
         return self.client.collection("news").create(data).id
 

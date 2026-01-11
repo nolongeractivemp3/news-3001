@@ -36,14 +36,14 @@ def get_news(connection: CRUD.connection | None = None) -> list[News]:
 @app.get("/")
 def index():
     data = get_news()
-    json_data = [news.tojson() for news in data]
+    json_data = [news.tojson(False) for news in data]
     return json_data
 
 
 @app.get("/rss")
 def rssserver():
     data = rss.get_rss_feed()
-    json_data = [news.tojson() for news in data]
+    json_data = [news.tojson(False) for news in data]
     return json_data
 
 

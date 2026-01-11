@@ -26,7 +26,7 @@ def create_and_save_report(db: CRUD.connection, news: list[News]) -> Report:
     prompt = ""
     print("found news")
     for data in news:
-        prompt += str(data.tojson())
+        prompt += str(data.tojson(True))
     response = openrouter.openrouter_client.query_openrouter(
         query=prompt,
         api_key=api_key,

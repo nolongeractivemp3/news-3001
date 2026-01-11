@@ -132,7 +132,7 @@ for item in savedresponse:
     print(badges[0].id)
     # Filter out None values from badge classification
     news.badges = badges
-    print(news.tojson())
+    print(news.tojson(True))
     print("  saving to the database")
     news_id = database.save_news(news)
     ids.append(news_id)
