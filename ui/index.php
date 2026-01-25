@@ -9,6 +9,9 @@ $cardDomain = $isRss ? "?domain=rss" : "";
 
 <head>
     <meta charset="UTF-8">
+    <link rel="canonical" href="https://news.jaypo.ch/<?php echo $isRss
+        ? "rss"
+        : ""; ?>">
     <link rel="icon" type="image/x-icon" href="/favicon.png">
     <meta name="description" content="<?php echo $isRss
         ? "Echtzeit-Nachrichten aus RSS-Quellen für Köpenick."
