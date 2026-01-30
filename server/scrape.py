@@ -129,8 +129,8 @@ for item in savedresponse:
     )
     # Step 4: Classify badges and save
     badges = database.getbadgefornews(news, api_key)
-    print(badges[0].id)
     # Filter out None values from badge classification
+    badges = [badge for badge in badges if badge is not None]
     news.badges = badges
     print(news.tojson(True))
     print("  saving to the database")
