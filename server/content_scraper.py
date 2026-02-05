@@ -10,6 +10,8 @@ from typing import Optional
 
 import trafilatura
 
+from openrouter import openrouter_client
+
 
 @dataclass
 class ScrapedContent:
@@ -101,3 +103,52 @@ if __name__ == "__main__":
         print(f"HTML: {result.content}")
     else:
         print(f"Failed: {result.error}")
+
+
+def check_snippet_locality(snippet: str, link: str, api_key: str) -> bool:
+    """
+    Quick check: Is the snippet about Köpenick? (existing check)
+    Returns True if "Smart", False if "Dumb"
+    """
+    system_prompt = """You are a News expert.
+Following is the description and link of the website.
+Please respond with Dumb if
+1. the website is not about Köpenick or the wider area like Treptow around it.
+Please respond with Smart if
+2. the website is about Köpenick or the wider area like Treptow around it.
+"""
+    response = openrouter_client.query_openrouter(
+        f"Description: {snippet} Link: {link}",
+        model="tngtech/deepseek-r1t2-chimera:free",
+        api_key=api_key,
+        system_prompt=system_prompt,
+    )
+    return response.strip() == "Smart"
+
+
+def check_full_content_locality(content: str, api_key: str) -> bool:
+    """
+    Deep check: Is the full article actually about Köpenick?
+    Returns True if local, False if not local
+    """
+    system_prompt = """You are a local news expert for Berlin-Köpenick.
+You will receive the full text of a news article.
+Your task is to determine if this article is TRULY LOCAL to Köpenick or the surrounding area (Treptow-Köpenick, Friedrichshagen, Müggelheim, Grünau, etc.)
+
+Respond with ONLY one word:
+- "Local" if the article is specifically about Köpenick or its surrounding areas
+- "NotLocal" if the article only mentions Köpenick in passing, or is about broader Berlin/Germany/World news
+- also respond with NotLocal if its not the full atrical like if its behind a paywall
+
+
+Be strict: The article must be PRIMARILY about something happening IN Köpenick, not just mentioning it."""
+
+    # Truncate content if too long (keep first 4000 chars to stay within token limits)
+    truncated_content = content[:4000] if len(content) > 4000 else content
+
+    response = openrouter_client.query_openrouter(
+        f"Article content:\n{truncated_content}",
+        api_key,
+        system_prompt=system_prompt,
+    )
+    return response.strip() == "Local"
