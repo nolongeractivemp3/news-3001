@@ -3,6 +3,14 @@ $isRss = isset($_GET["rss"]);
 $pageTitle = $isRss ? "RSS Feed" : "News Feed 3001";
 $navbarRss = $isRss ? "true" : "false";
 $cardDomain = $isRss ? "?domain=rss" : "";
+$rawReport = file_get_contents("http://backend:5000/report");
+$decodedReport = json_decode($rawReport, true);
+$reportContent = is_string($decodedReport) ? $decodedReport : $rawReport;
+$reportContent = str_replace(
+    ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
+    "",
+    $reportContent,
+);
 ?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
@@ -68,11 +76,7 @@ $cardDomain = $isRss ? "?domain=rss" : "";
         <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/card.php<?php echo $cardDomain; ?>" hx-trigger="load" hx-target="#news"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
-            str_replace(
-                ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
-                "",
-                file_get_contents("http://backend:5000/report"),
-            ),
+            $reportContent,
         ); ?>" hx-trigger="load" hx-target="#report"></div>
         <?php if ($isRss): ?>
             <div hx-get="components/report.php?name=rssexplanation&textstr=<?php echo urlencode(
