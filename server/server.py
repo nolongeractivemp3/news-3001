@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,7 +12,7 @@ from openrouter import openrouter_client
 
 
 def get_database():
-    return CRUD.connection("http://pocketbase:8080")
+    return CRUD.connection(os.getenv("POCKETBASE_URL", "http://pocketbase:8080"))
 
 
 database = None

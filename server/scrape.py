@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from serpapi import search
 
@@ -7,15 +8,24 @@ import myclasses
 from db import CRUD
 from openrouter import report
 
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+pocketbase_url = os.getenv("POCKETBASE_URL", "http://pocketbase:8080")
+
+if not openrouter_api_key:
+    raise RuntimeError("Missing OPENROUTER_API_KEY environment variable.")
+if not serpapi_api_key:
+    raise RuntimeError("Missing SERPAPI_API_KEY environment variable.")
+
 # Main execution
-database = CRUD.connection("http://pocketbase:8080")
+database = CRUD.connection(pocketbase_url)
 yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 date = datetime.datetime.now().strftime("%Y-%m-%d")
 query = f"köpenick news after:{yesterdate}"
 
 
 params = {
-    "api_key": "a1f2e133812cbca2dde9173b10d00aed814a914762efb200e568625feccab514",
+    "api_key": serpapi_api_key,
     "engine": "google",
     "q": query,
     "google_domain": "google.com",
@@ -27,7 +37,6 @@ searchy = search(params)
 results = searchy.as_dict()
 savedresponse = results.get("organic_results", [])
 print("Found", len(savedresponse), "results")
-api_key = "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"
 
 local_articles = []
 ids = []
@@ -36,7 +45,7 @@ for item in savedresponse:
 
     # Step 1: Quick snippet check (existing)
     is_maybe_local = content_scraper.check_snippet_locality(
-        item["snippet"], item["link"], api_key
+        item["snippet"], item["link"], openrouter_api_key
     )
 
     if not is_maybe_local:
@@ -58,7 +67,9 @@ for item in savedresponse:
 
     # Step 3: Deep locality check on full content
     print("  🔍 Deep locality check...")
-    is_truly_local = content_scraper.check_full_content_locality(full_content, api_key)
+    is_truly_local = content_scraper.check_full_content_locality(
+        full_content, openrouter_api_key
+    )
 
     if not is_truly_local:
         print("  ❌ Deep check: Not truly local (skipping)")
@@ -77,7 +88,7 @@ for item in savedresponse:
         full_text=full_content,
     )
     # Step 4: Classify badges and save
-    badges = database.getbadgefornews(news, api_key)
+    badges = database.getbadgefornews(news, openrouter_api_key)
     # Filter out None values from badge classification
     badges = [badge for badge in badges if badge is not None]
     news.badges = badges

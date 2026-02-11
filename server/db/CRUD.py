@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import pocketbase
 from typing_extensions import Dict
@@ -10,9 +11,12 @@ from openrouter.badges import get_badges
 class connection:
     def __init__(self, url: str):
         self.client = pocketbase.Client(url)
-        # Hardcoded credentials as requested
-        admin_email = "handyjason053@gmail.com"
-        admin_password = "handyjason053@gmail.com"
+        admin_email = os.getenv("POCKETBASE_ADMIN_EMAIL")
+        admin_password = os.getenv("POCKETBASE_ADMIN_PASSWORD")
+        if not admin_email or not admin_password:
+            raise RuntimeError(
+                "Missing POCKETBASE_ADMIN_EMAIL or POCKETBASE_ADMIN_PASSWORD environment variables."
+            )
         self.client.admins.auth_with_password(admin_email, admin_password)
 
     def save_news(self, news: myclasses.News) -> str:
