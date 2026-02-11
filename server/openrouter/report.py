@@ -1,3 +1,5 @@
+import os
+
 import openrouter.openrouter_client
 from db import CRUD
 from myclasses import News, Report
@@ -11,9 +13,9 @@ def create_and_save_report(db: CRUD.connection, news: list[News]) -> Report:
     Returns:
         Report: The created report.
     """
-    api_key = (
-        "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"
-    )
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        raise RuntimeError("Missing OPENROUTER_API_KEY environment variable.")
     system = """
     You are a News reporter you get some news and you should write a german report about what happend in kopenick.
     Please keep your report short and concise.

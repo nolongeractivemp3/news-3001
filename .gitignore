@@ -4,3 +4,4 @@ pb_data/
 server/__pycache__
 server/db/__pycache__/
 server/openrouter/__pycache__/
+docker-compose.yml
