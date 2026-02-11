@@ -1,7 +1,7 @@
 <?php
 $badges = json_decode($_GET["badge"], true);
 $showextras = false;
-if (count($badges) > 1) {
+if (count($badges) > 2) {
     $showextras = true;
     $extras = array_slice($badges, 2);
     $badges = array_slice($badges, 0, 2);
