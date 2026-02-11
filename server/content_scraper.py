@@ -119,7 +119,7 @@ Please respond with Smart if
 """
     response = openrouter_client.query_openrouter(
         f"Description: {snippet} Link: {link}",
-        model="tngtech/deepseek-r1t2-chimera:free",
+        model="openrouter/free",
         api_key=api_key,
         system_prompt=system_prompt,
     )

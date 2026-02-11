@@ -6,7 +6,7 @@ from openai import OpenAI
 def query_openrouter(
     query: str,
     api_key: str,
-    model: str = "tngtech/deepseek-r1t2-chimera:free",
+    model: str = "openrouter/free",
     system_prompt: Optional[str] = None,
     site_name: Optional[str] = None,
 ) -> str:
@@ -16,7 +16,7 @@ def query_openrouter(
     Args:
         query: The query or prompt to send to the OpenRouter API.
         api_key: The API key for authenticating with OpenRouter.
-        model: The model to use for the query. Defaults to "tngtech/deepseek-r1t2-chimera:free".
+        model: The model to use for the query. Defaults to "openrouter/free".
         system_prompt: Optional. System prompt to guide the behavior of the model.
         site_name: Optional. Site title for rankings on openrouter.ai.
 
