@@ -37,11 +37,15 @@ def query_openrouter(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": query},
     ]
-    completion = client.chat.completions.create(
-        extra_headers=extra_headers,
-        extra_body={},
-        model=model,
-        messages=messages,
-    )
-
-    return completion.choices[0].message.content
+    for i in range(4):
+        try:
+            completion = client.chat.completions.create(
+                extra_headers=extra_headers,
+                extra_body={},
+                model=model,
+                messages=messages,
+            )
+            return completion.choices[0].message.content
+        except Exception as e:
+            print(f"Attempt {i + 1} failed: {e}")
+            continue
