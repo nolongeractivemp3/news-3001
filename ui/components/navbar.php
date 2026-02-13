@@ -11,6 +11,10 @@ $rss = $_GET["rss"]; ?>
     </div>
 
     <div class="navbar-end">
+        <button class="btn btn-ghost" onclick="openSettingsModal()">
+            <span class="hidden sm:inline">Settings</span>
+            <span class="sm:hidden">⚙️</span>
+        </button>
         <button class="btn btn-primary" onclick="getReport()">
             <span class="hidden sm:inline">Zusammenfassung</span>
             <span class="sm:hidden">📋</span>
