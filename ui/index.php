@@ -80,13 +80,15 @@ $reportContent = str_replace(
         ); ?>" hx-trigger="load" hx-target="#report"></div>
         <?php if ($isRss): ?>
             <div hx-get="components/report.php?name=rssexplanation&textstr=<?php echo urlencode(
-                "<p>RSS liefert Nachrichten schneller in Echtzeit, werden aber nicht gefiltert und sind nicht in der Zusammenfassung. (vielleicht später wenn ich mehr lust darauf habe ;) </p>",
+                "<p>RSS liefert Nachrichten schneller in Echtzeit, werden aber nicht gefiltert und sind nicht in der Zusammenfassung. (vielleicht später wenn ich mehr lust dazu habe ;) </p>",
             ); ?>" hx-trigger="load" hx-target="#rss"></div>
         <?php endif; ?>
+        <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 
         <div id="navbar"> </div>
         <div id='news'></div>
         <div id="report"> </div>
+        <div id="settings"> </div>
         <?php if ($isRss): ?>
             <div id="rss"> </div>
         <?php endif; ?>
