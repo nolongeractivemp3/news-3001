@@ -1,3 +1,4 @@
+<?php $homepageCssVersion = filemtime(__DIR__ . "/style.css"); ?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
 
@@ -5,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News3001 — Köpenick News Aggregator</title>
+    <link rel="canonical" href="https://news.jaypo.ch/homepage/index.php">
     <meta name="description"
         content="Alle Köpenick News zusammengefasst in einem Feed. KI-gestützte Nachrichtenzusammenfassung für Berlin-Köpenick.">
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png">
@@ -14,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/homepage/style.css?v=<?php echo $homepageCssVersion; ?>">
 </head>
 
 <body>
@@ -28,9 +30,9 @@
             </a>
             <div class="flex items-center gap-6 font-mono text-sm">
                 <a href="#features"
-                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Features</a>
+                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Funktionen</a>
                 <a href="#architecture"
-                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Architecture</a>
+                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">System</a>
                 <a href="#tech"
                     class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Tech</a>
                 <a href="https://news.jaypo.ch" target="_blank"
@@ -45,14 +47,14 @@
     <header class="border-b border-subtle">
         <div class="max-w-5xl mx-auto px-6 py-24 sm:py-32">
             <p class="font-mono text-xs tracking-widest uppercase text-[--gold] mb-8 fade-in">
-                Berlin-Köpenick Nachrichtenaggregator
+                Berlin-Köpenick News
             </p>
             <h1 class="display-text mb-8 fade-in">
                 Alle Köpenick News<br><em>in einem Feed</em>
             </h1>
             <p class="text-xl text-white/60 max-w-2xl mb-12 fade-in">
-                Local news, aggregated. Ein Python-basierter Scraper sammelt Nachrichten aus verschiedenen Quellen,
-                OpenRouter AI generiert tägliche Zusammenfassungen und Badges. Das Ergebnis: ein sauberer,
+                Local Nachichten. Ein Python-basierter Scraper sammelt Nachrichten aus verschiedenen Quellen,
+                OpenRouter AI generiert tägliche Zusammenfassungen und Themen. Das Ergebnis: ein sauberer,
                 fokussierter News-Feed für deinen Bezirk.
             </p>
             <div class="flex flex-wrap gap-6 fade-in">
@@ -73,23 +75,23 @@
         <div class="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
                 <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">Sources</p>
-                <p class="text-3xl">5+</p>
+                <p class="text-3xl">10+</p>
                 <p class="text-white/40 text-sm">Newsquellen</p>
             </div>
             <div>
                 <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">Daily</p>
-                <p class="text-3xl">~20</p>
+                <p class="text-3xl">~8</p>
                 <p class="text-white/40 text-sm">Artikel/Tag</p>
             </div>
             <div>
-                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">AI</p>
+                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">KI</p>
                 <p class="text-3xl">Yes</p>
-                <p class="text-white/40 text-sm">Auto-Tagging</p>
+                <p class="text-white/40 text-sm">Auto-Themen</p>
             </div>
             <div>
-                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">RSS</p>
+                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">live</p>
                 <p class="text-3xl">✓</p>
-                <p class="text-white/40 text-sm">Full support</p>
+                <p class="text-white/40 text-sm">von Google alerts</p>
             </div>
         </div>
     </div>
@@ -118,20 +120,19 @@
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">🤖</p>
                     <h3 class="text-xl mb-3">KI-Zusammenfassung</h3>
-                    <p class="text-white/50">OpenRouter GPT generiert tägliche Zusammenfassungen des
+                    <p class="text-white/50">OpenRouter generiert tägliche Zusammenfassungen des
                         Nachrichtengeschehens.</p>
                 </div>
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">🏷️</p>
                     <h3 class="text-xl mb-3">Auto-Badges</h3>
-                    <p class="text-white/50">Jeder Artikel bekommt automatisch Tags: Sport, Politik, Kultur, Events. Auf
+                    <p class="text-white/50">Jeder Artikel bekommt automatisch Tags: Offiziel, Unfall, Politik, Unfall etc. Auf
                         einen Blick erkennbar.</p>
                 </div>
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">📡</p>
-                    <h3 class="text-xl mb-3">RSS Feed</h3>
-                    <p class="text-white/50">Voller RSS-Support. Nutze deinen Lieblings-Reader oder Feedly für
-                        Echtzeit-Updates.</p>
+                    <h3 class="text-xl mb-3">Google Alerts</h3>
+                    <p class="text-white/50">Es werden nachichten automatisch aus einem google feed gesammelt um live updates zu erhalten.</p>
                 </div>
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">🔧</p>
@@ -273,9 +274,8 @@ ui.<span class="str">render()</span>                           <span class="cmt"
             </div>
             <div class="flex items-center gap-8 font-mono text-sm text-white/40">
                 <a href="https://news.jaypo.ch" target="_blank" class="hover:text-white transition-colors">App</a>
-                <a href="#" class="hover:text-white transition-colors">GitHub</a>
+                <a href="#" class="hover:text-white transition-colors">GitHub kommt bald ich hoste es auf gitea privat</a>
             </div>
-            <p class="font-mono text-xs text-white/30">© 2024 — Built in Berlin</p>
         </div>
     </footer>
 

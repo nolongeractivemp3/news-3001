@@ -1,4 +1,4 @@
-const CACHE_NAME = 'news3001-v1';
+const CACHE_NAME = 'news3001-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.php',
@@ -32,8 +32,15 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests and Chrome extension requests
-  if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
+  const requestUrl = new URL(event.request.url);
+
+  // Skip non-GET requests, extension URLs, non-origin requests, and homepage assets.
+  if (
+    event.request.method !== 'GET' ||
+    requestUrl.protocol === 'chrome-extension:' ||
+    requestUrl.origin !== self.location.origin ||
+    requestUrl.pathname.startsWith('/homepage/')
+  ) {
     return;
   }
 

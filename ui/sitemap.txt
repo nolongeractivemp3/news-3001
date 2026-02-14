@@ -1,2 +1,3 @@
 https://news.jaypo.ch/
 https://news.jaypo.ch/?rss
+https://news.jaypo.ch.homepage/index.php
