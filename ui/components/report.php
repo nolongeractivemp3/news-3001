@@ -1,6 +1,52 @@
 <?php
-$name = $_GET["name"];
-$reportstr = $_GET["textstr"];
+$name = $_GET["name"] ?? "report_modal";
+$reportstr =
+    $_GET["textstr"] ??
+    "<p>Für dieses Datum ist keine Zusammenfassung verfügbar.</p>";
+$date = $_GET["date"] ?? null;
+
+if ($date !== null) {
+    $dateObj = DateTime::createFromFormat("Y-m-d", $date);
+    if ($dateObj !== false && $dateObj->format("Y-m-d") === $date) {
+        $rawReport = @file_get_contents(
+            "http://backend:5000/oldreport?date=" . urlencode($date),
+        );
+        if ($rawReport !== false) {
+            $decodedReport = json_decode($rawReport, true);
+            if (is_string($decodedReport) && trim($decodedReport) !== "") {
+                $reportstr = $decodedReport;
+            } elseif (
+                json_last_error() === JSON_ERROR_NONE &&
+                is_array($decodedReport)
+            ) {
+                $reportstr =
+                    "<p>Für den " .
+                    htmlspecialchars($date, ENT_QUOTES, "UTF-8") .
+                    " ist keine Zusammenfassung verfügbar.</p>";
+            } elseif (trim($rawReport) !== "") {
+                $reportstr = $rawReport;
+            } else {
+                $reportstr =
+                    "<p>Für den " .
+                    htmlspecialchars($date, ENT_QUOTES, "UTF-8") .
+                    " ist keine Zusammenfassung verfügbar.</p>";
+            }
+        } else {
+            $reportstr =
+                "<p>Für den " .
+                htmlspecialchars($date, ENT_QUOTES, "UTF-8") .
+                " ist keine Zusammenfassung verfügbar.</p>";
+        }
+    } else {
+        $reportstr = "<p>Ungültiges Datumsformat.</p>";
+    }
+}
+
+$reportstr = str_replace(
+    ["\r", "\n", '\r', '\n'],
+    "",
+    $reportstr,
+);
 ?>
 <style>
 h1 {

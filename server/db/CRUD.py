@@ -83,6 +83,19 @@ class connection:
         report = self.client.collection("Report").get_one(reportid)
         return myclasses.Report(report.id, report.text)
 
+    def get_report_from_day(self, date: str) -> myclasses.Report:
+        """Get report from a specific day."""
+        rawdays = self.client.collection("Days").get_full_list(
+            query_params={"filter": f"id = '{date}'"}
+        )
+        if len(rawdays) == 0:
+            raise ValueError(f"No day found for date: {date}")
+        reportid = rawdays[0].report
+        if not reportid:
+            raise ValueError(f"No report linked for date: {date}")
+        report = self.client.collection("Report").get_one(reportid)
+        return myclasses.Report(report.id, report.text)
+
     def get_news_from_day(self, date: str) -> list[myclasses.News]:
         """Get news from a specific day.
         args:

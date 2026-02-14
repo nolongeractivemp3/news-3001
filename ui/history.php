@@ -5,15 +5,6 @@ $selectedDateObj = DateTime::createFromFormat("Y-m-d", $selectedDate);
 if ($selectedDateObj === false || $selectedDateObj->format("Y-m-d") !== $selectedDate) {
     $selectedDate = $defaultDate;
 }
-
-$rawReport = file_get_contents("http://backend:5000/report");
-$decodedReport = json_decode($rawReport, true);
-$reportContent = is_string($decodedReport) ? $decodedReport : $rawReport;
-$reportContent = str_replace(
-    ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
-    "",
-    $reportContent,
-);
 ?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
@@ -70,8 +61,8 @@ $reportContent = str_replace(
             $selectedDate,
         ); ?>" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/card.php?date=<?php echo urlencode($selectedDate); ?>" hx-trigger="load" hx-target="#news"></div>
-        <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
-            $reportContent,
+        <div hx-get="components/report.php?name=report_modal&date=<?php echo urlencode(
+            $selectedDate,
         ); ?>" hx-trigger="load" hx-target="#report"></div>
         <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 

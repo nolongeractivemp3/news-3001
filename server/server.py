@@ -49,6 +49,18 @@ def oldnews(date: str):
     return response
 
 
+@app.get("/oldreport")
+def oldreport(date: str):
+    # date format validation
+    try:
+        datetime.datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format")
+    connection = get_database()
+    report = connection.get_report_from_day(date)
+    return report.text
+
+
 @app.get("/")
 def index():
     data = get_news()
