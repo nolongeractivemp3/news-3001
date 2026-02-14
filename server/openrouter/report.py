@@ -35,7 +35,7 @@ def create_and_save_report(db: CRUD.connection, news: list[News]) -> Report:
         system_prompt=system,
         model="openrouter/free",
     )
-    response += "<p>Hinweis: Diese Zusammenfassung wurde automatisch mit KI erstellt und nicht auf faktische Richtigkeit überprüft.</p>"
+    response += "<p><strong>Hinweis: Diese Zusammenfassung wurde automatisch mit KI erstellt und nicht auf faktische Richtigkeit überprüft.</strong></p>"
     print(f"response: {response}")
     report = Report(text=response)
     report_id = db.create_report(report)

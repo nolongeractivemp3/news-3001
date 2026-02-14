@@ -83,6 +83,7 @@ class Report:
         text: str = "somethings fucked",
     ):
         self.id: str = id
+        print(f"Report id: {self.id}")
         self.text: str = text
 
     def tojson(self):
