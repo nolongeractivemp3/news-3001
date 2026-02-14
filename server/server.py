@@ -2,7 +2,7 @@ import datetime
 import json
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 import rss
@@ -32,6 +32,21 @@ def get_news(connection: CRUD.connection | None = None) -> list[News]:
         connection = get_database()
     data = connection.get_news_from_day(datetime.datetime.now().strftime("%Y-%m-%d"))
     return data
+
+
+@app.get("/oldnews")
+def oldnews(date: str):
+    # date format validation
+    try:
+        datetime.datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format")
+    connection = get_database()
+    data = connection.get_news_from_day(date)
+    response = []
+    for news in data:
+        response.append(news.tojson(False))
+    return response
 
 
 @app.get("/")
