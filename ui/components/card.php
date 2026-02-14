@@ -3,7 +3,7 @@ $date = $_GET["date"] ?? false;
 $mode = $_GET["domain"] ?? "";
 if ($date) {
     $domain = $response = file_get_contents(
-        "http://backend:5000/oldnews?date=" . $date,
+        "http://backend:5000/oldnews?date=" . urlencode($date),
     );
 } else {
     $domain = $response = file_get_contents("http://backend:5000/" . $mode);
