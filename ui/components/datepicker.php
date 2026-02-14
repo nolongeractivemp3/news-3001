@@ -24,11 +24,7 @@ if ($selectedDateObj === false || $selectedDateObj->format("Y-m-d") !== $selecte
            value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, "UTF-8"); ?>"
            max="<?php echo date("Y-m-d"); ?>"
            aria-label="Datum auswählen"
-           hx-get="/components/card.php"
-           hx-trigger="change"
-           hx-target="#news"
-           hx-swap="innerHTML"
-           onchange="if (window.htmx) { htmx.ajax('GET', '/components/report.php?name=report_modal&date=' + encodeURIComponent(this.value), { target: '#report', swap: 'innerHTML' }); } const desktopPicker = document.getElementById('history-date-picker-desktop'); if (desktopPicker) desktopPicker.value = this.value;" />
+           onchange="window.location.href = '/history.php?date=' + encodeURIComponent(this.value);" />
 </div>
 <!-- Desktop date picker (visible on larger screens) -->
 <input type="date"
@@ -37,8 +33,4 @@ if ($selectedDateObj === false || $selectedDateObj->format("Y-m-d") !== $selecte
        class="input input-sm hidden sm:inline-flex h-9 w-36"
        value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, "UTF-8"); ?>"
        max="<?php echo date("Y-m-d"); ?>"
-       hx-get="/components/card.php"
-       hx-trigger="change"
-       hx-target="#news"
-       hx-swap="innerHTML"
-       onchange="if (window.htmx) { htmx.ajax('GET', '/components/report.php?name=report_modal&date=' + encodeURIComponent(this.value), { target: '#report', swap: 'innerHTML' }); } const mobilePicker = document.getElementById('history-date-picker-mobile'); if (mobilePicker) mobilePicker.value = this.value;" />
+       onchange="window.location.href = '/history.php?date=' + encodeURIComponent(this.value);" />
