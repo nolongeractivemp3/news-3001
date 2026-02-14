@@ -1,6 +1,33 @@
 <?php
-$name = $_GET["name"];
-$reportstr = $_GET["textstr"];
+$name = $_GET["name"] ?? "report_modal";
+$reportstr =
+    $_GET["textstr"] ??
+    "<p>Für dieses Datum ist keine Zusammenfassung verfügbar.</p>";
+$date = $_GET["date"] ?? false;
+
+function missingReportMessage(string $date): string
+{
+    return "<p>Für den " .
+        htmlspecialchars($date, ENT_QUOTES, "UTF-8") .
+        " ist keine Zusammenfassung verfügbar.</p>";
+}
+
+if ($date) {
+    $rawReport = @file_get_contents("http://backend:5000/oldreport?date=" . urlencode($date),);
+    if ($rawReport === false || trim($rawReport) === "") 
+    {
+        $reportstr = missingReportMessage($date);
+    } else {
+        $decodedReport = json_decode($rawReport, true);
+        $reportstr = $decodedReport;
+    }
+}
+
+$reportstr = str_replace(
+    ["\r", "\n", "\\r", "\\n"],
+    "",
+    $reportstr,
+);
 ?>
 <style>
 h1 {

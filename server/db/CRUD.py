@@ -72,14 +72,18 @@ class connection:
         return get_badges(news, self.getallbadges(), key)
 
     def get_todays_report(self) -> myclasses.Report:
-        print("Getting today's report...")
-        reportid = (
-            self.client.collection("Days")
-            .get_list(1, query_params={"sort": "-id"})
-            .items[0]
-            .report
+        return self.get_report_from_day(datetime.datetime.now().strftime("%Y-%m-%d"))
+
+    def get_report_from_day(self, date: str) -> myclasses.Report:
+        """Get report from a specific day."""
+        rawdays = self.client.collection("Days").get_full_list(
+            query_params={"filter": f"id = '{date}'"}
         )
-        print(reportid)
+        if len(rawdays) == 0:
+            raise ValueError(f"No day found for date: {date}")
+        reportid = rawdays[0].report
+        if not reportid:
+            raise ValueError(f"No report linked for date: {date}")
         report = self.client.collection("Report").get_one(reportid)
         return myclasses.Report(report.id, report.text)
 
@@ -91,6 +95,11 @@ class connection:
             list[myclasses.News]: A list of news articles from the specified day.
         """
         print(date)
+        try:
+            bool(datetime.datetime.strptime(date, "%Y-%m-%d"))
+        except ValueError:
+            raise ValueError("Invalid date format. Please use 'YYYY-MM-DD'.")
+
         rawday = self.client.collection("Days").get_full_list(
             query_params={"filter": f"id = '{date}'"}
         )
