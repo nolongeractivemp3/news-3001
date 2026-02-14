@@ -41,6 +41,7 @@ def save_day_report(articles: list[myclasses.News], ids: list[str], database):
 
     if ids:
         rep = report.create_and_save_report(database, articles)
+        print(f"Report saved with ID: {rep.id}")
         day = myclasses.Day(id=date, news=ids, reportid=rep.id)
         database.save_day(day)
         print(f"Day saved with {len(ids)} local articles")

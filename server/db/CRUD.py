@@ -28,6 +28,7 @@ class connection:
         return self.client.collection("days").create(day.tojson()).id
 
     def create_report(self, report: myclasses.Report) -> str:
+        print(f"Saving report id:{report.id}")
         return self.client.collection("report").create(report.tojson()).id
 
     def get_badge_by_id(self, badge_id: str) -> myclasses.Badge:
