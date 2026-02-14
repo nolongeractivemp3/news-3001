@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    --ink: #0a0a0a;
+    --paper: #f5f0e6;
+    --red: #e63946;
+    --red-hover: #c92a37;
+    --gold: #d4a853;
+    --muted: #9ca3af;
+}
+
+/* ── Base ─────────────────────────────────────── */
+
+* { font-family: 'Newsreader', Georgia, serif; }
+
+body {
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* subtle noise overlay */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+h1, h2, h3 {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+/* ── Typography ───────────────────────────────── */
+
+.display-text {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.95;
+}
+
+/* ── Borders & Sections ───────────────────────── */
+
+.border-subtle { border-color: rgba(245, 240, 230, 0.15); }
+
+.section-inverted {
+    background: var(--paper);
+    color: var(--ink);
+}
+.section-inverted .border-subtle { border-color: rgba(10, 10, 10, 0.15); }
+
+.accent-line {
+    width: 60px;
+    height: 2px;
+    background: var(--red);
+}
+
+/* ── Cards ────────────────────────────────────── */
+
+.card {
+    padding: 2rem;
+    border: 1px solid rgba(245, 240, 230, 0.1);
+    transition: border-color 0.3s, background 0.3s;
+}
+.card:hover {
+    border-color: var(--gold);
+    background: rgba(212, 168, 83, 0.03);
+}
+.section-inverted .card {
+    border-color: rgba(10, 10, 10, 0.1);
+}
+.section-inverted .card:hover {
+    border-color: var(--red);
+    background: rgba(230, 57, 70, 0.03);
+}
+
+/* ── Hover underline (nav links) ──────────────── */
+
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+}
+.nav-link:hover::after { width: 100%; }
+
+/* ── Code block ───────────────────────────────── */
+
+.code-block {
+    background: rgba(245, 240, 230, 0.05);
+    border: 1px solid rgba(245, 240, 230, 0.1);
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    white-space: pre;
+}
+.section-inverted .code-block {
+    background: rgba(10, 10, 10, 0.03);
+    border-color: rgba(10, 10, 10, 0.1);
+}
+.code-block .kw  { color: var(--red); }
+.code-block .str { color: var(--gold); }
+.code-block .cmt { color: var(--muted); }
+
+/* ── Numbered pipeline steps ──────────────────── */
+
+.step { counter-increment: step; }
+.step::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--red);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* ── Entrance animation ───────────────────────── */
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in:nth-child(2) { animation-delay: 0.1s; }
+.fade-in:nth-child(3) { animation-delay: 0.2s; }
+.fade-in:nth-child(4) { animation-delay: 0.3s; }
+
+/* ── Responsive ───────────────────────────────── */
+
+@media (max-width: 640px) {
+    body { font-size: 16px; }
+    
+    /* Hero */
+    .display-text { font-size: 2.25rem; }
+    header p.text-xl { font-size: 1rem; }
+    header .flex-wrap { flex-direction: column; }
+    header .flex-wrap a { width: 100%; text-align: center; }
+    
+    /* Section headers: stack vertically */
+    .flex.items-start.gap-12 {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    /* Code block scrollable */
+    .code-block {
+        overflow-x: auto;
+        font-size: 0.6rem;
+        padding: 1rem;
+        line-height: 1.6;
+    }
+    
+    /* Pipeline: 2 columns */
+    #architecture .grid { grid-template-columns: repeat(2, 1fr) !important; }
+    
+    /* Cards: single column */
+    .grid.md\:grid-cols-2,
+    .grid.sm\:grid-cols-2.lg\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Stats: keep 2x2 */
+    .grid.md\:grid-cols-4 { gap: 1rem; }
+    
+    /* Reduce padding */
+    .py-24, .py-32 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+    .py-12 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+    .px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
+    .mb-16 { margin-bottom: 2rem !important; }
+    
+    /* Footer stack */
+    footer .sm\:flex-row { flex-direction: column; text-align: center; gap: 1rem; }
+}
