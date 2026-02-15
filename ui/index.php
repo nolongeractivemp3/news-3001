@@ -1,8 +1,18 @@
 <?php
 $isRss = isset($_GET["rss"]);
+$defaultDate = date("Y-m-d");
+$selectedDate = $_GET["date"] ?? $defaultDate;
+$selectedDateObj = DateTime::createFromFormat("Y-m-d", $selectedDate);
+if ($selectedDateObj === false || $selectedDateObj->format("Y-m-d") !== $selectedDate) {
+    $selectedDate = $defaultDate;
+}
+
 $pageTitle = $isRss ? "RSS Feed" : "News Feed 3001";
 $navbarRss = $isRss ? "true" : "false";
-$cardDomain = $isRss ? "?domain=rss" : "";
+$navbarDate = $isRss ? "false" : "true";
+$cardDomain = $isRss
+    ? "?domain=rss"
+    : "?date=" . urlencode($selectedDate);
 $rawReport = file_get_contents("http://backend:5000/report");
 $decodedReport = json_decode($rawReport, true);
 $reportContent = is_string($decodedReport) ? $decodedReport : $rawReport;
@@ -73,11 +83,19 @@ $reportContent = str_replace(
     </script>
 
     <main class="p-4">
-        <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>&date=<?php echo $navbarDate; ?>&selectedDate=<?php echo urlencode(
+    $selectedDate,
+); ?>" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/card.php<?php echo $cardDomain; ?>" hx-trigger="load" hx-target="#news"></div>
-        <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
-            $reportContent,
-        ); ?>" hx-trigger="load" hx-target="#report"></div>
+        <?php if ($isRss): ?>
+            <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
+                $reportContent,
+            ); ?>" hx-trigger="load" hx-target="#report"></div>
+        <?php else: ?>
+            <div hx-get="components/report.php?name=report_modal&date=<?php echo urlencode(
+                $selectedDate,
+            ); ?>" hx-trigger="load" hx-target="#report"></div>
+        <?php endif; ?>
         <?php if ($isRss): ?>
             <div hx-get="components/report.php?name=rssexplanation&textstr=<?php echo urlencode(
                 "<p>RSS liefert Nachrichten schneller in Echtzeit, werden aber nicht gefiltert und sind nicht in der Zusammenfassung. (vielleicht später wenn ich mehr lust dazu habe ;) </p>",
