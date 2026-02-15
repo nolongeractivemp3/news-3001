@@ -274,7 +274,7 @@ ui.<span class="str">render()</span>                           <span class="cmt"
             </div>
             <div class="flex items-center gap-8 font-mono text-sm text-white/40">
                 <a href="https://news.jaypo.ch" target="_blank" class="hover:text-white transition-colors">App</a>
-                <a href="https://github.com/go-gitea/gitea" class="hover:text-white transition-colors">GitHub kommt bald ich hoste es auf gitea privat</a>
+                <a href="https://github.com/nolongeractivemp3/news-3001" class="hover:text-white transition-colors">GitHub kommt bald ich hoste es auf gitea privat</a>
             </div>
         </div>
     </footer>
