@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 import openrouter.openrouter_client
 from db import CRUD
@@ -38,6 +39,9 @@ def create_and_save_report(db: CRUD.connection, news: list[News]) -> Report:
     response += "<p><strong>Hinweis: Diese Zusammenfassung wurde automatisch mit KI erstellt und nicht auf faktische Richtigkeit überprüft.</strong></p>"
     print(f"response: {response}")
     report = Report(text=response)
+    report.id = datetime.now().strftime("%Y-%m-%d")
+    print(f"setting id to {report.id}")
+    print(f"date: {datetime.now()}")
     report_id = db.create_report(report)
     report.id = report_id
     return report
