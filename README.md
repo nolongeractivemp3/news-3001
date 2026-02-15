@@ -1,23 +1,37 @@
-commands:
+# news3001
 
-build:
+## Docker commands
 
-sudo docker compose up -d --build
+Build and start the stack:
 
-build tools 
+```bash
+docker compose up -d --build
+```
 
-sudo docker compose --profile tools build
+Run the scraper as a one-off command:
 
-run tools
+```bash
+docker compose run --rm scraper
+```
 
-sudo docker compose --profile tools run --rm scraper
+Follow logs:
 
-# important
-change port from 80:80 to x:80 where x is the desired port number
-# logs
-sudo docker compose logs -f news3001
+```bash
+docker compose logs -f backend
+docker compose logs -f scraper
+docker compose logs -f nginx_server
+```
 
-docker compose example:
+Stop everything:
+
+```bash
+docker compose down
+```
+
+The web server is currently exposed on `3049:80` (`http://localhost:3049`).
+
+## Docker Compose example
+
 ```yaml
 services:
   php_app:
@@ -28,31 +42,36 @@ services:
   nginx_server:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "3049:80"
     volumes:
       - ./ui:/var/www/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
   backend:
     build: ./server
+    image: news3001-server
     command: uv run server.py
     restart: always
     environment:
       POCKETBASE_URL: http://pocketbase:8080
-      POCKETBASE_ADMIN_EMAIL: "your-admin@example.com"
-      POCKETBASE_ADMIN_PASSWORD: "your-admin-password"
-      OPENROUTER_API_KEY: "your-openrouter-key"
+      POCKETBASE_ADMIN_EMAIL: "<admin-email>"
+      POCKETBASE_ADMIN_PASSWORD: "<admin-password>"
+      OPENROUTER_API_KEY: "<openrouter-api-key>"
 
   scraper:
-    build: ./server
-    command: uv run python scrape.py
-    profiles: ["tools"]
+    image: news3001-server
+    command: uv run run_scraper.py
+    ports:
+      - "5001:5001"
     environment:
       POCKETBASE_URL: http://pocketbase:8080
-      POCKETBASE_ADMIN_EMAIL: "your-admin@example.com"
-      POCKETBASE_ADMIN_PASSWORD: "your-admin-password"
-      OPENROUTER_API_KEY: "your-openrouter-key"
-      SERPAPI_API_KEY: "your-serpapi-key"
+      POCKETBASE_ADMIN_EMAIL: "<admin-email>"
+      POCKETBASE_ADMIN_PASSWORD: "<admin-password>"
+      OPENROUTER_API_KEY: "<openrouter-api-key>"
+      SERPAPI_API_KEY: "<serpapi-api-key>"
+    depends_on:
+      - backend
+      - pocketbase
 
   pocketbase:
     image: ghcr.io/muchobien/pocketbase:latest

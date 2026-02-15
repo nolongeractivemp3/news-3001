@@ -6,3 +6,5 @@ server/db/__pycache__/
 server/openrouter/__pycache__/
 docker-compose.yml
 telemetry-id
+server/scraper/__pycache__/*
+server/main.py
