@@ -2,6 +2,7 @@ import datetime
 import os
 
 from serpapi import search
+from rss import get_rss_feed
 
 from .models import ArticleInput
 
@@ -38,4 +39,29 @@ def fetch_google_results() -> list[ArticleInput]:
                 extra={"original": item},
             )
         )
+    return articles
+
+
+def fetch_rss_fallback_results(limit: int = 5) -> list[ArticleInput]:
+    rss_news = get_rss_feed()
+    print("Found", len(rss_news), "rss results")
+
+    articles = []
+    for item in rss_news[:limit]:
+        articles.append(
+            ArticleInput(
+                source=item.source,
+                title=item.title,
+                description=item.description,
+                link=item.link,
+                extra={
+                    "type": "rss",
+                    "original": {
+                        "id": item.id,
+                        "type": item.type,
+                    },
+                },
+            )
+        )
+    print("Using", len(articles), "rss fallback results")
     return articles
