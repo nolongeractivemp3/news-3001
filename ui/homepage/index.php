@@ -7,7 +7,7 @@
     <title>News3001 — Köpenick News Aggregator</title>
     <link rel="canonical" href="https://news.jaypo.ch/homepage/index.php">
     <meta name="description"
-        content="Alle Köpenick News zusammengefasst in einem Feed. KI-gestützte Nachrichtenzusammenfassung für Berlin-Köpenick. Köpenick News, Köpenick feed">
+        content="Alle Köpenick News zusammengefasst in einem Feed. KI-gestützte Nachrichtenzusammenfassung für Berlin-Köpenick. Köpenick News, Köpenick feed Köpenick News feed">
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72x72.png">
 

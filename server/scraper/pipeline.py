@@ -54,7 +54,7 @@ def run_scraper(min_filtered_results: int = 3):
         rss_articles = fetch_rss_fallback_results(limit=RSS_FALLBACK_COUNT)
         for article in rss_articles:
             print(f"\n--- RSS fallback: {article.title} ---")
-            enriched = enrich_scrape_content(article, use_description_fallback=True)
+            enriched = enrich_scrape_content(article)
             if not enriched:
                 continue
             articles_to_save.append(enriched)
