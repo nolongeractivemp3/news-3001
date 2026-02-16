@@ -1,14 +1,17 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-
 from ..models import ArticleInput
+from .snippet_local_keyword_pass import snippet_local_keyword_pass
+from .snippet_strong_non_local_reject import snippet_strong_non_local_reject
 
-RuleFn = Callable[[ArticleInput], bool | None]
+RULES = [
+    snippet_local_keyword_pass,
+    snippet_strong_non_local_reject,
+]
 
 
-def first_rule_decision(article: ArticleInput, rules: list[RuleFn]) -> bool | None:
-    for rule in rules:
+def first_rule_decision(article: ArticleInput) -> bool | None:
+    for rule in RULES:
         result = rule(article)
         if result is not None:
             return result

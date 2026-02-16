@@ -1,20 +1,15 @@
-from collections.abc import Callable
-
 from .enrichment import enrich_scrape_content
 from .fetchers import fetch_google_results, fetch_rss_fallback_results
 from .filters import filter_content_locality, filter_snippet_locality
 from .models import ArticleInput
-from .rules import SNIPPET_RULES, first_rule_decision
+from .rules import first_rule_decision
 from .storage import create_news_record, get_database, save_day_report, save_news
 
 RSS_FALLBACK_COUNT = 5
 
 
-def _passes_snippet_gate(
-    article: ArticleInput,
-    rules: list[Callable[[ArticleInput], bool | None]],
-) -> bool:
-    rule_result = first_rule_decision(article, rules)
+def _passes_snippet_gate(article: ArticleInput) -> bool:
+    rule_result = first_rule_decision(article)
     if rule_result is False:
         print("  Snippet rule: Rejected (skipping AI)")
         return False
@@ -37,10 +32,7 @@ def run_scraper(min_filtered_results: int = 3):
         if not enriched:
             continue
 
-        if not _passes_snippet_gate(
-            article=enriched,
-            rules=SNIPPET_RULES,
-        ):
+        if not _passes_snippet_gate(article=enriched):
             continue
 
         if not filter_content_locality(enriched):
