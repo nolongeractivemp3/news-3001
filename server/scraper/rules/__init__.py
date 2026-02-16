@@ -1,7 +1,9 @@
-from .content_rules import run_content_rules
-from .snippet_rules import run_snippet_rules
+from .content_rules import CONTENT_RULES
+from .runner import first_rule_decision
+from .snippet_rules import SNIPPET_RULES
 
 __all__ = [
-    "run_content_rules",
-    "run_snippet_rules",
+    "CONTENT_RULES",
+    "SNIPPET_RULES",
+    "first_rule_decision",
 ]
