@@ -20,7 +20,24 @@ LOCAL_TERMS = (
     "niederschoeneweide",
 )
 
-MIN_LOCAL_MATCHES = 1
+MIN_LOCAL_MATCHES_STRONG = 1
+
+LOCAL_PATH_HINTS = (
+    "treptow-koepenick",
+    "treptow_koepenick",
+    "treptowkoepenick",
+    "bezirke/treptow",
+    "bezirk/treptow",
+    "kopenick",
+    "koepenick",
+    "friedrichshagen",
+    "mueggelheim",
+    "muggelheim",
+    "gruenau",
+    "grunau",
+    "rahnsdorf",
+    "schmockwitz",
+)
 
 
 def _normalize(text: str) -> str:
@@ -44,8 +61,25 @@ def _snippet_text(article: ArticleInput) -> str:
     return " ".join([article.title, article.description, article.link])
 
 
+def _title_description(article: ArticleInput) -> str:
+    return " ".join([article.title, article.description])
+
+
+def _has_local_path_hint(link: str) -> bool:
+    lowered = (link or "").lower()
+    return any(hint in lowered for hint in LOCAL_PATH_HINTS)
+
+
 def snippet_local_keyword_pass(article: ArticleInput) -> bool | None:
-    matches = _find_matches(_snippet_text(article), LOCAL_TERMS)
-    if len(matches) >= MIN_LOCAL_MATCHES:
+    snippet_matches = _find_matches(_snippet_text(article), LOCAL_TERMS)
+    if len(snippet_matches) >= MIN_LOCAL_MATCHES_STRONG:
         return True
+
+    text_matches = _find_matches(_title_description(article), LOCAL_TERMS)
+    if text_matches and _has_local_path_hint(article.link):
+        return True
+
+    if text_matches and "bezirke" in _normalize(article.link):
+        return True
+
     return None

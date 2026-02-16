@@ -41,6 +41,18 @@ NON_LOCAL_HINTS = (
 
 MIN_NON_LOCAL_MATCHES = 2
 
+NON_LOCAL_PATH_HINTS = (
+    "/politik/",
+    "/welt/",
+    "/international/",
+    "/wirtschaft/",
+    "/sport/",
+    "/boerse/",
+    "/finanzen/",
+    "/promi/",
+    "/panorama/",
+)
+
 
 def _normalize(text: str) -> str:
     normalized = (text or "").lower()
@@ -63,13 +75,29 @@ def _snippet_text(article: ArticleInput) -> str:
     return " ".join([article.title, article.description, article.link])
 
 
+def _title_description(article: ArticleInput) -> str:
+    return " ".join([article.title, article.description])
+
+
+def _has_non_local_path_hint(link: str) -> bool:
+    lowered = (link or "").lower()
+    return any(hint in lowered for hint in NON_LOCAL_PATH_HINTS)
+
+
 def snippet_strong_non_local_reject(article: ArticleInput) -> bool | None:
-    snippet = _snippet_text(article)
-    local_matches = _find_matches(snippet, LOCAL_TERMS)
+    snippet_text = _snippet_text(article)
+    local_matches = _find_matches(snippet_text, LOCAL_TERMS)
     if local_matches:
         return None
 
-    non_local_matches = _find_matches(snippet, NON_LOCAL_HINTS)
+    non_local_matches = _find_matches(_title_description(article), NON_LOCAL_HINTS)
     if len(non_local_matches) >= MIN_NON_LOCAL_MATCHES:
         return False
+
+    if _has_non_local_path_hint(article.link) and not local_matches:
+        return False
+
+    if "bundesliga" in _normalize(_title_description(article)):
+        return False
+
     return None
