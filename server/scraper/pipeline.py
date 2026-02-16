@@ -1,10 +1,29 @@
+from collections.abc import Callable
+
 from .enrichment import enrich_scrape_content
 from .fetchers import fetch_google_results, fetch_rss_fallback_results
 from .filters import filter_content_locality, filter_snippet_locality
 from .models import ArticleInput
+from .rules import run_content_rules, run_snippet_rules
 from .storage import create_news_record, get_database, save_day_report, save_news
 
 RSS_FALLBACK_COUNT = 5
+
+
+def _passes_locality_gate(
+    article: ArticleInput,
+    run_rules: Callable[[ArticleInput], bool | None],
+    run_ai_filter: Callable[[ArticleInput], bool],
+    label: str,
+) -> bool:
+    rule_result = run_rules(article)
+    if rule_result is False:
+        print(f"  {label} rule: Rejected (skipping AI)")
+        return False
+    if rule_result is True:
+        print(f"  {label} rule: Accepted (skipping AI)")
+        return True
+    return run_ai_filter(article)
 
 
 def run_scraper(min_filtered_results: int = 3):
@@ -20,10 +39,20 @@ def run_scraper(min_filtered_results: int = 3):
         if not enriched:
             continue
 
-        if not filter_snippet_locality(enriched):
+        if not _passes_locality_gate(
+            article=enriched,
+            run_rules=run_snippet_rules,
+            run_ai_filter=filter_snippet_locality,
+            label="Snippet",
+        ):
             continue
 
-        if not filter_content_locality(enriched):
+        if not _passes_locality_gate(
+            article=enriched,
+            run_rules=run_content_rules,
+            run_ai_filter=filter_content_locality,
+            label="Deep",
+        ):
             continue
 
         filtered_articles.append(enriched)
