@@ -19,11 +19,11 @@ def filter_snippet_locality(article: ArticleInput) -> bool:
 
 
 def filter_content_locality(article: ArticleInput) -> bool:
+    print("  Deep check: Asking AI...")
     is_local = content_scraper.check_full_content_locality(
         article.full_text, openrouter_api_key
     )
     if not is_local:
-        print("  Deep check: Not truly local (skipping)")
         return False
     print("  Confirmed local!")
     return True

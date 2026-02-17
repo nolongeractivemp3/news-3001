@@ -8,3 +8,4 @@ docker-compose.yml
 telemetry-id
 server/scraper/__pycache__/*
 server/main.py
+server/scraper/rules/__pycache__/

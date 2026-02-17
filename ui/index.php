@@ -13,14 +13,21 @@ $navbarDate = $isRss ? "false" : "true";
 $cardDomain = $isRss
     ? "?domain=rss"
     : "?date=" . urlencode($selectedDate);
-$rawReport = file_get_contents("http://backend:5000/report");
-$decodedReport = json_decode($rawReport, true);
-$reportContent = is_string($decodedReport) ? $decodedReport : $rawReport;
-$reportContent = str_replace(
-    ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
-    "",
-    $reportContent,
-);
+$reportContent = "";
+if ($isRss) {
+    $rawReport = @file_get_contents("http://backend:5000/report");
+    if ($rawReport === false || trim($rawReport) === "") {
+        $reportContent = "<p>Für heute ist keine Zusammenfassung verfügbar.</p>";
+    } else {
+        $decodedReport = json_decode($rawReport, true);
+        $reportContent = is_string($decodedReport) ? $decodedReport : $rawReport;
+    }
+    $reportContent = str_replace(
+        ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
+        "",
+        $reportContent,
+    );
+}
 ?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
