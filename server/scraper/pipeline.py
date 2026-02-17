@@ -8,17 +8,6 @@ from .storage import create_news_record, get_database, save_day_report, save_new
 RSS_FALLBACK_COUNT = 5
 
 
-def _passes_snippet_gate(article: ArticleInput) -> bool:
-    rule_result = first_rule_decision(article)
-    if rule_result is False:
-        print("  Snippet rule: Rejected (skipping AI)")
-        return False
-    if rule_result is True:
-        print("  Snippet rule: Accepted (skipping AI)")
-        return True
-    return filter_snippet_locality(article)
-
-
 def run_scraper(min_filtered_results: int = 3):
     database = get_database()
     articles = fetch_google_results()
@@ -32,8 +21,12 @@ def run_scraper(min_filtered_results: int = 3):
         if not enriched:
             continue
 
-        if not _passes_snippet_gate(article=enriched):
+        rule_result = first_rule_decision(enriched)
+        if rule_result is False:
             continue
+        if rule_result is None:
+            if not filter_snippet_locality(enriched):
+                continue
 
         if not filter_content_locality(enriched):
             continue
