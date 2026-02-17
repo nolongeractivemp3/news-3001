@@ -23,12 +23,15 @@ def run_scraper(min_filtered_results: int = 3):
 
         rule_result = first_rule_decision(enriched)
         if rule_result is False:
+            print("rule said NOOOOO")
             continue
         if rule_result is None:
+            print("rule said ahh im not sure about this one")
             if not filter_snippet_locality(enriched):
                 continue
 
         if not filter_content_locality(enriched):
+            print("deep check said NOOOOO")
             continue
 
         filtered_articles.append(enriched)
