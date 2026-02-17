@@ -57,7 +57,10 @@ def oldreport(date: str):
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date format")
     connection = get_database()
-    report = connection.get_report_from_day(date)
+    try:
+        report = connection.get_report_from_day(date)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     return report.text
 
 
@@ -78,7 +81,10 @@ def rssserver():
 @app.get("/report")
 def report():
     db = get_database()
-    report = db.get_todays_report()
+    try:
+        report = db.get_todays_report()
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     print(report)
     return report.text
 
