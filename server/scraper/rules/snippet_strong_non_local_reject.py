@@ -2,55 +2,11 @@ from __future__ import annotations
 
 from ..models import ArticleInput
 
-LOCAL_TERMS = (
-    "kopenick",
-    "koepenick",
-    "treptow",
-    "treptow kopenick",
-    "treptow koepenick",
-    "friedrichshagen",
-    "muggelheim",
-    "mueggelheim",
-    "grunau",
-    "gruenau",
-    "rahnsdorf",
-    "schmockwitz",
-    "adlershof",
-    "oberschoeneweide",
-    "niederschoeneweide",
-)
-
-NON_LOCAL_HINTS = (
+BLOCKED_KEYWORDS = (
     "international",
-    "weltweit",
-    "welt",
     "global",
-    "deutschlandweit",
+    "weltweit",
     "bundesweit",
-    "europa",
-    "usa",
-    "ukraine",
-    "russland",
-    "israel",
-    "gaza",
-    "china",
-    "trump",
-    "bundestag",
-    "bundesregierung",
-)
-
-MIN_NON_LOCAL_MATCHES = 2
-
-NON_LOCAL_PATH_HINTS = (
-    "/politik/",
-    "/welt/",
-    "/international/",
-    "/wirtschaft/",
-    "/sport/",
-    "/boerse/",
-    "/finanzen/",
-    "/promi/",
-    "/panorama/",
 )
 
 
@@ -62,42 +18,17 @@ def _normalize(text: str) -> str:
         .replace("ü", "ue")
         .replace("ß", "ss")
     )
-    return " " + normalized.replace("-", " ").replace("/", " ") + " "
+    return normalized.replace("-", " ").replace("/", " ").replace("_", " ")
 
 
-def _find_matches(text: str, terms: tuple[str, ...]) -> list[str]:
-    normalized_text = _normalize(text)
-    matches = [term for term in terms if f" {term} " in normalized_text]
-    return sorted(set(matches))
-
-
-def _snippet_text(article: ArticleInput) -> str:
-    return " ".join([article.title, article.description, article.link])
-
-
-def _title_description(article: ArticleInput) -> str:
-    return " ".join([article.title, article.description])
-
-
-def _has_non_local_path_hint(link: str) -> bool:
-    lowered = (link or "").lower()
-    return any(hint in lowered for hint in NON_LOCAL_PATH_HINTS)
+def _contains_keyword(text: str, keyword: str) -> bool:
+    normalized_text = " " + _normalize(text) + " "
+    normalized_keyword = _normalize(keyword).strip()
+    return f" {normalized_keyword} " in normalized_text
 
 
 def snippet_strong_non_local_reject(article: ArticleInput) -> bool | None:
-    snippet_text = _snippet_text(article)
-    local_matches = _find_matches(snippet_text, LOCAL_TERMS)
-    if local_matches:
-        return None
-
-    non_local_matches = _find_matches(_title_description(article), NON_LOCAL_HINTS)
-    if len(non_local_matches) >= MIN_NON_LOCAL_MATCHES:
+    scope = " ".join([article.title, article.description])
+    if any(_contains_keyword(scope, keyword) for keyword in BLOCKED_KEYWORDS):
         return False
-
-    if _has_non_local_path_hint(article.link) and not local_matches:
-        return False
-
-    if "bundesliga" in _normalize(_title_description(article)):
-        return False
-
     return None

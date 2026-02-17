@@ -2,41 +2,11 @@ from __future__ import annotations
 
 from ..models import ArticleInput
 
-LOCAL_TERMS = (
-    "kopenick",
+REQUIRED_KEYWORDS = (
     "koepenick",
+    "köpenick",
     "treptow",
-    "treptow kopenick",
-    "treptow koepenick",
-    "friedrichshagen",
-    "muggelheim",
-    "mueggelheim",
-    "grunau",
-    "gruenau",
-    "rahnsdorf",
-    "schmockwitz",
-    "adlershof",
-    "oberschoeneweide",
-    "niederschoeneweide",
-)
-
-MIN_LOCAL_MATCHES_STRONG = 1
-
-LOCAL_PATH_HINTS = (
-    "treptow-koepenick",
-    "treptow_koepenick",
-    "treptowkoepenick",
-    "bezirke/treptow",
-    "bezirk/treptow",
-    "kopenick",
-    "koepenick",
-    "friedrichshagen",
-    "mueggelheim",
-    "muggelheim",
-    "gruenau",
-    "grunau",
-    "rahnsdorf",
-    "schmockwitz",
+    "treptow-köpenick",
 )
 
 
@@ -48,38 +18,17 @@ def _normalize(text: str) -> str:
         .replace("ü", "ue")
         .replace("ß", "ss")
     )
-    return " " + normalized.replace("-", " ").replace("/", " ") + " "
+    return normalized.replace("-", " ").replace("/", " ").replace("_", " ")
 
 
-def _find_matches(text: str, terms: tuple[str, ...]) -> list[str]:
-    normalized_text = _normalize(text)
-    matches = [term for term in terms if f" {term} " in normalized_text]
-    return sorted(set(matches))
-
-
-def _snippet_text(article: ArticleInput) -> str:
-    return " ".join([article.title, article.description, article.link])
-
-
-def _title_description(article: ArticleInput) -> str:
-    return " ".join([article.title, article.description])
-
-
-def _has_local_path_hint(link: str) -> bool:
-    lowered = (link or "").lower()
-    return any(hint in lowered for hint in LOCAL_PATH_HINTS)
+def _contains_keyword(text: str, keyword: str) -> bool:
+    normalized_text = " " + _normalize(text) + " "
+    normalized_keyword = _normalize(keyword).strip()
+    return f" {normalized_keyword} " in normalized_text
 
 
 def snippet_local_keyword_pass(article: ArticleInput) -> bool | None:
-    snippet_matches = _find_matches(_snippet_text(article), LOCAL_TERMS)
-    if len(snippet_matches) >= MIN_LOCAL_MATCHES_STRONG:
-        return True
-
-    text_matches = _find_matches(_title_description(article), LOCAL_TERMS)
-    if text_matches and _has_local_path_hint(article.link):
-        return True
-
-    if text_matches and "bezirke" in _normalize(article.link):
-        return True
-
-    return None
+    scope = " ".join([article.title, article.description])
+    if any(_contains_keyword(scope, keyword) for keyword in REQUIRED_KEYWORDS):
+        return None
+    return False
