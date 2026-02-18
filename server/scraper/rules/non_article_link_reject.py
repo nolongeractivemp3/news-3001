@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 from ..models import ArticleInput
 
 DEFINITE_FALSE_PATHS = (
-    "/",
     "/home",
     "/homepage",
     "/startseite",
@@ -31,6 +30,7 @@ DEFINITE_FALSE_PATHS = (
 )
 
 MAYBE_PATHS = (
+    "/",
     "/news",
     "/nachrichten",
     "/latest",
