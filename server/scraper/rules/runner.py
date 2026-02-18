@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from ..models import ArticleInput
 from .blocked_domain_reject import blocked_domain_reject
+from .non_article_link_reject import non_article_link_reject
 from .snippet_local_keyword_pass import snippet_local_keyword_pass
 from .snippet_strong_non_local_reject import snippet_strong_non_local_reject
 
 RULES = [
     snippet_local_keyword_pass,
     blocked_domain_reject,
+    non_article_link_reject,
     snippet_strong_non_local_reject,
 ]
 
