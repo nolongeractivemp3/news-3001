@@ -2,7 +2,7 @@ from .enrichment import enrich_scrape_content
 from .fetchers import fetch_google_results, fetch_rss_fallback_results
 from .filters import filter_content_locality, filter_snippet_locality
 from .models import ArticleInput
-from .rules import first_rule_decision
+from .rules.runner import first_rule_decision
 from .storage import create_news_record, get_database, save_day_report, save_news
 
 RSS_FALLBACK_COUNT = 5
