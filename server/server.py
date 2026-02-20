@@ -1,8 +1,7 @@
 import datetime
-import json
 import os
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 import rss
@@ -87,6 +86,38 @@ def report():
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     print(report)
     return report.text
+
+
+def _raise_stats_exception(exc: ValueError):
+    status_code = 404 if str(exc).startswith("No day found for date:") else 400
+    raise HTTPException(status_code=status_code, detail=str(exc)) from exc
+
+
+@app.get("/stats/day")
+def day_stats(date: str = Query(..., description="Date format: YYYY-MM-DD")):
+    db = get_database()
+    try:
+        return db.get_day_stats(date)
+    except ValueError as exc:
+        _raise_stats_exception(exc)
+
+
+@app.get("/stats/tags/daily")
+def daily_tag_stats(days: int = Query(30, ge=1, le=365)):
+    db = get_database()
+    try:
+        return db.get_tag_usage_by_day(days)
+    except ValueError as exc:
+        _raise_stats_exception(exc)
+
+
+@app.get("/stats/summary")
+def stats_summary(days: int = Query(30, ge=1, le=365)):
+    db = get_database()
+    try:
+        return db.get_scraper_summary(days)
+    except ValueError as exc:
+        _raise_stats_exception(exc)
 
 
 if __name__ == "__main__":
