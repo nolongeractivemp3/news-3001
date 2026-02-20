@@ -9,8 +9,8 @@ $daily_json = json_encode(
 ?>
 
 <section class="stats-chart-card">
-  <h2 class="stats-chart-title">Getaggt vs. Ungetaggt</h2>
-  <p class="stats-chart-subtitle">Stacked Ansicht pro Tag.</p>
+  <h2 class="stats-chart-title">Getaggt vs. Nicht Getaggt</h2>
+  <p class="stats-chart-subtitle">Wie viele News nach Themen kategorisiert sind</p>
   <div class="stats-chart-canvas-wrap">
     <canvas id="chart-tagged-vs-untagged"></canvas>
   </div>

@@ -159,6 +159,7 @@ def get_tag_usage_by_day(client, days: int = 30) -> dict[str, Any]:
             "article_count": day["article_count"],
             "untagged_article_count": day["untagged_article_count"],
             "tag_counts": day["tag_counts"],
+            "source_counts": day["source_counts"],
         }
         for day in day_stats
     ]

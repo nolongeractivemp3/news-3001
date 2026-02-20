@@ -9,10 +9,10 @@ $daily_json = json_encode(
 ?>
 
 <section class="stats-chart-card">
-  <h2 class="stats-chart-title">Top Themen (Gesamt)</h2>
-  <p class="stats-chart-subtitle">Häufigste Themen im aktuellen Zeitfenster.</p>
+  <h2 class="stats-chart-title">Top Quellen (Gesamt)</h2>
+  <p class="stats-chart-subtitle">Haeufigste Quellen im aktuellen Zeitfenster.</p>
   <div class="stats-chart-canvas-wrap">
-    <canvas id="chart-top-tags"></canvas>
+    <canvas id="chart-top-sources"></canvas>
   </div>
 </section>
 
@@ -22,14 +22,14 @@ $daily_json = json_encode(
     const totals = {};
 
     daily.forEach((entry) => {
-      const tagCounts = Array.isArray(entry.tag_counts) ? entry.tag_counts : [];
-      tagCounts.forEach((tagEntry) => {
-        const tag = String(tagEntry.tag ?? "").trim();
-        if (!tag) {
+      const sourceCounts = Array.isArray(entry.source_counts) ? entry.source_counts : [];
+      sourceCounts.forEach((sourceEntry) => {
+        const source = String(sourceEntry.source ?? "").trim();
+        if (!source) {
           return;
         }
-        const count = Number(tagEntry.count ?? 0);
-        totals[tag] = (totals[tag] || 0) + count;
+        const count = Number(sourceEntry.count ?? 0);
+        totals[source] = (totals[source] || 0) + count;
       });
     });
 
@@ -37,21 +37,21 @@ $daily_json = json_encode(
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
       .slice(0, 10);
 
-    const labels = sorted.map(([tag]) => tag);
+    const labels = sorted.map(([source]) => source);
     const values = sorted.map(([, count]) => count);
     const colors = window.newsStatsCharts?.colors || {};
 
-    window.newsStatsCharts?.mountChart("chart-top-tags", {
+    window.newsStatsCharts?.mountChart("chart-top-sources", {
       type: "bar",
       data: {
         labels,
         datasets: [
           {
-            label: "Tag-Nennungen",
+            label: "Artikel je Quelle",
             data: values,
             borderWidth: 1,
-            borderColor: colors.violetBorder || "rgba(167, 139, 250, 1)",
-            backgroundColor: colors.violet || "rgba(167, 139, 250, 0.7)",
+            borderColor: colors.amberBorder || "rgba(251, 191, 36, 1)",
+            backgroundColor: colors.amber || "rgba(251, 191, 36, 0.8)",
           },
         ],
       },

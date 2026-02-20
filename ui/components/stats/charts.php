@@ -122,8 +122,8 @@ $encoded_data = urlencode($raw_data);
        hx-get="components/stats/tagged_vs_untagged.php?data=<?php echo $encoded_data; ?>"
        hx-trigger="load"></div>
 
-  <div id="stats-chart-untagged-share"
-       hx-get="components/stats/untagged_share.php?data=<?php echo $encoded_data; ?>"
+  <div id="stats-chart-top-sources"
+       hx-get="components/stats/top_sources.php?data=<?php echo $encoded_data; ?>"
        hx-trigger="load"></div>
 
   <div id="stats-chart-top-tags"
