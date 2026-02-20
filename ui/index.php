@@ -74,7 +74,7 @@ if ($isRss) {
 <body>
     <style>
         body {
-            background-color: 333446;
+            background-color: #1d232a;
             color: white;
         }
     </style>
