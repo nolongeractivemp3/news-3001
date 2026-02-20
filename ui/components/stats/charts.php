@@ -13,7 +13,7 @@ $encoded_data = urlencode($raw_data);
   }
 
   .stats-chart-card {
-    background: rgba(17, 24, 39, 0.45);
+    background: #3b4754;
     border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 0.9rem;
     padding: 1rem;
