@@ -1,6 +1,8 @@
 <?php
-$raw_data = urldecode($_GET["data"] ?? "{}");
-$parsed_data = json_decode($raw_data, true);
+if (!isset($parsed_data) || !is_array($parsed_data)) {
+    $raw_data = urldecode($_GET["data"] ?? "{}");
+    $parsed_data = json_decode($raw_data, true);
+}
 $daily = is_array($parsed_data["daily"] ?? null) ? $parsed_data["daily"] : [];
 $daily_json = json_encode(
     $daily,

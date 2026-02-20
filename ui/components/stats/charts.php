@@ -1,6 +1,9 @@
 <?php
-$raw_data = urldecode($_GET["data"] ?? "{}");
-$encoded_data = urlencode($raw_data);
+$raw_data = @file_get_contents("http://backend:5000/stats/tags/daily");
+$parsed_data = json_decode($raw_data ?: "{}", true);
+if (!is_array($parsed_data)) {
+  $parsed_data = [];
+}
 ?>
 
 <style>
@@ -114,19 +117,8 @@ $encoded_data = urlencode($raw_data);
 </script>
 
 <div class="stats-charts-grid">
-  <div id="stats-chart-articlecount"
-       hx-get="components/stats/artikelcount.php?data=<?php echo $encoded_data; ?>"
-       hx-trigger="load"></div>
-
-  <div id="stats-chart-tagged-untagged"
-       hx-get="components/stats/tagged_vs_untagged.php?data=<?php echo $encoded_data; ?>"
-       hx-trigger="load"></div>
-
-  <div id="stats-chart-top-sources"
-       hx-get="components/stats/top_sources.php?data=<?php echo $encoded_data; ?>"
-       hx-trigger="load"></div>
-
-  <div id="stats-chart-top-tags"
-       hx-get="components/stats/top_tags.php?data=<?php echo $encoded_data; ?>"
-       hx-trigger="load"></div>
+  <?php include __DIR__ . "/artikelcount.php"; ?>
+  <?php include __DIR__ . "/tagged_vs_untagged.php"; ?>
+  <?php include __DIR__ . "/top_sources.php"; ?>
+  <?php include __DIR__ . "/top_tags.php"; ?>
 </div>

@@ -12,7 +12,6 @@ $reportContent = str_replace(
     ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
     "", 
     $rawReport);  // FIX: Use $rawReport as the subject, not empty $reportContent
-$raw_data = @file_get_contents("http://backend:5000/stats/tags/daily");
 ?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
@@ -68,7 +67,7 @@ $raw_data = @file_get_contents("http://backend:5000/stats/tags/daily");
 
     <main class="p-4">
         <div hx-get="components/navbar.php?rss=false&selectedDate=false" hx-trigger="load" hx-target="#navbar"></div>
-        <div hx-get="components/stats/charts.php?data=<?php echo urlencode($raw_data); ?>"  hx-trigger="load" hx-target="#charts"></div>
+        <div hx-get="components/stats/charts.php" hx-trigger="load" hx-target="#charts"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
                 $reportContent,
             ); ?>" hx-trigger="load" hx-target="#report"></div>
