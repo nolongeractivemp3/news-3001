@@ -9,10 +9,10 @@ $daily_json = json_encode(
 ?>
 
 <section class="stats-chart-card">
-  <h2 class="stats-chart-title">Artikel pro Tag</h2>
-  <p class="stats-chart-subtitle">Anzahl aller erfassten Artikel je Datum.</p>
+  <h2 class="stats-chart-title">Getaggt vs. Ungetaggt</h2>
+  <p class="stats-chart-subtitle">Stacked Ansicht pro Tag.</p>
   <div class="stats-chart-canvas-wrap">
-    <canvas id="chart-article-count"></canvas>
+    <canvas id="chart-tagged-vs-untagged"></canvas>
   </div>
 </section>
 
@@ -20,20 +20,34 @@ $daily_json = json_encode(
   (() => {
     const daily = <?php echo $daily_json ?: "[]"; ?>;
     const labels = daily.map((entry) => entry.date ?? "");
-    const articleCounts = daily.map((entry) => Number(entry.article_count ?? 0));
+    const untagged = daily.map((entry) => Number(entry.untagged_article_count ?? 0));
+    const tagged = daily.map((entry) => {
+      const articleCount = Number(entry.article_count ?? 0);
+      const untaggedCount = Number(entry.untagged_article_count ?? 0);
+      return Math.max(articleCount - untaggedCount, 0);
+    });
     const colors = window.newsStatsCharts?.colors || {};
 
-    window.newsStatsCharts?.mountChart("chart-article-count", {
+    window.newsStatsCharts?.mountChart("chart-tagged-vs-untagged", {
       type: "bar",
       data: {
         labels,
         datasets: [
           {
-            label: "Artikel",
-            data: articleCounts,
+            label: "Getaggt",
+            data: tagged,
             borderWidth: 1,
-            borderColor: colors.blueBorder || "rgba(56, 189, 248, 1)",
-            backgroundColor: colors.blue || "rgba(56, 189, 248, 0.8)",
+            borderColor: colors.greenBorder || "rgba(74, 222, 128, 1)",
+            backgroundColor: colors.green || "rgba(74, 222, 128, 0.7)",
+            stack: "article_tag_state",
+          },
+          {
+            label: "Ungetaggt",
+            data: untagged,
+            borderWidth: 1,
+            borderColor: colors.roseBorder || "rgba(251, 113, 133, 1)",
+            backgroundColor: colors.rose || "rgba(251, 113, 133, 0.75)",
+            stack: "article_tag_state",
           },
         ],
       },
@@ -47,6 +61,7 @@ $daily_json = json_encode(
         },
         scales: {
           x: {
+            stacked: true,
             ticks: {
               color: colors.slateText || "#cbd5e1",
             },
@@ -55,6 +70,7 @@ $daily_json = json_encode(
             },
           },
           y: {
+            stacked: true,
             beginAtZero: true,
             ticks: {
               color: colors.slateText || "#cbd5e1",

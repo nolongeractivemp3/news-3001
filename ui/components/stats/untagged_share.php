@@ -9,10 +9,10 @@ $daily_json = json_encode(
 ?>
 
 <section class="stats-chart-card">
-  <h2 class="stats-chart-title">Artikel pro Tag</h2>
-  <p class="stats-chart-subtitle">Anzahl aller erfassten Artikel je Datum.</p>
+  <h2 class="stats-chart-title">Anteil ungetaggt (%)</h2>
+  <p class="stats-chart-subtitle">Prozentsatz ungetaggter Artikel je Tag.</p>
   <div class="stats-chart-canvas-wrap">
-    <canvas id="chart-article-count"></canvas>
+    <canvas id="chart-untagged-share"></canvas>
   </div>
 </section>
 
@@ -20,20 +20,31 @@ $daily_json = json_encode(
   (() => {
     const daily = <?php echo $daily_json ?: "[]"; ?>;
     const labels = daily.map((entry) => entry.date ?? "");
-    const articleCounts = daily.map((entry) => Number(entry.article_count ?? 0));
+    const untaggedShare = daily.map((entry) => {
+      const articleCount = Number(entry.article_count ?? 0);
+      const untaggedCount = Number(entry.untagged_article_count ?? 0);
+      if (articleCount <= 0) {
+        return 0;
+      }
+      return Number(((untaggedCount / articleCount) * 100).toFixed(1));
+    });
     const colors = window.newsStatsCharts?.colors || {};
 
-    window.newsStatsCharts?.mountChart("chart-article-count", {
-      type: "bar",
+    window.newsStatsCharts?.mountChart("chart-untagged-share", {
+      type: "line",
       data: {
         labels,
         datasets: [
           {
-            label: "Artikel",
-            data: articleCounts,
-            borderWidth: 1,
-            borderColor: colors.blueBorder || "rgba(56, 189, 248, 1)",
-            backgroundColor: colors.blue || "rgba(56, 189, 248, 0.8)",
+            label: "Ungetaggt (%)",
+            data: untaggedShare,
+            borderWidth: 2,
+            borderColor: colors.amberBorder || "rgba(251, 191, 36, 1)",
+            backgroundColor: colors.amber || "rgba(251, 191, 36, 0.8)",
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            tension: 0.25,
+            fill: false,
           },
         ],
       },
@@ -42,6 +53,13 @@ $daily_json = json_encode(
           legend: {
             labels: {
               color: colors.slateText || "#cbd5e1",
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label(context) {
+                return `${context.dataset.label}: ${context.parsed.y}%`;
+              },
             },
           },
         },
@@ -56,9 +74,12 @@ $daily_json = json_encode(
           },
           y: {
             beginAtZero: true,
+            max: 100,
             ticks: {
               color: colors.slateText || "#cbd5e1",
-              precision: 0,
+              callback(value) {
+                return `${value}%`;
+              },
             },
             grid: {
               color: colors.slateGrid || "rgba(148, 163, 184, 0.2)",

@@ -7,6 +7,7 @@ $date = $_GET["date"] ?? "false";
     <div class="navbar-start w-auto flex-nowrap items-center gap-0">
         <a href="/" class="btn btn-ghost normal-case text-xl px-2 sm:px-3">News</a>
         <a href="/index.php?rss" class="btn btn-ghost normal-case px-2 sm:px-3">RSS</a>
+        <a href="/stats.php" class="btn btn-ghost normal-case px-2 sm:px-3">Stats</a>
         <?php if ($date === "true"): ?>
             <?php include __DIR__ . "/datepicker.php"; ?>
         <?php endif; ?>

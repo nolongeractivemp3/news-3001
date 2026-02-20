@@ -68,14 +68,14 @@ $raw_data = @file_get_contents("http://backend:5000/stats/tags/daily");
 
     <main class="p-4">
         <div hx-get="components/navbar.php?rss=false&selectedDate=false" hx-trigger="load" hx-target="#navbar"></div>
-        <div hx-get="components/stats/charts.php?data=<?php echo urlencode($raw_data); ?>"  hx-trigger="load" hx-target="#chart"></div>
+        <div hx-get="components/stats/charts.php?data=<?php echo urlencode($raw_data); ?>"  hx-trigger="load" hx-target="#charts"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
                 $reportContent,
             ); ?>" hx-trigger="load" hx-target="#report"></div>
         <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 
         <div id="navbar"> </div>
-        <div id='chart'></div>
+        <div id='charts'></div>
         <div id="report"> </div>
         <div id="settings"> </div>
         <?php if ($isRss): ?>
