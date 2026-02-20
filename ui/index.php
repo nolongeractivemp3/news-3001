@@ -71,7 +71,7 @@ if ($isRss) {
     <script src="/js/settings.js" defer></script>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
     <style>
         body {
             background-color: #1d232a;
@@ -90,7 +90,7 @@ if ($isRss) {
         }
     </script>
 
-    <main class="p-4">
+    <main class="w-full flex-1 p-4 flex flex-col">
         <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>&date=<?php echo $navbarDate; ?>&selectedDate=<?php echo urlencode(
     $selectedDate,
 ); ?>" hx-trigger="load" hx-target="#navbar"></div>
@@ -118,7 +118,10 @@ if ($isRss) {
         <?php if ($isRss): ?>
             <div id="rss"> </div>
         <?php endif; ?>
+
     </main>
+
+    <?php include __DIR__ . "/components/footer.php"; ?>
 
     <!-- Service Worker Registration -->
     <script>

@@ -51,7 +51,7 @@ $reportContent = str_replace(
     <script src="/js/settings.js" defer></script>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
     <style>
         body {
             background-color: #1d232a;
@@ -65,7 +65,7 @@ $reportContent = str_replace(
 </script>
 
 
-    <main class="p-4">
+    <main class="w-full flex-1 p-4 flex flex-col">
         <div hx-get="components/navbar.php?rss=false&selectedDate=false" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/stats/charts.php" hx-trigger="load" hx-target="#charts"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
@@ -80,7 +80,10 @@ $reportContent = str_replace(
         <?php if ($isRss): ?>
             <div id="rss"> </div>
         <?php endif; ?>
+
     </main>
+
+    <?php include __DIR__ . "/components/footer.php"; ?>
 
     <!-- Service Worker Registration -->
     <script>

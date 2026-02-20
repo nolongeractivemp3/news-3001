@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
 
     <!-- Nav -->
     <nav class="border-b border-subtle bg-black/50 backdrop-blur sticky top-0 z-50">
@@ -264,19 +264,7 @@ ui.<span class="str">render()</span>                           <span class="cmt"
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="max-w-5xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <span class="text-xl">📰</span>
-                <span class="font-medium">News3001</span>
-            </div>
-            <div class="flex items-center gap-8 font-mono text-sm text-white/40">
-                <a href="https://news.jaypo.ch" target="_blank" class="hover:text-white transition-colors">App</a>
-                <a href="https://github.com/nolongeractivemp3/news-3001" class="hover:text-white transition-colors">GitHub kommt bald ich hoste es auf gitea privat</a>
-            </div>
-        </div>
-    </footer>
+    <?php include __DIR__ . "/../components/footer.php"; ?>
 
 </body>
 
