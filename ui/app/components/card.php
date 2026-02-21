@@ -36,7 +36,7 @@ $ignoredSet = array_flip($ignoredSources);
 
                 <div class="flex items-center  mr-auto">
                     <?php if ($mode != "rss"): ?>
-                    <div hx-get="/components/badge.php?badge=<?php echo htmlspecialchars(
+                    <div hx-get="/app/components/badge.php?badge=<?php echo htmlspecialchars(
                         urlencode(json_encode($item["badges"])),
                     ); ?>"
                          hx-trigger="load"
