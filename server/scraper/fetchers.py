@@ -56,48 +56,59 @@ def fetch_google_results() -> list[ArticleInput]:
 def fetch_test_articles() -> list[ArticleInput]:
     articles = [
         ArticleInput(
-            source="Manual Berlin Feed",
-            title="Köpenick district library starts evening reading program",
+            source="Berlin.de",
+            title="Feministischer März 2026 in Treptow-Köpenick",
             description=(
-                "Treptow-Köpenick residents can join weekly reading sessions "
-                "at the district library."
+                "Im Feministischen März laden auch im Jahr 2026 wieder zahlreiche "
+                "Organisationen, Initiativen, Aktivist*innen und die "
+                "Gleichstellungsbeauftragte zu ..."
             ),
-            link="https://manual.test/koepenick/library-evening-program",
-            full_text=(
-                "The district office of Treptow-Koepenick announced a new evening "
-                "reading program at the Koepenick central library. Local families "
-                "from nearby neighborhoods are invited to attend sessions every "
-                "Thursday."
-            ),
-            extra={"type": "manual_test", "original": {"type": "manual", "index": 1}},
+            link="https://www.berlin.de/ba-treptow-koepenick/aktuelles/pressemitteilungen/2026/pressemitteilung.1640109.php",
+            extra={
+                "type": "manual_test",
+                "original": {"id": "8yki9112ul3slub", "type": "google"},
+            },
         ),
         ArticleInput(
-            source="Manual Berlin Feed",
-            title="Treptow-Köpenick opens new bike lane near S-Bahn",
+            source="B.Z. – Die Stimme Berlins",
+            title="Treptow-Köpenick - Berlin",
             description=(
-                "A new bike corridor improves commuter access between Adlershof "
-                "and Köpenick."
+                "Aktuelle Nachrichten aus Treptow-Köpenick. News zu Politik, "
+                "Wirtschaft, Sport und Kultur sowie aktuelle Polizeimeldungen "
+                "aus Berlin auf BZ.de."
             ),
-            link="https://manual.test/treptow-koepenick/new-bike-lane",
-            full_text=(
-                "The borough administration in Treptow-Koepenick opened a new bike "
-                "lane connecting major commuter routes. The route runs near local "
-                "schools and transit stops and is focused on district-level traffic "
-                "safety."
-            ),
-            extra={"type": "manual_test", "original": {"type": "manual", "index": 2}},
+            link="https://www.bz-berlin.de/berlin/treptow-koepenick",
+            extra={
+                "type": "manual_test",
+                "original": {"id": "9n3lu3lh1lew5pe", "type": "google"},
+            },
         ),
         ArticleInput(
-            source="Manual Berlin Feed",
-            title="Köpenick global sports partnership announced",
-            description="District club leaders discussed an international cooperation project.",
-            link="https://manual.test/koepenick/global-partnership",
-            full_text=(
-                "A sports organization in Koepenick announced a global partnership "
-                "program with clubs outside Berlin. The project focuses on exchange "
-                "events and long-term sponsorship opportunities."
+            source="Berliner Morgenpost",
+            title="Berlin: Folge des harten Winters – Deutlich mehr ...",
+            description=(
+                "Alle entstandenen Straßenschäden zu reparieren, wird lange "
+                "dauern. Aus Treptow-Köpenick kommt nun eine deutliche Forderung "
+                "an den Senat."
             ),
-            extra={"type": "manual_test", "original": {"type": "manual", "index": 3}},
+            link="https://www.morgenpost.de/bezirke/treptow-koepenick/article411195191/folge-des-harten-winters-in-berlin-deutlich-mehr-schlagloecher-als-sonst.html",
+            extra={
+                "type": "manual_test",
+                "original": {"id": "wqpv9icain1mxdo", "type": "google"},
+            },
+        ),
+        ArticleInput(
+            source="Tagesspiegel",
+            title="Alle Artikel in „Treptow-Köpenick“ vom 10.01.2026",
+            description=(
+                "Eine Übersicht aller Artikel des Ressorts Treptow-Köpenick vom "
+                "10.01.2026 finden Sie in unserem Tagesspiegel Archiv."
+            ),
+            link="https://www.tagesspiegel.de/berlin/bezirke/treptow-koepenick/archiv/2026/01/10",
+            extra={
+                "type": "manual_test",
+                "original": {"id": "16t7xiu7qw74a6y", "type": "google"},
+            },
         ),
     ]
     print("Using", len(articles), "manual test results")
