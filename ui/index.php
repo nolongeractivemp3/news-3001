@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="/homepage/style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body class="min-h-screen flex flex-col">
@@ -264,7 +264,7 @@ ui.<span class="str">render()</span>                           <span class="cmt"
         </div>
     </section>
 
-    <?php include __DIR__ . "/../app/components/footer.php"; ?>
+    <?php include __DIR__ . "/app/components/footer.php"; ?>
 
 </body>
 
