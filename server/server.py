@@ -123,18 +123,34 @@ def stats_summary(days: int = Query(30, ge=1, le=365)):
 @app.get("/search")
 def search_news(
     q: str = Query(..., min_length=2, description="Search query"),
-    limit: int = Query(100, ge=1, le=500),
+    page: int = Query(1, ge=1, description="Page number"),
+    limit: int = Query(30, ge=1, le=100),
 ):
     connection = get_database()
-    data = connection.search_news(q, limit)
-    return [news.tojson(False) for news in data]
+    data, total = connection.search_news(q, limit, page)
+    return {
+        "results": [news.tojson(False) for news in data],
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit,
+    }
 
 
 @app.get("/recent")
-def recent_news(limit: int = Query(50, ge=1, le=200)):
+def recent_news(
+    page: int = Query(1, ge=1, description="Page number"),
+    limit: int = Query(30, ge=1, le=100),
+):
     connection = get_database()
-    data = connection.get_recent_news(limit)
-    return [news.tojson(False) for news in data]
+    data, total = connection.get_recent_news(limit, page)
+    return {
+        "results": [news.tojson(False) for news in data],
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit,
+    }
 
 
 if __name__ == "__main__":

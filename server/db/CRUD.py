@@ -57,11 +57,13 @@ class connection:
     def get_scraper_summary(self, days: int = 30) -> dict:
         return get_scraper_summary(self.client, days)
 
-    def search_news(self, query: str, limit: int = 100) -> list:
-        return search_news(self.client, query, limit)
+    def search_news(
+        self, query: str, limit: int = 30, page: int = 1
+    ) -> tuple[list, int]:
+        return search_news(self.client, query, limit, page)
 
-    def get_recent_news(self, limit: int = 50) -> list:
-        return get_recent_news(self.client, limit)
+    def get_recent_news(self, limit: int = 30, page: int = 1) -> tuple[list, int]:
+        return get_recent_news(self.client, limit, page)
 
 
 __all__ = ["connection"]

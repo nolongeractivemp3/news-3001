@@ -1,16 +1,23 @@
 <?php
 $search = $_GET["q"] ?? "";
 $search = trim($search);
+$page = max(1, intval($_GET["page"] ?? 1));
+$limit = 30;
 
 $endpoint = $search 
-    ? "http://backend:5000/search?q=" . urlencode($search)
-    : "http://backend:5000/recent";
+    ? "http://backend:5000/search?q=" . urlencode($search) . "&page=" . $page . "&limit=" . $limit
+    : "http://backend:5000/recent?page=" . $page . "&limit=" . $limit;
 
 $response = @file_get_contents($endpoint);
 if ($response === false) {
     $news = [];
+    $total = 0;
+    $pages = 0;
 } else {
-    $news = json_decode($response, true) ?: [];
+    $data = json_decode($response, true) ?: [];
+    $news = $data["results"] ?? [];
+    $total = $data["total"] ?? 0;
+    $pages = $data["pages"] ?? 0;
 }
 
 $ignoreEnabled =
@@ -66,4 +73,44 @@ $ignoredSet = array_flip($ignoredSources);
     </div>
     <?php endforeach; ?>
 </div>
+
+<?php if ($pages > 1): ?>
+<div class="flex justify-center gap-2 mt-6 flex-wrap">
+    <?php if ($page > 1): ?>
+        <button class="btn btn-sm"
+                hx-get="components/searchcard.php?q=<?php echo urlencode($search); ?>&page=<?php echo $page - 1; ?>"
+                hx-target="#news"
+                hx-indicator="#search-indicator">
+            ← Zurück
+        </button>
+    <?php endif; ?>
+    
+    <div class="join">
+        <?php
+        $startPage = max(1, $page - 2);
+        $endPage = min($pages, $page + 2);
+        for ($i = $startPage; $i <= $endPage; $i++):
+        ?>
+            <button class="btn btn-sm join-item <?php echo $i === $page ? 'btn-primary' : ''; ?>"
+                    hx-get="components/searchcard.php?q=<?php echo urlencode($search); ?>&page=<?php echo $i; ?>"
+                    hx-target="#news"
+                    hx-indicator="#search-indicator">
+                <?php echo $i; ?>
+            </button>
+        <?php endfor; ?>
+    </div>
+    
+    <?php if ($page < $pages): ?>
+        <button class="btn btn-sm"
+                hx-get="components/searchcard.php?q=<?php echo urlencode($search); ?>&page=<?php echo $page + 1; ?>"
+                hx-target="#news"
+                hx-indicator="#search-indicator">
+            Weiter →
+        </button>
+    <?php endif; ?>
+</div>
+<p class="text-center text-sm text-white/40 mt-2">
+    Seite <?php echo $page; ?> von <?php echo $pages; ?> (<?php echo $total; ?> Artikel)
+</p>
+<?php endif; ?>
 <?php endif; ?>

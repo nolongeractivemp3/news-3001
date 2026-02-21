@@ -72,17 +72,25 @@ def _raw_to_news(client, raw_item) -> myclasses.News:
     )
 
 
-def get_recent_news(client, limit: int = 50) -> list[myclasses.News]:
+def get_recent_news(
+    client, limit: int = 30, page: int = 1
+) -> tuple[list[myclasses.News], int]:
     raw_news = _get_all_news_cached(client)
     raw_news = sorted(
         raw_news, key=lambda x: getattr(x, "date", "") or "", reverse=True
     )
-    return [_raw_to_news(client, item) for item in raw_news[:limit]]
+    total = len(raw_news)
+    offset = (page - 1) * limit
+    return [
+        _raw_to_news(client, item) for item in raw_news[offset : offset + limit]
+    ], total
 
 
-def search_news(client, query: str, limit: int = 100) -> list[myclasses.News]:
+def search_news(
+    client, query: str, limit: int = 30, page: int = 1
+) -> tuple[list[myclasses.News], int]:
     if not query or len(query.strip()) < 2:
-        return []
+        return [], 0
 
     search_term = query.strip().lower()
     words = search_term.split()
@@ -117,6 +125,8 @@ def search_news(client, query: str, limit: int = 100) -> list[myclasses.News]:
             scored.append((best_score, item))
 
     scored.sort(key=lambda x: x[0], reverse=True)
-    top_items = [item for _, item in scored[:limit]]
+    total = len(scored)
+    offset = (page - 1) * limit
+    top_items = [item for _, item in scored[offset : offset + limit]]
 
-    return [_raw_to_news(client, item) for item in top_items]
+    return [_raw_to_news(client, item) for item in top_items], total
