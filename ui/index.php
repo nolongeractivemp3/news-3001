@@ -52,8 +52,8 @@
                 Alle Köpenick News<br><em>in einem Feed</em>
             </h1>
             <p class="text-xl text-white/60 max-w-2xl mb-12 fade-in">
-                Local Nachichten. Ein Python-basierter Scraper sammelt Nachrichten aus verschiedenen Quellen,
-                OpenRouter AI generiert tägliche Zusammenfassungen und Themen. Das Ergebnis: ein sauberer,
+                Lokale Nachrichten. Ein Python-basierter Scraper sammelt Nachrichten aus verschiedenen Quellen,
+                OpenRouter Ki generiert tägliche Zusammenfassungen und Themen. Das Ergebnis: ein sauberer,
                 fokussierter News-Feed für deinen Bezirk.
             </p>
             <div class="flex flex-wrap gap-6 fade-in">
@@ -125,13 +125,13 @@
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">🏷️</p>
                     <h3 class="text-xl mb-3">Auto-Badges</h3>
-                    <p class="text-white/50">Jeder Artikel bekommt automatisch Tags: Offiziel, Unfall, Politik, Unfall etc. Auf
+                    <p class="text-white/50">Jeder Artikel bekommt automatisch Tags: Offizielles, Unfall, Politik, Kultur etc. Auf
                         einen Blick erkennbar.</p>
                 </div>
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">📡</p>
                     <h3 class="text-xl mb-3">Google Alerts</h3>
-                    <p class="text-white/50">Es werden nachichten automatisch aus einem google feed gesammelt um live updates zu erhalten.</p>
+                    <p class="text-white/50">Nachrichten werden automatisch aus einem Google-Feed gesammelt, um Live-Updates zu erhalten.</p>
                 </div>
                 <div class="card bg-[--ink]">
                     <p class="text-2xl mb-4">🔧</p>
@@ -164,10 +164,10 @@
 
             <pre
                 class="code-block mb-16"><span class="cmt"># News3001 Pipeline</span>
-<span class="kw">import</span> scraper, ai, db, api, ui
+<span class="kw">import</span> scraper, ki, db, api, ui
 
 news     = scraper.<span class="str">collect_daily()</span>   <span class="cmt"># 1. Scrape sources</span>
-enriched = ai.<span class="str">enrich(news)</span>           <span class="cmt"># 2. Add badges &amp; summary</span>
+enriched = ki.<span class="str">enrich(news)</span>           <span class="cmt"># 2. Add badges &amp; summary</span>
 db.<span class="str">save(enriched)</span>                     <span class="cmt"># 3. Store in PocketBase</span>
 api.<span class="str">expose(db.query())</span>                <span class="cmt"># 4. Serve via FastAPI</span>
 ui.<span class="str">render()</span>                           <span class="cmt"># 5. Render with PHP + HTMX</span></pre>
@@ -179,7 +179,7 @@ ui.<span class="str">render()</span>                           <span class="cmt"
                     </p>
                 </div>
                 <div class="step">
-                    <h3 class="text-lg mb-2">🧠 AI</h3>
+                    <h3 class="text-lg mb-2">🧠 KI</h3>
                     <p class="text-black/50 text-sm">OpenRouter API generiert Badges und tägliche Zusammenfassung.</p>
                 </div>
                 <div class="step">
@@ -226,7 +226,7 @@ ui.<span class="str">render()</span>                           <span class="cmt"
                     </p>
                 </div>
                 <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">AI</span>
+                    <span class="font-mono text-xs text-[--gold]">KI</span>
                     <h3 class="text-lg mt-2">OpenRouter</h3>
                     <p class="text-white/40 text-sm mt-2">Unified API für GPT, Claude, und andere LLMs.</p>
                 </div>
