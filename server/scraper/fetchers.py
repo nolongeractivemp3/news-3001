@@ -1,26 +1,16 @@
 import datetime
 import os
 
+from serpapi import search
+
 from rss import get_rss_feed
 
 from .models import ArticleInput
 
+serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+
 
 def fetch_google_results() -> list[ArticleInput]:
-    raise RuntimeError("tried to scrape live news")
-    try:
-        from serpapi import search
-    except ImportError as exc:
-        raise RuntimeError(
-            "Google mode requires the 'serpapi' package to be installed."
-        ) from exc
-
-    serpapi_api_key = os.getenv("SERPAPI_API_KEY")
-    if not serpapi_api_key:
-        raise RuntimeError(
-            "Missing SERPAPI_API_KEY environment variable for Google mode."
-        )
-
     yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime(
         "%Y-%m-%d"
     )
