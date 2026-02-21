@@ -18,7 +18,7 @@ news3001/
   pb_data/                 # PocketBase persistent data
   server/                  # Python backend + scraper
   ui/                      # PHP frontend + JS + components
-  .github/workflows/       # deploys ui/homepage to GitHub Pages
+  .github/workflows/       # deploys ui/ to GitHub Pages
 ```
 
 ## Runtime architecture

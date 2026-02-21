@@ -7,7 +7,7 @@
 - `server/tests/`: Backend tests (currently rule-focused, e.g. `tests/rules/run_rules_tests.py`).
 - `ui/`: PHP frontend, HTMX-driven components, JS settings logic, and PWA assets.
 - `ui/components/`: Render units (`card.php`, `report.php`, `navbar.php`, etc.).
-- `ui/homepage/`: Static homepage deployed by GitHub Actions (`.github/workflows/static.yml`).
+- `ui/index.php`: Homepage at root.
 - `docker-compose.yml`, `nginx.conf`: Local runtime wiring (Nginx + PHP + backend + scraper + PocketBase).
 
 ## Build, Test, and Development Commands

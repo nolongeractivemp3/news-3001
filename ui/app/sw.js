@@ -38,8 +38,7 @@ self.addEventListener('fetch', (event) => {
   if (
     event.request.method !== 'GET' ||
     requestUrl.protocol === 'chrome-extension:' ||
-    requestUrl.origin !== self.location.origin ||
-    requestUrl.pathname.startsWith('/homepage/')
+    requestUrl.origin !== self.location.origin
   ) {
     return;
   }
