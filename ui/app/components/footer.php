@@ -1,10 +1,10 @@
 <?php
 $year = date("Y");
 $footerLinks = [
-    ["href" => "/", "label" => "News"],
-    ["href" => "/index.php?rss", "label" => "RSS"],
-    ["href" => "/stats.php", "label" => "Stats"],
-    ["href" => "/homepage/index.php", "label" => "Homepage"],
+    ["href" => "./", "label" => "News"],
+    ["href" => "./index.php?rss", "label" => "RSS"],
+    ["href" => "./stats.php", "label" => "Stats"],
+    ["href" => "/", "label" => "Homepage"],
     ["href" => "https://github.com/nolongeractivemp3/news-3001", "label" => "Github Mirror"],
 ];
 ?>

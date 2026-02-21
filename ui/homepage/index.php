@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News3001 — Köpenick News Aggregator</title>
-    <link rel="canonical" href="https://news.jaypo.ch/homepage/index.php">
+    <link rel="canonical" href="https://news.jaypo.ch/">
     <meta name="description"
         content="Alle Köpenick News zusammengefasst in einem Feed. KI-gestützte Nachrichtenzusammenfassung für Berlin-Köpenick. Köpenick News, Köpenick feed Köpenick News feed">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72x72.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/app/icons/icon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/app/icons/icon-72x72.png">
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/homepage/style.css">
 </head>
 
 <body class="min-h-screen flex flex-col">
@@ -34,7 +34,7 @@
                     class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">System</a>
                 <a href="#tech"
                     class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Tech</a>
-                <a href="https://news.jaypo.ch" target="_blank"
+                <a href="/app/" target="_blank"
                     class="px-3 py-1.5 border border-[--red] text-[--red] hover:bg-[--red] hover:text-white transition-colors">
                     → App
                 </a>
@@ -57,7 +57,7 @@
                 fokussierter News-Feed für deinen Bezirk.
             </p>
             <div class="flex flex-wrap gap-6 fade-in">
-                <a href="https://news.jaypo.ch" target="_blank"
+                <a href="/app/" target="_blank"
                     class="px-8 py-4 bg-[--red] text-white font-medium hover:bg-[--red-hover] transition-colors">
                     Zur App →
                 </a>
@@ -257,14 +257,14 @@ ui.<span class="str">render()</span>                           <span class="cmt"
             <p class="text-white/50 max-w-lg mx-auto mb-10">
                 Alle Köpenick News an einem Ort. RSS, KI-Zusammenfassungen, Filter — alles dabei.
             </p>
-            <a href="https://news.jaypo.ch" target="_blank"
+            <a href="/app/" target="_blank"
                 class="inline-block px-10 py-5 bg-[--red] text-white text-lg hover:bg-[--red-hover] transition-colors">
                 → Zur App
             </a>
         </div>
     </section>
 
-    <?php include __DIR__ . "/../components/footer.php"; ?>
+    <?php include __DIR__ . "/../app/components/footer.php"; ?>
 
 </body>
 
