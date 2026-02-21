@@ -3,7 +3,13 @@ import myclasses
 from db.crud.badges import get_all_badges, get_badge_by_id, get_badges_for_news
 from db.crud.client import create_authenticated_client
 from db.crud.days import save_day
-from db.crud.news import get_news_from_day, get_news_from_id, save_news
+from db.crud.news import (
+    get_news_from_day,
+    get_news_from_id,
+    save_news,
+    search_news,
+    get_recent_news,
+)
 from db.crud.reports import create_report, get_report_from_day, get_todays_report
 from db.crud.stats import get_day_stats, get_scraper_summary, get_tag_usage_by_day
 
@@ -50,5 +56,12 @@ class connection:
 
     def get_scraper_summary(self, days: int = 30) -> dict:
         return get_scraper_summary(self.client, days)
+
+    def search_news(self, query: str, limit: int = 100) -> list:
+        return search_news(self.client, query, limit)
+
+    def get_recent_news(self, limit: int = 50) -> list:
+        return get_recent_news(self.client, limit)
+
 
 __all__ = ["connection"]

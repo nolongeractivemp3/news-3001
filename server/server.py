@@ -120,6 +120,23 @@ def stats_summary(days: int = Query(30, ge=1, le=365)):
         _raise_stats_exception(exc)
 
 
+@app.get("/search")
+def search_news(
+    q: str = Query(..., min_length=2, description="Search query"),
+    limit: int = Query(100, ge=1, le=500),
+):
+    connection = get_database()
+    data = connection.search_news(q, limit)
+    return [news.tojson(False) for news in data]
+
+
+@app.get("/recent")
+def recent_news(limit: int = Query(50, ge=1, le=200)):
+    connection = get_database()
+    data = connection.get_recent_news(limit)
+    return [news.tojson(False) for news in data]
+
+
 if __name__ == "__main__":
     # run server
     import uvicorn
