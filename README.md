@@ -8,7 +8,13 @@ Local news stack with:
 
 ## Docker quick start
 
-Start or rebuild the full stack:
+Create your local env file from the template:
+
+```bash
+cp .env.example .env
+```
+
+Then start or rebuild the full stack:
 
 ```bash
 docker compose up -d --build
@@ -89,4 +95,4 @@ uv run tests/rules/run_rules_tests.py
 ## Notes
 
 - The source of truth for container wiring is `docker-compose.yml`.
-- Before sharing this project, sanitize local credentials/secrets in `docker-compose.yml`.
+- Keep secrets in `.env` and commit only `.env.example`.
