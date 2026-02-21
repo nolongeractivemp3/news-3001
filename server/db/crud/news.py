@@ -1,10 +1,22 @@
 import datetime
+import time
 
 from rapidfuzz import fuzz
 
 import myclasses
 
 from .badges import get_badge_by_id
+
+_news_cache: tuple[float, list] = (0, [])
+
+
+def _get_all_news_cached(client, ttl: int = 300) -> list:
+    global _news_cache
+    now = time.time()
+    if now - _news_cache[0] > ttl:
+        raw_news = client.collection("news").get_full_list()
+        _news_cache = (now, raw_news)
+    return _news_cache[1]
 
 
 def save_news(client, news: myclasses.News) -> str:
@@ -61,7 +73,10 @@ def _raw_to_news(client, raw_item) -> myclasses.News:
 
 
 def get_recent_news(client, limit: int = 50) -> list[myclasses.News]:
-    raw_news = client.collection("news").get_full_list(query_params={"sort": "-date"})
+    raw_news = _get_all_news_cached(client)
+    raw_news = sorted(
+        raw_news, key=lambda x: getattr(x, "date", "") or "", reverse=True
+    )
     return [_raw_to_news(client, item) for item in raw_news[:limit]]
 
 
@@ -72,7 +87,7 @@ def search_news(client, query: str, limit: int = 100) -> list[myclasses.News]:
     search_term = query.strip().lower()
     words = search_term.split()
 
-    raw_news = client.collection("news").get_full_list()
+    raw_news = _get_all_news_cached(client)
 
     scored = []
     for item in raw_news:

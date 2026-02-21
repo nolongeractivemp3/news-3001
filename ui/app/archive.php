@@ -44,6 +44,13 @@ $pageTitle = "Archive - News3001";
             background-color: #1d232a;
             color: white;
         }
+        .htmx-indicator {
+            display: none;
+        }
+        .htmx-request .htmx-indicator,
+        .htmx-request.htmx-indicator {
+            display: inline-block;
+        }
     </style>
 
     <main class="w-full flex-1 p-4 flex flex-col">
