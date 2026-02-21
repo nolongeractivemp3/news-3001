@@ -1,6 +1,7 @@
 <?php
 $searchQuery = $_GET["q"] ?? "";
 $searchQuery = trim($searchQuery);
+$page = max(1, intval($_GET["page"] ?? 1));
 $pageTitle = "Archive - News3001";
 ?>
 <!DOCTYPE html>
@@ -55,8 +56,17 @@ $pageTitle = "Archive - News3001";
 
     <main class="w-full flex-1 p-4 flex flex-col">
         <div hx-get="components/navbar.php?archive=true" hx-trigger="load" hx-target="#navbar"></div>
-        <div hx-get="components/searchbox.php<?php echo $searchQuery ? '?q=' . urlencode($searchQuery) : ''; ?>" hx-trigger="load" hx-target="#searchbox"></div>
-        <div hx-get="components/searchcard.php<?php echo $searchQuery ? '?q=' . urlencode($searchQuery) : ''; ?>" hx-trigger="load" hx-target="#news"></div>
+        <div hx-get="components/searchbox.php<?php 
+            $params = [];
+            if ($searchQuery) $params['q'] = $searchQuery;
+            echo !empty($params) ? '?' . http_build_query($params) : ''; 
+        ?>" hx-trigger="load" hx-target="#searchbox"></div>
+        <div hx-get="components/searchcard.php<?php 
+            $params = [];
+            if ($searchQuery) $params['q'] = $searchQuery;
+            if ($page > 1) $params['page'] = $page;
+            echo !empty($params) ? '?' . http_build_query($params) : ''; 
+        ?>" hx-trigger="load" hx-target="#news"></div>
         <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 
         <div id="navbar"> </div>

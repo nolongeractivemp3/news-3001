@@ -80,7 +80,8 @@ $ignoredSet = array_flip($ignoredSources);
         <button class="btn btn-sm"
                 hx-get="components/searchcard.php?q=<?php echo urlencode($search); ?>&page=<?php echo $page - 1; ?>"
                 hx-target="#news"
-                hx-indicator="#search-indicator">
+                hx-indicator="#search-indicator"
+                hx-push-url="<?php echo $search ? './archive.php?q=' . urlencode($search) . '&page=' . ($page - 1) : './archive.php?page=' . ($page - 1); ?>">
             ← Zurück
         </button>
     <?php endif; ?>
@@ -94,7 +95,8 @@ $ignoredSet = array_flip($ignoredSources);
             <button class="btn btn-sm join-item <?php echo $i === $page ? 'btn-primary' : ''; ?>"
                     hx-get="components/searchcard.php?q=<?php echo urlencode($search); ?>&page=<?php echo $i; ?>"
                     hx-target="#news"
-                    hx-indicator="#search-indicator">
+                    hx-indicator="#search-indicator"
+                    hx-push-url="<?php echo $search ? './archive.php?q=' . urlencode($search) . '&page=' . $i : './archive.php?page=' . $i; ?>">
                 <?php echo $i; ?>
             </button>
         <?php endfor; ?>
@@ -104,7 +106,8 @@ $ignoredSet = array_flip($ignoredSources);
         <button class="btn btn-sm"
                 hx-get="components/searchcard.php?q=<?php echo urlencode($search); ?>&page=<?php echo $page + 1; ?>"
                 hx-target="#news"
-                hx-indicator="#search-indicator">
+                hx-indicator="#search-indicator"
+                hx-push-url="<?php echo $search ? './archive.php?q=' . urlencode($search) . '&page=' . ($page + 1) : './archive.php?page=' . ($page + 1); ?>">
             Weiter →
         </button>
     <?php endif; ?>

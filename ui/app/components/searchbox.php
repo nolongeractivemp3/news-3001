@@ -16,6 +16,7 @@ $searchQuery = trim($searchQuery);
         hx-target="#news"
         hx-indicator="#search-indicator"
         hx-params="q"
+        hx-on::htmx:after-request="if(this.value.trim()){history.replaceState(null,'','./archive.php?q='+encodeURIComponent(this.value.trim()))}else{history.replaceState(null,'','./archive.php')}"
     />
     <div class="flex items-center gap-2 mt-2">
         <span id="search-indicator" class="htmx-indicator loading loading-spinner loading-sm"></span>
