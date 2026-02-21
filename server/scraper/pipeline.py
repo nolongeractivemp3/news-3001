@@ -1,5 +1,11 @@
+import os
+
 from .enrichment import enrich_scrape_content
-from .fetchers import fetch_google_results, fetch_rss_fallback_results
+from .fetchers import (
+    fetch_google_results,
+    fetch_rss_fallback_results,
+    fetch_test_articles,
+)
 from .filters import filter_content_locality, filter_snippet_locality
 from .models import ArticleInput
 from .rules.runner import first_rule_decision
@@ -8,9 +14,21 @@ from .storage import create_news_record, get_database, save_day_report, save_new
 RSS_FALLBACK_COUNT = 5
 
 
+def _is_testing_mode_enabled() -> bool:
+    return os.getenv("SCRAPER_TESTING_MODE", "false").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    )
+
+
 def run_scraper(min_filtered_results: int = 3):
+    testing_mode = _is_testing_mode_enabled()
+    print(f"Testing mode: {testing_mode}")
+
     database = get_database()
-    articles = fetch_google_results()
+    articles = fetch_test_articles() if testing_mode else fetch_google_results()
 
     filtered_articles: list[ArticleInput] = []
 
@@ -36,14 +54,14 @@ def run_scraper(min_filtered_results: int = 3):
 
         filtered_articles.append(enriched)
 
-    strict_google_count = len(filtered_articles)
-    fallback_used = strict_google_count < min_filtered_results
+    strict_source_count = len(filtered_articles)
+    fallback_used = (not testing_mode) and strict_source_count < min_filtered_results
     rss_added = 0
     articles_to_save = list(filtered_articles)
 
     if fallback_used:
         print(
-            f"\nOnly {strict_google_count} articles passed filter (min: {min_filtered_results})"
+            f"\nOnly {strict_source_count} articles passed filter (min: {min_filtered_results})"
         )
         print(f"Adding {RSS_FALLBACK_COUNT} RSS fallback articles...")
 
@@ -68,10 +86,11 @@ def run_scraper(min_filtered_results: int = 3):
     save_day_report(saved_articles, saved_ids, database)
 
     return {
+        "testing_mode": testing_mode,
         "total_results": len(articles),
         "saved_articles": len(saved_articles),
         "filtered_articles": len(filtered_articles),
-        "strict_google_count": strict_google_count,
+        "strict_source_count": strict_source_count,
         "fallback_used": fallback_used,
         "rss_added": rss_added,
         "article_ids": saved_ids,

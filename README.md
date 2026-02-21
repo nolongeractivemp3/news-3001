@@ -14,6 +14,12 @@ Run the scraper as a one-off command:
 docker compose run --rm scraper
 ```
 
+Run scraper in testing mode (no SerpAPI):
+
+```bash
+docker compose run --rm -e SCRAPER_TESTING_MODE=true scraper
+```
+
 Follow logs:
 
 ```bash

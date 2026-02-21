@@ -108,6 +108,7 @@ news3001/
 - `POCKETBASE_ADMIN_PASSWORD`
 - `OPENROUTER_API_KEY`
 - `SERPAPI_API_KEY` (scraper only)
+- `SCRAPER_TESTING_MODE` (`true`/`false`, optional)
 
 ## Where to edit for common tasks
 

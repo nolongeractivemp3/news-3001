@@ -1,15 +1,26 @@
 import datetime
 import os
 
-from serpapi import search
 from rss import get_rss_feed
 
 from .models import ArticleInput
 
-serpapi_api_key = os.getenv("SERPAPI_API_KEY")
-
 
 def fetch_google_results() -> list[ArticleInput]:
+    raise RuntimeError("tried to scrape live news")
+    try:
+        from serpapi import search
+    except ImportError as exc:
+        raise RuntimeError(
+            "Google mode requires the 'serpapi' package to be installed."
+        ) from exc
+
+    serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+    if not serpapi_api_key:
+        raise RuntimeError(
+            "Missing SERPAPI_API_KEY environment variable for Google mode."
+        )
+
     yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime(
         "%Y-%m-%d"
     )
@@ -39,6 +50,57 @@ def fetch_google_results() -> list[ArticleInput]:
                 extra={"original": item},
             )
         )
+    return articles
+
+
+def fetch_test_articles() -> list[ArticleInput]:
+    articles = [
+        ArticleInput(
+            source="Manual Berlin Feed",
+            title="Köpenick district library starts evening reading program",
+            description=(
+                "Treptow-Köpenick residents can join weekly reading sessions "
+                "at the district library."
+            ),
+            link="https://manual.test/koepenick/library-evening-program",
+            full_text=(
+                "The district office of Treptow-Koepenick announced a new evening "
+                "reading program at the Koepenick central library. Local families "
+                "from nearby neighborhoods are invited to attend sessions every "
+                "Thursday."
+            ),
+            extra={"type": "manual_test", "original": {"type": "manual", "index": 1}},
+        ),
+        ArticleInput(
+            source="Manual Berlin Feed",
+            title="Treptow-Köpenick opens new bike lane near S-Bahn",
+            description=(
+                "A new bike corridor improves commuter access between Adlershof "
+                "and Köpenick."
+            ),
+            link="https://manual.test/treptow-koepenick/new-bike-lane",
+            full_text=(
+                "The borough administration in Treptow-Koepenick opened a new bike "
+                "lane connecting major commuter routes. The route runs near local "
+                "schools and transit stops and is focused on district-level traffic "
+                "safety."
+            ),
+            extra={"type": "manual_test", "original": {"type": "manual", "index": 2}},
+        ),
+        ArticleInput(
+            source="Manual Berlin Feed",
+            title="Köpenick global sports partnership announced",
+            description="District club leaders discussed an international cooperation project.",
+            link="https://manual.test/koepenick/global-partnership",
+            full_text=(
+                "A sports organization in Koepenick announced a global partnership "
+                "program with clubs outside Berlin. The project focuses on exchange "
+                "events and long-term sponsorship opportunities."
+            ),
+            extra={"type": "manual_test", "original": {"type": "manual", "index": 3}},
+        ),
+    ]
+    print("Using", len(articles), "manual test results")
     return articles
 
 
