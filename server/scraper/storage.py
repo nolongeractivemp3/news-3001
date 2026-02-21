@@ -7,6 +7,11 @@ from openrouter import report
 
 openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
 pocketbase_url = os.getenv("POCKETBASE_URL", "http://pocketbase:8080")
+PRESET_TEST_REPORT_TEXT = (
+    "<h2>Testbericht</h2>"
+    "<p>Dieser Bericht wurde im Testmodus erstellt.</p>"
+    "<p>OpenRouter wurde fuer die Berichterstellung nicht verwendet.</p>"
+)
 
 
 def get_database():
@@ -34,13 +39,33 @@ def save_news(news: myclasses.News, database) -> str:
     return database.save_news(news)
 
 
+def _is_testing_mode_enabled() -> bool:
+    return os.getenv("SCRAPER_TESTING_MODE", "false").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    )
+
+
+def _create_and_save_testing_report(database) -> myclasses.Report:
+    rep = myclasses.Report(text=PRESET_TEST_REPORT_TEXT)
+    rep_id = database.create_report(rep)
+    rep.id = rep_id
+    return rep
+
+
 def save_day_report(articles: list[myclasses.News], ids: list[str], database):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
     print(f"\n{'=' * 50}")
     print(f"Results: {len(articles)} local articles")
 
     if ids:
-        rep = report.create_and_save_report(database, articles)
+        if _is_testing_mode_enabled():
+            print("Testing mode: creating preset report without OpenRouter")
+            rep = _create_and_save_testing_report(database)
+        else:
+            rep = report.create_and_save_report(database, articles)
         print(f"Report saved with ID: {rep.id}")
         day = myclasses.Day(id=date, news=ids, reportid=rep.id)
         database.save_day(day)
