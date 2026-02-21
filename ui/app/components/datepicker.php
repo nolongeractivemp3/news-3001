@@ -1,7 +1,10 @@
 <?php
 $selectedDate = $_GET["selectedDate"] ?? date("Y-m-d");
 $selectedDateObj = DateTime::createFromFormat("Y-m-d", $selectedDate);
-if ($selectedDateObj === false || $selectedDateObj->format("Y-m-d") !== $selectedDate) {
+if (
+    $selectedDateObj === false ||
+    $selectedDateObj->format("Y-m-d") !== $selectedDate
+) {
     $selectedDate = date("Y-m-d");
 }
 ?>
@@ -21,16 +24,24 @@ if ($selectedDateObj === false || $selectedDateObj->format("Y-m-d") !== $selecte
            id="history-date-picker-mobile"
            name="date"
            class="absolute inset-0 m-0 h-full w-full cursor-pointer appearance-none border-0 bg-transparent opacity-0"
-           value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, "UTF-8"); ?>"
+           value="<?php echo htmlspecialchars(
+               $selectedDate,
+               ENT_QUOTES,
+               "UTF-8",
+           ); ?>"
            max="<?php echo date("Y-m-d"); ?>"
            aria-label="Datum auswählen"
-           onchange="window.location.href = '/?date=' + encodeURIComponent(this.value);" />
+           onchange="window.location.href = '/app/?date=' + encodeURIComponent(this.value);" />
 </div>
 <!-- Desktop date picker (visible on larger screens) -->
 <input type="date"
        id="history-date-picker-desktop"
        name="date"
        class="input input-sm hidden sm:inline-flex h-9 w-36"
-       value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, "UTF-8"); ?>"
+       value="<?php echo htmlspecialchars(
+           $selectedDate,
+           ENT_QUOTES,
+           "UTF-8",
+       ); ?>"
        max="<?php echo date("Y-m-d"); ?>"
-       onchange="window.location.href = '/?date=' + encodeURIComponent(this.value);" />
+       onchange="window.location.href = '/app/?date=' + encodeURIComponent(this.value);" />
