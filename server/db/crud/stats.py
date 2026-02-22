@@ -4,6 +4,8 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Any
 
+from .badges import get_all_badges
+
 MAX_DAYS_WINDOW = 365
 
 
@@ -153,12 +155,16 @@ def get_day_stats(client, date: str) -> dict[str, Any]:
 
 def get_tag_usage_by_day(client, days: int = 30) -> dict[str, Any]:
     day_stats, start_date, end_date = _build_window_stats(client, days)
+    badge_names = {b.id: b.name for b in get_all_badges(client)}
     daily = [
         {
             "date": day["date"],
             "article_count": day["article_count"],
             "untagged_article_count": day["untagged_article_count"],
-            "tag_counts": day["tag_counts"],
+            "tag_counts": [
+                {"tag": badge_names.get(t["tag"], t["tag"]), "count": t["count"]}
+                for t in day["tag_counts"]
+            ],
             "source_counts": day["source_counts"],
         }
         for day in day_stats
