@@ -1,5 +1,20 @@
 <?php
 $isRss = isset($_GET["rss"]);
+
+if ($isRss) {
+    setcookie("news_preference", "rss", [
+        "expires" => time() + (365 * 24 * 60 * 60),
+        "path" => "/",
+        "httponly" => false
+    ]);
+} else {
+    setcookie("news_preference", "news", [
+        "expires" => time() + (365 * 24 * 60 * 60),
+        "path" => "/",
+        "httponly" => false
+    ]);
+}
+
 $defaultDate = date("Y-m-d");
 $selectedDate = $_GET["date"] ?? $defaultDate;
 $selectedDateObj = DateTime::createFromFormat("Y-m-d", $selectedDate);

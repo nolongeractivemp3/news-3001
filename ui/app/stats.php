@@ -66,7 +66,7 @@ $reportContent = str_replace(
 
 
     <main class="w-full flex-1 p-4 flex flex-col">
-        <div hx-get="components/navbar.php?rss=false&selectedDate=false" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/navbar.php?rss=false&selectedDate=false&dropdown=false" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/stats/charts.php" hx-trigger="load" hx-target="#charts"></div>
         <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
                 $reportContent,

@@ -1,12 +1,14 @@
 <?php
 $rss = $_GET["rss"] ?? "false";
 $date = $_GET["date"] ?? "false";
+$dropdown = $_GET["dropdown"] ?? "true";
 ?>
 
 <div class="navbar bg-base-100 shadow-sm gap-0">
     <div class="navbar-start w-auto flex-nowrap items-center gap-0">
-        <a href="./" class="btn btn-ghost normal-case text-xl px-2 sm:px-3">News</a>
-        <a href="./index.php?rss" class="btn btn-ghost normal-case px-2 sm:px-3">RSS</a>
+        <a href="./" class="btn btn-ghost normal-case text-xl px-2 sm:px-3 hidden sm:inline-flex">News</a>
+        <a href="./index.php?rss" class="btn btn-ghost normal-case px-2 sm:px-3 hidden sm:inline-flex">RSS</a>
+        <?php include __DIR__ . "/nav_dropdown.php"; ?>
         <a href="./stats.php" class="btn btn-ghost normal-case px-2 sm:px-3">Stats</a>
         <?php if ($date === "true"): ?>
             <?php include __DIR__ . "/datepicker.php"; ?>
