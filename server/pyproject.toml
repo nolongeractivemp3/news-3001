@@ -16,4 +16,5 @@ dependencies = [
     "tldextract>=5.3.1",
     "trafilatura>=2.0.0",
     "uvicorn>=0.40.0",
+    "rapidfuzz>=3.6.0",
 ]
