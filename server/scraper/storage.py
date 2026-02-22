@@ -6,7 +6,9 @@ from db import CRUD
 from openrouter import report
 
 openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
-pocketbase_url = os.getenv("POCKETBASE_URL", "http://pocketbase:8080")
+pocketbase_url = os.getenv("POCKETBASE_URL")
+if not pocketbase_url:
+    raise RuntimeError("Missing POCKETBASE_URL environment variable.")
 PRESET_TEST_REPORT_TEXT = (
     "<h2>Testbericht</h2>"
     "<p>Dieser Bericht wurde im Testmodus erstellt.</p>"

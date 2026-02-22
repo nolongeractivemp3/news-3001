@@ -11,7 +11,10 @@ from openrouter import openrouter_client
 
 
 def get_database():
-    return CRUD.connection(os.getenv("POCKETBASE_URL", "http://pocketbase:8080"))
+    url = os.getenv("POCKETBASE_URL")
+    if not url:
+        raise RuntimeError("Missing POCKETBASE_URL environment variable.")
+    return CRUD.connection(url)
 
 
 database = None
