@@ -1,7 +1,7 @@
 <?php
 $rss = $_GET["rss"] ?? "false";
 $date = $_GET["date"] ?? "false";
-$dropdown = $_GET["dropdown"] ?? "true";
+$dropdown = $_GET["dropdown"] ?? "false";
 ?>
 
 <div class="navbar bg-base-100 shadow-sm gap-0">

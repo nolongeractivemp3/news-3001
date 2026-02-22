@@ -1,7 +1,7 @@
 <?php
 $rss = $_GET["rss"] ?? "false";
 $isRss = $rss === "true";
-$isDropdown = ($_GET["dropdown"] ?? "true") === "true";
+$isDropdown = ($_GET["dropdown"] ?? "false") === "true";
 
 $preference = $_COOKIE["news_preference"] ?? "news";
 $prefIsRss = $preference === "rss";
