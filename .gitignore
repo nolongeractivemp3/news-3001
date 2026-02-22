@@ -11,3 +11,4 @@ server/scraper/rules/__pycache__/
 server/db/crud/__pycache__/
 .env
 !.env.example
+server/db/crud/stats/__pycache__
