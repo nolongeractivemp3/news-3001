@@ -1,13 +1,12 @@
 <?php
 $date = $_GET["date"] ?? false;
 $mode = $_GET["domain"] ?? "";
-
 if ($date) {
-    $response = file_get_contents(
+    $domain = $response = file_get_contents(
         "http://backend:5000/oldnews?date=" . urlencode($date),
     );
 } else {
-    $response = file_get_contents("http://backend:5000/" . $mode);
+    $domain = $response = file_get_contents("http://backend:5000/" . $mode);
 }
 $news = json_decode($response, true);
 
