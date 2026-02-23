@@ -1,6 +1,7 @@
 services:
   php_app:
     image: php:8.3-fpm
+    restart: unless-stopped
     volumes:
       - ./ui:/var/www/html
     environment:
@@ -8,6 +9,7 @@ services:
 
   nginx_server:
     image: nginx:alpine
+    restart: unless-stopped
     ports:
       - "3049:80" # Opens the server to the world
     volumes:
@@ -16,7 +18,7 @@ services:
   backend:
     build: ./server
     command: uv run server.py # Change this from uvicorn to your filenam
-    restart: always
+    restart: unless-stopped
     ports:
       - "4567:5000" # important remove later its for testing
     environment:
@@ -28,6 +30,7 @@ services:
   scraper:
     build: ./server
     command: uv run run_scraper.py
+    restart: unless-stopped
     ports:
       - "0987:5001"
     environment:
