@@ -1,5 +1,20 @@
 <?php
 $isRss = isset($_GET["rss"]);
+
+if ($isRss) {
+    setcookie("news_preference", "rss", [
+        "expires" => time() + (365 * 24 * 60 * 60),
+        "path" => "/",
+        "httponly" => false
+    ]);
+} else {
+    setcookie("news_preference", "news", [
+        "expires" => time() + (365 * 24 * 60 * 60),
+        "path" => "/",
+        "httponly" => false
+    ]);
+}
+
 $defaultDate = date("Y-m-d");
 $selectedDate = $_GET["date"] ?? $defaultDate;
 $selectedDateObj = DateTime::createFromFormat("Y-m-d", $selectedDate);
@@ -93,7 +108,7 @@ if ($isRss) {
     <main class="w-full flex-1 p-4 flex flex-col">
         <div hx-get="components/navbar.php?rss=<?php echo $navbarRss; ?>&date=<?php echo $navbarDate; ?>&selectedDate=<?php echo urlencode(
     $selectedDate,
-); ?>" hx-trigger="load" hx-target="#navbar"></div>
+); ?>&dropdown=true" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/card.php<?php echo $cardDomain; ?>" hx-trigger="load" hx-target="#news"></div>
         <?php if ($isRss): ?>
             <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
