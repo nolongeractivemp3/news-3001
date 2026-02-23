@@ -11,12 +11,12 @@ if str(SERVER_ROOT) not in sys.path:
     sys.path.insert(0, str(SERVER_ROOT))
 
 from scraper.models import ArticleInput
-from scraper.rules.blocked_domain_reject import blocked_domain_reject
-from scraper.rules.non_article_link_reject import non_article_link_reject
+from scraper.rules.blocked_domain_reject import rule as blocked_domain_reject
+from scraper.rules.non_article_link_reject import rule as non_article_link_reject
 from scraper.rules.runner import first_rule_decision
-from scraper.rules.snippet_local_keyword_pass import snippet_local_keyword_pass
+from scraper.rules.snippet_local_keyword_pass import rule as snippet_local_keyword_pass
 from scraper.rules.snippet_strong_non_local_reject import (
-    snippet_strong_non_local_reject,
+    rule as snippet_strong_non_local_reject,
 )
 
 RuleFn = Callable[[ArticleInput], bool | None]

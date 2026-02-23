@@ -53,7 +53,7 @@ def _normalize_path(link: str) -> str:
     return path or "/"
 
 
-def non_article_link_reject(article: ArticleInput) -> bool | None:
+def rule(article: ArticleInput) -> bool | None:
     path = _normalize_path(article.link)
     if not path:
         return None

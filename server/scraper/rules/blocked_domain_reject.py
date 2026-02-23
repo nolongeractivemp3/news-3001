@@ -21,7 +21,7 @@ def _extract_host(link: str) -> str:
     return (parsed.hostname or "").lower()
 
 
-def blocked_domain_reject(article: ArticleInput) -> bool | None:
+def rule(article: ArticleInput) -> bool | None:
     host = _extract_host(article.link)
     if not host:
         return None

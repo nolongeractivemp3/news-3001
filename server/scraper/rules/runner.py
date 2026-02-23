@@ -1,17 +1,38 @@
 from __future__ import annotations
 
-from ..models import ArticleInput
-from .blocked_domain_reject import blocked_domain_reject
-from .non_article_link_reject import non_article_link_reject
-from .snippet_local_keyword_pass import snippet_local_keyword_pass
-from .snippet_strong_non_local_reject import snippet_strong_non_local_reject
+import importlib
+import pkgutil
+from pathlib import Path
+from typing import Callable
 
-RULES = [
-    snippet_local_keyword_pass,
-    blocked_domain_reject,
-    non_article_link_reject,
-    snippet_strong_non_local_reject,
-]
+from ..models import ArticleInput
+
+_RULES_PATH = Path(__file__).parent
+RuleFunc = Callable[[ArticleInput], bool | None]
+
+
+def _discover_rules() -> list[RuleFunc]:
+    """
+    Auto-discover rules from sibling modules in this package.
+
+    Each rule file should define a function named `rule`:
+        my_rule.py -> def rule(article: ArticleInput) -> bool | None
+    """
+    rules: list[RuleFunc] = []
+
+    for importer, modname, ispkg in pkgutil.iter_modules([str(_RULES_PATH)]):
+        if modname == "runner":
+            continue
+
+        module = importlib.import_module(f"scraper.rules.{modname}")
+        rule_func = getattr(module, "rule", None)
+        if callable(rule_func):
+            rules.append(rule_func)  # type: ignore[arg-type]
+
+    return rules
+
+
+RULES = _discover_rules()
 
 
 def first_rule_decision(article: ArticleInput) -> bool | None:
