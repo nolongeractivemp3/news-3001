@@ -1,39 +1,30 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
-- `server/`: Python services and scraping pipeline.
-- `server/server.py`: Main FastAPI read API (`/`, `/oldnews`, `/oldreport`, `/report`, `/rss`, `/stats/*`).
-- `server/scraper/`: Scraper pipeline, rule filters, enrichment, and storage.
-- `server/tests/`: Backend tests (currently rule-focused, e.g. `tests/rules/run_rules_tests.py`).
-- `ui/`: PHP frontend, HTMX-driven components, JS settings logic, and PWA assets.
-- `ui/components/`: Render units (`card.php`, `report.php`, `navbar.php`, etc.).
-- `ui/index.php`: Homepage at root.
-- `docker-compose.yml`, `nginx.conf`: Local runtime wiring (Nginx + PHP + backend + scraper + PocketBase).
+## Project Structure
 
-## Build, Test, and Development Commands
-- `docker compose up -d --build`: Build and start the full local stack.
-- `docker compose ps`: Show running service status and published ports.
-- `docker compose down`: Stop all services.
-- `docker compose logs -f backend scraper nginx_server`: Tail service logs.
-- `curl -X POST http://localhost:987/run`: Trigger the scraper pipeline in Docker mode.
-- `cd server && uv sync --locked`: Install Python dependencies with `uv`.
-- `cd server && uv run server.py`: Run backend API on port `5000`.
-- `cd server && uv run run_scraper.py`: Run scraper API on port `5001`.
-- `cd server && uv run tests/rules/run_rules_tests.py`: Run rule-focused backend tests.
+```
+news3001/
+├── server/           # Python backend services
+│   ├── server.py     # FastAPI read API
+│   ├── scraper/      # Scraping pipeline, rules, enrichment
+│   ├── tests/        # Backend tests
+│   └── db/           # Database utilities
+├── ui/               # PHP frontend (HTMX-driven)
+│   ├── index.php     # Homepage
+│   └── app/          # Components and assets
+├── pb_data/          # PocketBase data
+├── docker-compose.yml
+└── nginx.conf
+```
 
-## Coding Style & Naming Conventions
-- Python: 4-space indentation, `snake_case` for functions/files, `CamelCase` for classes, prefer type hints on new/changed code.
-- PHP: Follow existing component style (`ui/components/*.php`), keep variables descriptive (`$ignoredSources`, `$sourceNormalized`).
-- JavaScript: Use `const`/`let`, `camelCase`, and small focused functions.
-- Keep modules narrowly scoped (rules in `server/scraper/rules/`, UI concerns in `ui/components/`).
+## Development
 
-## Commit & Pull Request Guidelines
-- Commit style in history is short, imperative, and scoped (example: `Add exact-path non-article rejection rule`).
-- Prefer one logical change per commit; avoid vague messages like `wip`.
-- PRs should include a clear summary of what changed and why.
-- Include linked issue or branch context in the PR description.
-- Include test evidence (`cd server && uv run tests/rules/run_rules_tests.py`, manual Docker checks).
+- Python package management: `uv` (see `server/pyproject.toml`)
+- Local runtime: `docker compose up -d --build`
 
-## Security & Configuration Tips
-- Treat API keys and PocketBase credentials as secrets; use environment variables, not committed plaintext.
-- Review `docker-compose.yml` before sharing; sanitize local credentials.
+## Scraper Warning
+
+**IMPORTANT**: The scraper pipeline runs periodically and fetches content from external sources. When modifying scraper logic in `server/scraper/`, be aware that:
+- Changes may affect live data ingestion
+- Test thoroughly before deploying
+- Consider rate limiting and external API quotas
