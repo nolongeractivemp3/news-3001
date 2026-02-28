@@ -71,3 +71,24 @@ def get_news_from_day(
             news_items.append(news_item)
 
     return news_items
+
+
+def get_unique_news_sources(client, days: int | None = None) -> list[str]:
+    query_params = {"sort": "source"}
+    if days is not None:
+        if days < 1:
+            raise ValueError("days must be >= 1")
+        cutoff = datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=days)
+        cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M:%S")
+        query_params["filter"] = f"created >= '{cutoff_str}'"
+
+    raw_news_items = client.collection("news").get_full_list(query_params=query_params)
+    unique_sources = set()
+    for raw_news in raw_news_items:
+        raw_source = getattr(raw_news, "source", "")
+        if raw_source is None:
+            continue
+        source = str(raw_source).strip()
+        if source:
+            unique_sources.add(source)
+    return sorted(source for source in unique_sources if source)
