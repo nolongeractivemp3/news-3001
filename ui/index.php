@@ -1,271 +1,334 @@
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News3001 — Köpenick News Aggregator</title>
     <link rel="canonical" href="https://news.jaypo.ch/">
-    <meta name="description"
-        content="Alle Köpenick News zusammengefasst in einem Feed. KI-gestützte Nachrichtenzusammenfassung für Berlin-Köpenick. Köpenick News, Köpenick feed Köpenick News feed">
+    <meta name="description" content="Alle Köpenick News zusammengefasst in einem Feed. KI-gestützte Nachrichtenzusammenfassung für Berlin-Köpenick.">
     <link rel="icon" type="image/png" sizes="32x32" href="/app/icons/icon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/app/icons/icon-72x72.png">
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="/style.css">
+    <style>
+        body { 
+            background-color: #1d232a; 
+            color: white; 
+            font-family: system-ui, -apple-system, sans-serif; 
+        }
+        html { scroll-behavior: smooth; }
+        
+        .card-custom {
+            background-color: #3B4754;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .fade-up { 
+            opacity: 0; 
+            transform: translateY(20px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        
+        .text-gold { color: #d4a853; }
+        .bg-red-custom { background-color: #e63946; }
+        .bg-red-custom:hover { background-color: #c92a37; }
+        .text-red-custom { color: #e63946; }
+    </style>
 </head>
-
 <body class="min-h-screen flex flex-col">
 
-    <!-- Nav -->
-    <nav class="border-b border-subtle bg-black/50 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2">
-                <span class="text-xl">📰</span>
-                <span class="text-lg tracking-tight">News3001</span>
-            </a>
-            <div class="flex items-center gap-6 font-mono text-sm">
-                <a href="#features"
-                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Funktionen</a>
-                <a href="#architecture"
-                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">System</a>
-                <a href="#tech"
-                    class="nav-link text-white/70 hover:text-white transition-colors hidden sm:inline">Tech</a>
-                <a href="/app/" target="_blank"
-                    class="px-3 py-1.5 border border-[--red] text-[--red] hover:bg-[--red] hover:text-white transition-colors">
-                    → App
-                </a>
+    <!-- Navbar -->
+    <div class="navbar shadow-sm sticky top-0 z-50" style="background-color: rgba(29, 35, 42, 0.9); backdrop-filter: blur(8px);">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-52" style="background-color: #3B4754;">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#architecture">System</a></li>
+                    <li><a href="#tech">Tech Stack</a></li>
+                </ul>
             </div>
+            <a href="#" class="btn btn-ghost normal-case text-xl gap-2">
+                <span class="text-2xl">📰</span>
+                News3001
+            </a>
         </div>
-    </nav>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="#features" class="hover:text-white/80">Features</a></li>
+                <li><a href="#architecture" class="hover:text-white/80">System</a></li>
+                <li><a href="#tech" class="hover:text-white/80">Tech Stack</a></li>
+            </ul>
+        </div>
+        <div class="navbar-end">
+            <a href="/app/" class="btn btn-primary btn-sm sm:btn-md">Zur App →</a>
+        </div>
+    </div>
 
     <!-- Hero -->
-    <header class="border-b border-subtle">
-        <div class="max-w-5xl mx-auto px-6 py-24 sm:py-32">
-            <p class="font-mono text-xs tracking-widest uppercase text-[--gold] mb-8 fade-in">
-                Berlin-Köpenick News
-            </p>
-            <h1 class="display-text mb-8 fade-in">
-                Alle Köpenick News<br><em>in einem Feed</em>
-            </h1>
-            <p class="text-xl text-white/60 max-w-2xl mb-12 fade-in">
-                Lokale Nachrichten. Ein Python-basierter Scraper sammelt Nachrichten aus verschiedenen Quellen,
-                OpenRouter Ki generiert tägliche Zusammenfassungen und Themen. Das Ergebnis: ein sauberer,
-                fokussierter News-Feed für deinen Bezirk.
-            </p>
-            <div class="flex flex-wrap gap-6 fade-in">
-                <a href="/app/" target="_blank"
-                    class="px-8 py-4 bg-[--red] text-white font-medium hover:bg-[--red-hover] transition-colors">
-                    Zur App →
-                </a>
-                <a href="#architecture"
-                    class="px-8 py-4 border border-white/20 text-white/70 hover:text-white hover:border-white/40 transition-colors">
-                    Wie es funktioniert
-                </a>
+    <div class="hero min-h-[70vh]">
+        <div class="hero-content text-center max-w-4xl px-4 py-20">
+            <div class="fade-up">
+                <div class="inline-block px-4 py-1 rounded-full border border-[var(--color-primary)] text-primary text-sm font-semibold mb-8 tracking-widest uppercase">
+                    Berlin-Köpenick News
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight leading-tight">Alle Köpenick News <br/><span class="text-primary italic font-serif">in einem Feed</span></h1>
+                <p class="py-6 text-xl opacity-80 mb-8 max-w-2xl mx-auto">
+                    Lokale Nachrichten. Ein Python-basierter Scraper sammelt Nachrichten aus verschiedenen Quellen, OpenRouter KI generiert tägliche Zusammenfassungen und Themen. Das Ergebnis: ein sauberer, fokussierter News-Feed für deinen Bezirk.
+                </p>
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <a href="/app/" class="btn btn-primary btn-lg border-none">App öffnen</a>
+                    <a href="#architecture" class="btn btn-outline btn-lg">Wie es funktioniert</a>
+                </div>
             </div>
         </div>
-    </header>
+    </div>
 
     <!-- Stats -->
-    <div class="border-b border-subtle">
-        <div class="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">Sources</p>
-                <p class="text-3xl">10+</p>
-                <p class="text-white/40 text-sm">Newsquellen</p>
-            </div>
-            <div>
-                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">Daily</p>
-                <p class="text-3xl">~8</p>
-                <p class="text-white/40 text-sm">Artikel/Tag</p>
-            </div>
-            <div>
-                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">KI</p>
-                <p class="text-3xl">Yes</p>
-                <p class="text-white/40 text-sm">Auto-Themen</p>
-            </div>
-            <div>
-                <p class="font-mono text-xs text-[--gold] uppercase tracking-widest mb-2">live</p>
-                <p class="text-3xl">✓</p>
-                <p class="text-white/40 text-sm">von Google alerts</p>
+    <div class="border-y border-white/10" style="background-color: rgba(59, 71, 84, 0.3);">
+        <div class="max-w-5xl mx-auto px-4 py-8">
+            <div class="stats stats-vertical lg:stats-horizontal shadow-none w-full bg-transparent fade-up delay-100">
+                <div class="stat place-items-center">
+                    <div class="stat-title text-gold uppercase tracking-widest text-xs">Quellen</div>
+                    <div class="stat-value text-4xl mt-2">10+</div>
+                    <div class="stat-desc mt-1 opacity-60">Lokale Newsquellen</div>
+                </div>
+                <div class="stat place-items-center">
+                    <div class="stat-title text-gold uppercase tracking-widest text-xs">Frequenz</div>
+                    <div class="stat-value text-4xl mt-2">~8</div>
+                    <div class="stat-desc mt-1 opacity-60">Artikel pro Tag</div>
+                </div>
+                <div class="stat place-items-center">
+                    <div class="stat-title text-gold uppercase tracking-widest text-xs">KI-Analysen</div>
+                    <div class="stat-value text-4xl mt-2">Auto</div>
+                    <div class="stat-desc mt-1 opacity-60">Zusammenfassung & Badges</div>
+                </div>
+                <div class="stat place-items-center">
+                    <div class="stat-title text-gold uppercase tracking-widest text-xs">Updates</div>
+                    <div class="stat-value text-4xl mt-2 text-info">Live</div>
+                    <div class="stat-desc mt-1 opacity-60">via Google Alerts</div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Features -->
-    <section id="features" class="border-b border-subtle">
-        <div class="max-w-5xl mx-auto px-6 py-24">
-            <div class="flex items-start gap-12 mb-16">
-                <div class="flex-shrink-0">
-                    <span class="font-mono text-xs tracking-widest uppercase text-[--gold]">01</span>
-                    <div class="accent-line mt-4"></div>
-                </div>
-                <div>
-                    <h2 class="text-3xl sm:text-4xl mb-6">Features</h2>
-                    <p class="text-white/50 max-w-xl">Was News3001 von anderen News-Aggregatoren unterscheidet.</p>
-                </div>
+    <section id="features" class="py-24">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="flex items-center gap-4 mb-12 fade-up">
+                <div class="w-12 h-1 bg-primary rounded"></div>
+                <h2 class="text-4xl font-bold">Features</h2>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-px bg-white/10">
-                <div class="card bg-[--ink]">
-                    <p class="text-2xl mb-4">📰</p>
-                    <h3 class="text-xl mb-3">Automatische Aggregation</h3>
-                    <p class="text-white/50">Scraper sammeln täglich News aus verschiedenen Quellen. Kein manuelles
-                        Kuratieren erforderlich.</p>
+            <p class="opacity-70 max-w-2xl mb-12 fade-up">Was News3001 von anderen News-Aggregatoren unterscheidet und zu deiner besten lokalen Nachrichtenquelle macht.</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-up delay-100">
+                <!-- Card 1 -->
+                <div class="card card-custom shadow-xl hover:-translate-y-1 transition-transform">
+                    <div class="card-body">
+                        <div class="text-4xl mb-4">📰</div>
+                        <h2 class="card-title text-xl mb-2">Automatische Aggregation</h2>
+                        <p class="opacity-70 text-sm">Scraper sammeln täglich News aus verschiedenen Quellen. Kein manuelles Kuratieren erforderlich.</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <p class="text-2xl mb-4">🤖</p>
-                    <h3 class="text-xl mb-3">KI-Zusammenfassung</h3>
-                    <p class="text-white/50">OpenRouter generiert tägliche Zusammenfassungen des
-                        Nachrichtengeschehens.</p>
+                <!-- Card 2 -->
+                <div class="card card-custom shadow-xl hover:-translate-y-1 transition-transform">
+                    <div class="card-body">
+                        <div class="text-4xl mb-4">🤖</div>
+                        <h2 class="card-title text-xl mb-2">KI-Zusammenfassung</h2>
+                        <p class="opacity-70 text-sm">OpenRouter generiert tägliche Zusammenfassungen des Nachrichtengeschehens.</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <p class="text-2xl mb-4">🏷️</p>
-                    <h3 class="text-xl mb-3">Auto-Badges</h3>
-                    <p class="text-white/50">Jeder Artikel bekommt automatisch Tags: Offizielles, Unfall, Politik, Kultur etc. Auf
-                        einen Blick erkennbar.</p>
+                <!-- Card 3 -->
+                <div class="card card-custom shadow-xl hover:-translate-y-1 transition-transform">
+                    <div class="card-body">
+                        <div class="text-4xl mb-4">🏷️</div>
+                        <h2 class="card-title text-xl mb-2">Auto-Badges</h2>
+                        <p class="opacity-70 text-sm">Jeder Artikel bekommt automatisch Tags: Offizielles, Unfall, Politik, Kultur etc. Auf einen Blick erkennbar.</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <p class="text-2xl mb-4">📡</p>
-                    <h3 class="text-xl mb-3">Google Alerts</h3>
-                    <p class="text-white/50">Nachrichten werden automatisch aus einem Google-Feed gesammelt, um Live-Updates zu erhalten.</p>
+                <!-- Card 4 -->
+                <div class="card card-custom shadow-xl hover:-translate-y-1 transition-transform">
+                    <div class="card-body">
+                        <div class="text-4xl mb-4">📡</div>
+                        <h2 class="card-title text-xl mb-2">Google Alerts</h2>
+                        <p class="opacity-70 text-sm">Nachrichten werden automatisch aus einem Google-Feed gesammelt, um Live-Updates zu erhalten.</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <p class="text-2xl mb-4">🔧</p>
-                    <h3 class="text-xl mb-3">Quellen-Filter</h3>
-                    <p class="text-white/50">Filtere unerwünschte Quellen heraus. Dein Feed, deine Regeln.</p>
+                <!-- Card 5 -->
+                <div class="card card-custom shadow-xl hover:-translate-y-1 transition-transform">
+                    <div class="card-body">
+                        <div class="text-4xl mb-4">🔧</div>
+                        <h2 class="card-title text-xl mb-2">Quellen-Filter</h2>
+                        <p class="opacity-70 text-sm">Filtere unerwünschte Quellen heraus. Dein Feed, deine Regeln.</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <p class="text-2xl mb-4">📱</p>
-                    <h3 class="text-xl mb-3">PWA</h3>
-                    <p class="text-white/50">Progressive Web App mit Offline-Support. Installierbar auf Mobile und
-                        Desktop.</p>
+                <!-- Card 6 -->
+                <div class="card card-custom shadow-xl hover:-translate-y-1 transition-transform">
+                    <div class="card-body">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h2 class="card-title text-xl mb-2">PWA Ready</h2>
+                        <p class="opacity-70 text-sm">Progressive Web App mit Offline-Support. Installierbar auf Mobile und Desktop für schnellen Zugriff.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Architecture (inverted) -->
-    <section id="architecture" class="section-inverted">
-        <div class="max-w-5xl mx-auto px-6 py-24">
-            <div class="flex items-start gap-12 mb-16">
-                <div class="flex-shrink-0">
-                    <span class="font-mono text-xs tracking-widest uppercase text-[--red]">02</span>
-                    <div class="accent-line mt-4"></div>
-                </div>
-                <div>
-                    <h2 class="text-3xl sm:text-4xl mb-6">Architecture</h2>
-                    <p class="text-black/50 max-w-xl">Vom Scraper bis zur Anzeige — ein Blick unter die Haube.</p>
-                </div>
+    <!-- Architecture -->
+    <section id="architecture" class="py-24 border-y border-white/10" style="background-color: rgba(59, 71, 84, 0.3);">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="flex items-center gap-4 mb-12 fade-up">
+                <div class="w-12 h-1 bg-primary rounded"></div>
+                <h2 class="text-4xl font-bold">Architektur</h2>
             </div>
-
-            <pre
-                class="code-block mb-16"><span class="cmt"># News3001 Pipeline</span>
-<span class="kw">import</span> scraper, ki, db, api, ui
-
-news     = scraper.<span class="str">collect_daily()</span>   <span class="cmt"># 1. Scrape sources</span>
-enriched = ki.<span class="str">enrich(news)</span>           <span class="cmt"># 2. Add badges &amp; summary</span>
-db.<span class="str">save(enriched)</span>                     <span class="cmt"># 3. Store in PocketBase</span>
-api.<span class="str">expose(db.query())</span>                <span class="cmt"># 4. Serve via FastAPI</span>
-ui.<span class="str">render()</span>                           <span class="cmt"># 5. Render with PHP + HTMX</span></pre>
-
-            <div class="grid md:grid-cols-5 gap-8">
-                <div class="step">
-                    <h3 class="text-lg mb-2">🕷️ Scraper</h3>
-                    <p class="text-black/50 text-sm">Python-Skripte sammeln täglich Artikel von regionalen Newsquellen.
-                    </p>
+            
+            <div class="flex flex-col lg:flex-row gap-16 items-start">
+                <div class="lg:w-1/2 fade-up">
+                    <p class="opacity-70 mb-10 text-lg">Vom Scraper bis zur Anzeige — ein Blick unter die Haube. Die gesamte Pipeline läuft automatisiert und effizient jeden Tag.</p>
+                    
+                    <ul class="steps steps-vertical">
+                        <li class="step step-primary" data-content="🕷️">
+                            <div class="text-left ml-2">
+                                <strong class="block text-lg">Scraper</strong>
+                                <span class="text-sm opacity-70">Python-Skripte sammeln Artikel</span>
+                            </div>
+                        </li>
+                        <li class="step step-primary" data-content="🧠">
+                            <div class="text-left ml-2">
+                                <strong class="block text-lg">KI Verarbeitung</strong>
+                                <span class="text-sm opacity-70">OpenRouter generiert Badges & Zusammenfassung</span>
+                            </div>
+                        </li>
+                        <li class="step step-primary" data-content="💾">
+                            <div class="text-left ml-2">
+                                <strong class="block text-lg">Datenbank</strong>
+                                <span class="text-sm opacity-70">Speicherung in PocketBase</span>
+                            </div>
+                        </li>
+                        <li class="step step-primary" data-content="🚀">
+                            <div class="text-left ml-2">
+                                <strong class="block text-lg">API Server</strong>
+                                <span class="text-sm opacity-70">FastAPI liefert JSON aus</span>
+                            </div>
+                        </li>
+                        <li class="step step-primary" data-content="🎨">
+                            <div class="text-left ml-2">
+                                <strong class="block text-lg">Frontend UI</strong>
+                                <span class="text-sm opacity-70">PHP + HTMX rendert dynamisch</span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div class="step">
-                    <h3 class="text-lg mb-2">🧠 KI</h3>
-                    <p class="text-black/50 text-sm">OpenRouter API generiert Badges und tägliche Zusammenfassung.</p>
-                </div>
-                <div class="step">
-                    <h3 class="text-lg mb-2">💾 DB</h3>
-                    <p class="text-black/50 text-sm">PocketBase speichert alle Artikel, Tags und Reports.</p>
-                </div>
-                <div class="step">
-                    <h3 class="text-lg mb-2">🚀 API</h3>
-                    <p class="text-black/50 text-sm">FastAPI-Server liefert JSON an das Frontend.</p>
-                </div>
-                <div class="step">
-                    <h3 class="text-lg mb-2">🎨 UI</h3>
-                    <p class="text-black/50 text-sm">PHP + HTMX rendert dynamisch ohne JS-Framework.</p>
+                
+                <div class="lg:w-1/2 w-full fade-up delay-200">
+                    <div class="mockup-code shadow-2xl border border-white/10" style="background-color: #1d232a;">
+                        <pre data-prefix="1" class="text-white/50"><code># News3001 Pipeline</code></pre>
+                        <pre data-prefix="2"><code><span class="text-primary">import</span> scraper, ki, db, api, ui</code></pre>
+                        <pre data-prefix="3"><code></code></pre>
+                        <pre data-prefix="4"><code>news     = scraper.collect_daily()   <span class="text-white/40"># 1. Scrape sources</span></code></pre>
+                        <pre data-prefix="5"><code>enriched = ki.enrich(news)           <span class="text-white/40"># 2. Add badges & summary</span></code></pre>
+                        <pre data-prefix="6"><code>db.save(enriched)                    <span class="text-white/40"># 3. Store in PocketBase</span></code></pre>
+                        <pre data-prefix="7"><code>api.expose(db.query())               <span class="text-white/40"># 4. Serve via FastAPI</span></code></pre>
+                        <pre data-prefix="8"><code>ui.render()                          <span class="text-white/40"># 5. Render with PHP + HTMX</span></code></pre>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Tech Stack -->
-    <section id="tech" class="border-b border-subtle">
-        <div class="max-w-5xl mx-auto px-6 py-24">
-            <div class="flex items-start gap-12 mb-16">
-                <div class="flex-shrink-0">
-                    <span class="font-mono text-xs tracking-widest uppercase text-[--gold]">03</span>
-                    <div class="accent-line mt-4"></div>
+    <section id="tech" class="py-24">
+        <div class="max-w-5xl mx-auto px-6 text-center fade-up">
+            <h2 class="text-4xl font-bold mb-6">Tech Stack</h2>
+            <p class="opacity-70 max-w-2xl mx-auto mb-16">Built with open source. Simple, reliable, maintainable.</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="card card-custom shadow hover:-translate-y-1 transition-transform">
+                    <div class="card-body items-center text-center p-6">
+                        <div class="text-3xl mb-2">🐍</div>
+                        <h3 class="font-bold">Python</h3>
+                        <p class="text-xs opacity-60">FastAPI Backend</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-3xl sm:text-4xl mb-6">Tech Stack</h2>
-                    <p class="text-white/50 max-w-xl">Built with open source. Simple, reliable, maintainable.</p>
+                <div class="card card-custom shadow hover:-translate-y-1 transition-transform">
+                    <div class="card-body items-center text-center p-6">
+                        <div class="text-3xl mb-2">🗄️</div>
+                        <h3 class="font-bold">PocketBase</h3>
+                        <p class="text-xs opacity-60">Database</p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10">
-                <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">Backend</span>
-                    <h3 class="text-lg mt-2">Python + FastAPI</h3>
-                    <p class="text-white/40 text-sm mt-2">Moderne, schnelle Python-Bibliotheken. Typisiert mit Pydantic.
-                    </p>
+                <div class="card card-custom shadow hover:-translate-y-1 transition-transform">
+                    <div class="card-body items-center text-center p-6">
+                        <div class="text-3xl mb-2">🧠</div>
+                        <h3 class="font-bold">OpenRouter</h3>
+                        <p class="text-xs opacity-60">LLM API</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">Database</span>
-                    <h3 class="text-lg mt-2">PocketBase</h3>
-                    <p class="text-white/40 text-sm mt-2">SQLite-basiert, Admin-UI inklusive. Einfach &amp; performant.
-                    </p>
+                <div class="card card-custom shadow hover:-translate-y-1 transition-transform">
+                    <div class="card-body items-center text-center p-6">
+                        <div class="text-3xl mb-2">🐘</div>
+                        <h3 class="font-bold">PHP</h3>
+                        <p class="text-xs opacity-60">Server Rendering</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">KI</span>
-                    <h3 class="text-lg mt-2">OpenRouter</h3>
-                    <p class="text-white/40 text-sm mt-2">Unified API für GPT, Claude, und andere LLMs.</p>
+                <div class="card card-custom shadow hover:-translate-y-1 transition-transform">
+                    <div class="card-body items-center text-center p-6">
+                        <div class="text-3xl mb-2">⚡</div>
+                        <h3 class="font-bold">HTMX</h3>
+                        <p class="text-xs opacity-60">Dynamic Updates</p>
+                    </div>
                 </div>
-                <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">Frontend</span>
-                    <h3 class="text-lg mt-2">PHP + HTMX</h3>
-                    <p class="text-white/40 text-sm mt-2">Server-side rendering mit dynamischen Updates. Kein React
-                        nötig.</p>
-                </div>
-                <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">Styling</span>
-                    <h3 class="text-lg mt-2">Tailwind + DaisyUI</h3>
-                    <p class="text-white/40 text-sm mt-2">Utility-first CSS mit komponentenorientierter Ergänzung.</p>
-                </div>
-                <div class="card bg-[--ink]">
-                    <span class="font-mono text-xs text-[--gold]">Infrastructure</span>
-                    <h3 class="text-lg mt-2">Docker</h3>
-                    <p class="text-white/40 text-sm mt-2">Containerisiert mit Docker Compose. Deploy überall.</p>
+                <div class="card card-custom shadow hover:-translate-y-1 transition-transform">
+                    <div class="card-body items-center text-center p-6">
+                        <div class="text-3xl mb-2">🎨</div>
+                        <h3 class="font-bold">Tailwind</h3>
+                        <p class="text-xs opacity-60">DaisyUI Styles</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA -->
-    <section class="border-b border-subtle">
-        <div class="max-w-5xl mx-auto px-6 py-24 text-center">
-            <h2 class="text-3xl sm:text-4xl mb-6">Probier es aus</h2>
-            <p class="text-white/50 max-w-lg mx-auto mb-10">
+    <section class="py-32 relative overflow-hidden" style="background-color: rgba(59, 71, 84, 0.5);">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at center, var(--color-primary) 0%, transparent 70%);"></div>
+        <div class="max-w-3xl mx-auto px-6 text-center relative z-10 fade-up">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Probier es aus</h2>
+            <p class="text-xl mb-10 opacity-80 font-light">
                 Alle Köpenick News an einem Ort. RSS, KI-Zusammenfassungen, Filter — alles dabei.
             </p>
-            <a href="/app/" target="_blank"
-                class="inline-block px-10 py-5 bg-[--red] text-white text-lg hover:bg-[--red-hover] transition-colors">
-                → Zur App
+            <a href="/app/" class="btn btn-primary btn-lg border-none px-12 shadow-lg hover:shadow-primary/50 transition-shadow">
+                Jetzt zur App →
             </a>
         </div>
     </section>
 
     <?php include __DIR__ . "/app/components/footer.php"; ?>
 
-</body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
 
+            document.querySelectorAll('.fade-up').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
 </html>
