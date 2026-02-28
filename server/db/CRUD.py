@@ -39,8 +39,10 @@ class connection:
     def get_report_from_day(self, date: str) -> myclasses.Report:
         return get_report_from_day(self.client, date)
 
-    def get_news_from_day(self, date: str) -> list[myclasses.News]:
-        return get_news_from_day(self.client, date)
+    def get_news_from_day(
+        self, date: str, types: list[str] | None = None
+    ) -> list[myclasses.News]:
+        return get_news_from_day(self.client, date, types)
 
     def get_day_stats(self, date: str) -> dict:
         return get_day_stats(self.client, date)
@@ -50,5 +52,6 @@ class connection:
 
     def get_scraper_summary(self, days: int = 30) -> dict:
         return get_scraper_summary(self.client, days)
+
 
 __all__ = ["connection"]

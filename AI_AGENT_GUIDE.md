@@ -79,7 +79,7 @@ news3001/
 
 - Backend (port 5000 inside Docker network):
   - `GET /` -> today news
-  - `GET /oldnews?date=YYYY-MM-DD`
+  - `GET /oldnews?date=YYYY-MM-DD` (optional: repeat `types` for filtering)
   - `GET /report` -> today report text
   - `GET /oldreport?date=YYYY-MM-DD`
   - `GET /rss` -> live RSS feed

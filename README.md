@@ -52,6 +52,8 @@ Backend:
 ```bash
 curl http://localhost:4567/
 curl "http://localhost:4567/oldnews?date=2026-02-20"
+curl "http://localhost:4567/oldnews?date=2026-02-20&types=google"
+curl "http://localhost:4567/oldnews?date=2026-02-20&types=rss"
 curl http://localhost:4567/report
 curl "http://localhost:4567/stats/day?date=2026-02-20"
 ```

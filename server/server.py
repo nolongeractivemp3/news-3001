@@ -29,22 +29,29 @@ app.add_middleware(
 )
 
 
-def get_news(connection: CRUD.connection | None = None) -> list[News]:
+def get_news(
+    connection: CRUD.connection | None = None, types: list[str] | None = None
+) -> list[News]:
     if connection is None:
         connection = get_database()
-    data = connection.get_news_from_day(datetime.datetime.now().strftime("%Y-%m-%d"))
+    data = connection.get_news_from_day(
+        datetime.datetime.now().strftime("%Y-%m-%d"), types
+    )
     return data
 
 
 @app.get("/oldnews")
-def oldnews(date: str):
+def oldnews(date: str, types: list[str] = Query(default=["google", "rss"])):
     # date format validation
     try:
         datetime.datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date format")
     connection = get_database()
-    data = connection.get_news_from_day(date)
+    try:
+        data = connection.get_news_from_day(date, types)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     response = []
     for news in data:
         response.append(news.tojson(False))
@@ -67,8 +74,11 @@ def oldreport(date: str):
 
 
 @app.get("/")
-def index():
-    data = get_news()
+def index(types: list[str] = Query(default=["google", "rss"])):
+    try:
+        data = get_news(types=types)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     json_data = [news.tojson(False) for news in data]
     return json_data
 
