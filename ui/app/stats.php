@@ -1,17 +1,11 @@
 <?php
 $isRss = isset($_GET["rss"]);
 $defaultDate = date("Y-m-d");
-$selectedDate = false;
+$selectedDate = $defaultDate;
 
 $pageTitle = $isRss ? "RSS Feed" : "News Feed 3001";
 $navbarRss = $isRss ? "true" : "false";
 
-$reportContent = "";
-$rawReport = @file_get_contents("http://backend:5000/report");
-$reportContent = str_replace(
-    ["\r", "\n", '\r', '\n'], // Covers real enters AND literal text "\n"
-    "", 
-    $rawReport);  // FIX: Use $rawReport as the subject, not empty $reportContent
 ?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
@@ -48,7 +42,7 @@ $reportContent = str_replace(
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
         integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
         crossorigin="anonymous"></script>
-    <script src="/js/settings.js" defer></script>
+    <script src="./js/settings.js" defer></script>
 </head>
 
 <body class="min-h-screen flex flex-col">
@@ -58,18 +52,22 @@ $reportContent = str_replace(
             color: white;
         }
     </style>
-    <script>        function getReport() {
-            // Open the modal properly
-            document.getElementById("report_modal").showModal();
+    <script>
+        function getReport() {
+            const modal = document.getElementById("report_modal");
+            if (!modal || typeof modal.showModal !== "function") {
+                return;
+            }
+            modal.showModal();
         }
-</script>
+    </script>
 
 
     <main class="w-full flex-1 p-4 flex flex-col">
         <div hx-get="components/navbar.php?rss=false&selectedDate=false" hx-trigger="load" hx-target="#navbar"></div>
         <div hx-get="components/stats/charts.php" hx-trigger="load" hx-target="#charts"></div>
-        <div hx-get="components/report.php?name=report_modal&textstr=<?php echo urlencode(
-                $reportContent,
+        <div hx-get="components/report.php?name=report_modal&date=<?php echo urlencode(
+                $selectedDate,
             ); ?>" hx-trigger="load" hx-target="#report"></div>
         <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 
