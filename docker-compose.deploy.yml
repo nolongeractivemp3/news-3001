@@ -1,0 +1,57 @@
+services:
+  php_app:
+    image: jaypoch/news3001:php
+    restart: unless-stopped
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+  nginx_server:
+    image: jaypoch/news3001:nginx
+    restart: unless-stopped
+    ports:
+      - "3049:80"
+    depends_on:
+      - php_app
+
+  backend:
+    image: jaypoch/news3001:backend
+    command: uv run server.py
+    restart: unless-stopped
+    ports:
+      - "4567:5000"
+    environment:
+      POCKETBASE_URL: ${POCKETBASE_URL:-http://pocketbase:8080}
+      POCKETBASE_ADMIN_EMAIL: ${POCKETBASE_ADMIN_EMAIL}
+      POCKETBASE_ADMIN_PASSWORD: ${POCKETBASE_ADMIN_PASSWORD}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+
+  scraper:
+    image: jaypoch/news3001:scraper
+    command: uv run run_scraper.py
+    restart: unless-stopped
+    ports:
+      - "0987:5001"
+    environment:
+      POCKETBASE_URL: ${POCKETBASE_URL:-http://pocketbase:8080}
+      POCKETBASE_ADMIN_EMAIL: ${POCKETBASE_ADMIN_EMAIL}
+      POCKETBASE_ADMIN_PASSWORD: ${POCKETBASE_ADMIN_PASSWORD}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      SERPAPI_API_KEY: ${SERPAPI_API_KEY}
+      SCRAPER_TESTING_MODE: ${SCRAPER_TESTING_MODE:-true}
+    depends_on:
+      - pocketbase
+
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - pb_data:/pb_data
+    command:
+      - serve
+      - --http=0.0.0.0:8080
+      - --dir=/pb_data
+    restart: unless-stopped
+
+volumes:
+  pb_data:

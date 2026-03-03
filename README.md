@@ -38,6 +38,20 @@ Stop everything:
 docker compose down
 ```
 
+## Production images (Docker Hub)
+
+Run from Docker Hub images (no source needed):
+
+```bash
+docker pull jaypoch/news3001:php
+docker pull jaypoch/news3001:nginx
+docker pull jaypoch/news3001:backend
+docker pull jaypoch/news3001:scraper
+docker compose -f docker-compose.prod.yml up -d --no-build
+```
+
+Make sure the target machine has `.env` with the required values.
+
 ## Service URLs (current compose)
 
 - UI (Nginx): `http://localhost:3049`
