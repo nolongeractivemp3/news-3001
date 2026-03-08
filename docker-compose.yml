@@ -3,7 +3,7 @@ services:
     image: php:8.3-fpm
     restart: unless-stopped
     volumes:
-      - ./ui:/var/www/html
+      - ./frontend:/var/www/html
     environment:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
 
@@ -11,25 +11,31 @@ services:
     image: nginx:alpine
     restart: unless-stopped
     ports:
-      - "3049:80" # Opens the server to the world
+      - "3049:80"
     volumes:
-      - ./ui:/var/www/html
+      - ./frontend:/var/www/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
   backend:
-    build: ./server
-    command: uv run server.py # Change this from uvicorn to your filenam
+    build: ./backend
+    working_dir: /app
+    command: uvicorn main:app --host 0.0.0.0 --port 5000 --reload
     restart: unless-stopped
     ports:
-      - "4567:5000" # important remove later its for testing
+      - "4567:5000"
     environment:
+      WATCHFILES_FORCE_POLLING: "true"
       POCKETBASE_URL: ${POCKETBASE_URL:-http://pocketbase:8080}
       POCKETBASE_ADMIN_EMAIL: ${POCKETBASE_ADMIN_EMAIL}
       POCKETBASE_ADMIN_PASSWORD: ${POCKETBASE_ADMIN_PASSWORD}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+    volumes:
+      - ./backend:/app
 
   scraper:
-    build: ./server
-    command: uv run run_scraper.py
+    build: ./backend
+    working_dir: /app
+    command: python run_scraper.py
     restart: unless-stopped
     ports:
       - "0987:5001"
@@ -40,6 +46,8 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       SERPAPI_API_KEY: ${SERPAPI_API_KEY}
       SCRAPER_TESTING_MODE: ${SCRAPER_TESTING_MODE:-true}
+    volumes:
+      - ./backend:/app
     depends_on:
       - pocketbase
 

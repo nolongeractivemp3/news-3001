@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 import rss
 from db import CRUD
 from myclasses import News
-from openrouter import openrouter_client
 
 
 def get_database():

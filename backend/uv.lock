@@ -42,6 +42,41 @@ wheels = [
 ]
 
 [[package]]
+name = "backend"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "fastapi" },
+    { name = "feedparser" },
+    { name = "flask" },
+    { name = "flask-cors" },
+    { name = "openai" },
+    { name = "pocketbase" },
+    { name = "rapidfuzz" },
+    { name = "serpapi" },
+    { name = "tldextract" },
+    { name = "trafilatura" },
+    { name = "uvicorn" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "beautifulsoup4", specifier = ">=4.14.3" },
+    { name = "fastapi", specifier = ">=0.128.0" },
+    { name = "feedparser", specifier = ">=6.0.12" },
+    { name = "flask", specifier = ">=3.1.2" },
+    { name = "flask-cors", specifier = ">=6.0.2" },
+    { name = "openai", specifier = ">=2.14.0" },
+    { name = "pocketbase", specifier = ">=0.15.0" },
+    { name = "rapidfuzz", specifier = ">=3.14.3" },
+    { name = "serpapi", specifier = ">=0.1.5" },
+    { name = "tldextract", specifier = ">=5.3.1" },
+    { name = "trafilatura", specifier = ">=2.0.0" },
+    { name = "uvicorn", specifier = ">=0.40.0" },
+]
+
+[[package]]
 name = "beautifulsoup4"
 version = "4.14.3"
 source = { registry = "https://pypi.org/simple" }
@@ -788,41 +823,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/f0/fa/3fd8809287f3977a3e752bb88610e918d49cb1038b14f4bc51e13e594197/serpapi-0.1.5.tar.gz", hash = "sha256:b9707ed54750fdd2f62dc3a17c6a3fb7fa421dc37902fd65b2263c0ac765a1a5", size = 14191, upload-time = "2023-11-01T14:00:43.602Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/df/6a/21deade04100d64844e494353a5d65e7971fbdfddf78eb1f248423593ad0/serpapi-0.1.5-py2.py3-none-any.whl", hash = "sha256:6467b6adec1231059f754ccaa952b229efeaa8b9cae6e71f879703ec9e5bb3d1", size = 10966, upload-time = "2023-11-01T14:00:38.885Z" },
-]
-
-[[package]]
-name = "server"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "beautifulsoup4" },
-    { name = "fastapi" },
-    { name = "feedparser" },
-    { name = "flask" },
-    { name = "flask-cors" },
-    { name = "openai" },
-    { name = "pocketbase" },
-    { name = "rapidfuzz" },
-    { name = "serpapi" },
-    { name = "tldextract" },
-    { name = "trafilatura" },
-    { name = "uvicorn" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "beautifulsoup4", specifier = ">=4.14.3" },
-    { name = "fastapi", specifier = ">=0.128.0" },
-    { name = "feedparser", specifier = ">=6.0.12" },
-    { name = "flask", specifier = ">=3.1.2" },
-    { name = "flask-cors", specifier = ">=6.0.2" },
-    { name = "openai", specifier = ">=2.14.0" },
-    { name = "pocketbase", specifier = ">=0.15.0" },
-    { name = "rapidfuzz", specifier = ">=3.14.3" },
-    { name = "serpapi", specifier = ">=0.1.5" },
-    { name = "tldextract", specifier = ">=5.3.1" },
-    { name = "trafilatura", specifier = ">=2.0.0" },
-    { name = "uvicorn", specifier = ">=0.40.0" },
 ]
 
 [[package]]

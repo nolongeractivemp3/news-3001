@@ -15,7 +15,6 @@ services:
 
   backend:
     image: jaypoch/news3001:backend
-    command: uv run server.py
     restart: unless-stopped
     ports:
       - "4567:5000"
@@ -27,7 +26,7 @@ services:
 
   scraper:
     image: jaypoch/news3001:scraper
-    command: uv run run_scraper.py
+    command: python run_scraper.py
     restart: unless-stopped
     ports:
       - "0987:5001"

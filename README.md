@@ -1,9 +1,9 @@
 # news3001
 
 Local news stack with:
-- PHP + Nginx UI (`ui/`)
-- FastAPI read API (`server/server.py`)
-- FastAPI scraper API (`server/run_scraper.py`)
+- PHP + Nginx UI (`frontend/`)
+- FastAPI read API (`backend/main.py`)
+- FastAPI scraper API (`backend/run_scraper.py`)
 - PocketBase storage
 
 ## Docker quick start
@@ -47,7 +47,7 @@ docker pull jaypoch/news3001:php
 docker pull jaypoch/news3001:nginx
 docker pull jaypoch/news3001:backend
 docker pull jaypoch/news3001:scraper
-docker compose -f docker-compose.prod.yml up -d --no-build
+docker compose -f docker-compose.deploy.yml up -d --no-build
 ```
 
 Make sure the target machine has `.env` with the required values.
@@ -83,28 +83,28 @@ curl -X POST http://localhost:987/run
 Install backend dependencies:
 
 ```bash
-cd server
+cd backend
 uv sync --locked
 ```
 
 Run backend API (port `5000`):
 
 ```bash
-cd server
-uv run server.py
+cd backend
+uv run uvicorn main:app --host 0.0.0.0 --port 5000 --reload
 ```
 
 Run scraper API (port `5001`):
 
 ```bash
-cd server
+cd backend
 uv run run_scraper.py
 ```
 
 Run rule tests:
 
 ```bash
-cd server
+cd backend
 uv run tests/rules/run_rules_tests.py
 ```
 

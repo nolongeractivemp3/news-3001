@@ -1,6 +1,6 @@
 services:
   php_app:
-    build: ./ui
+    build: ./frontend
     image: jaypoch/news3001:php
     restart: unless-stopped
     environment:
@@ -19,8 +19,7 @@ services:
 
   backend:
     image: jaypoch/news3001:backend
-    build: ./server
-    command: uv run server.py
+    build: ./backend
     restart: unless-stopped
     ports:
       - "4567:5000"
@@ -31,9 +30,9 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
 
   scraper:
-    build: ./server
+    build: ./backend
     image: jaypoch/news3001:scraper
-    command: uv run run_scraper.py
+    command: python run_scraper.py
     restart: unless-stopped
     ports:
       - "0987:5001"

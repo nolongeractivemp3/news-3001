@@ -16,63 +16,63 @@ news3001/
   docker-compose.yml        # service wiring
   nginx.conf               # php + static routing
   pb_data/                 # PocketBase persistent data
-  server/                  # Python backend + scraper
-  ui/                      # PHP frontend + JS + components
-  .github/workflows/       # deploys ui/ to GitHub Pages
+  backend/                 # Python backend + scraper
+  frontend/                # PHP frontend + JS + components
+  .github/workflows/       # deploys frontend/ to GitHub Pages
 ```
 
 ## Runtime architecture
 
 1. Browser opens `http://localhost:3049` (Nginx).
-2. `ui/index.php` loads HTMX components.
+2. `frontend/index.php` loads HTMX components.
 3. UI components call backend endpoints at `http://backend:5000/...` (internal Docker DNS).
 4. Backend reads from PocketBase and returns JSON/text.
-5. Scraper service (`server/scraper/server.py`) fetches and filters articles, then writes new day/news/report records to PocketBase.
+5. Scraper service (`backend/scraper/server.py`) fetches and filters articles, then writes new day/news/report records to PocketBase.
 
 ## Key backend files
 
-- `server/server.py`
+- `backend/main.py`
   - Main read API (`/`, `/oldnews`, `/report`, `/oldreport`, `/rss`), port `5000`.
-- `server/db/CRUD.py`
+- `backend/db/CRUD.py`
   - PocketBase client wrapper and collection read/write methods.
-- `server/myclasses.py`
+- `backend/myclasses.py`
   - Core data objects: `News`, `Badge`, `Day`, `Report`.
-- `server/run_scraper.py`
+- `backend/run_scraper.py`
   - Starts scraper API service (port `5001` inside container).
-- `server/scraper/pipeline.py`
+- `backend/scraper/pipeline.py`
   - Main scrape pipeline orchestrator.
-- `server/scraper/fetchers.py`
+- `backend/scraper/fetchers.py`
   - Google (SerpAPI) and RSS fallback result fetch.
-- `server/scraper/enrichment.py`
+- `backend/scraper/enrichment.py`
   - Full article scraping for each candidate URL.
-- `server/scraper/filters.py`
+- `backend/scraper/filters.py`
   - LLM-based locality checks.
-- `server/scraper/rules/*.py`
+- `backend/scraper/rules/*.py`
   - Fast, rule-based pre-filters (domain/path/keyword gates).
-- `server/scraper/storage.py`
+- `backend/scraper/storage.py`
   - Converts articles to `News`, applies badges, saves day+report.
-- `server/content_scraper.py`
+- `backend/content_scraper.py`
   - Trafilatura extraction + LLM locality helper functions.
-- `server/openrouter/report.py`
+- `backend/openrouter/report.py`
   - Daily summary prompt and save logic.
-- `server/openrouter/badges.py`
+- `backend/openrouter/badges.py`
   - Badge classification prompt and parsing.
 
 ## Key frontend files
 
-- `ui/index.php`
+- `frontend/index.php`
   - Main page shell and HTMX mounts.
-- `ui/components/card.php`
+- `frontend/app/components/card.php`
   - Fetches article JSON and renders cards.
-- `ui/components/report.php`
+- `frontend/app/components/report.php`
   - Fetches and renders daily report modal.
-- `ui/components/navbar.php`
+- `frontend/app/components/navbar.php`
   - Navigation + date picker include.
-- `ui/components/datepicker.php`
+- `frontend/app/components/datepicker.php`
   - Date-based history selection (`YYYY-MM-DD`).
-- `ui/components/settings.php` + `ui/js/settings.js`
+- `frontend/app/components/settings.php` + `frontend/app/js/settings.js`
   - Source-ignore settings saved in cookies.
-- `ui/sw.js`, `ui/manifest.json`
+- `frontend/app/sw.js`, `frontend/app/manifest.json`
   - PWA service worker + manifest.
 
 ## API surface (current)
@@ -112,21 +112,21 @@ news3001/
 
 ## Where to edit for common tasks
 
-- Change report style/tone: `server/openrouter/report.py`
-- Change badge assignment logic: `server/openrouter/badges.py`
-- Add fast inclusion/exclusion rules: `server/scraper/rules/*.py`
-- Adjust strict/locality AI checks: `server/scraper/filters.py` and `server/content_scraper.py`
-- Change card layout or data shown: `ui/components/card.php`
-- Change report modal UI: `ui/components/report.php`
-- Add/modify backend endpoints: `server/server.py`
+- Change report style/tone: `backend/openrouter/report.py`
+- Change badge assignment logic: `backend/openrouter/badges.py`
+- Add fast inclusion/exclusion rules: `backend/scraper/rules/*.py`
+- Adjust strict/locality AI checks: `backend/scraper/filters.py` and `backend/content_scraper.py`
+- Change card layout or data shown: `frontend/app/components/card.php`
+- Change report modal UI: `frontend/app/components/report.php`
+- Add/modify backend endpoints: `backend/main.py`
 
 ## Important caveats for agents
 
 - There are legacy/duplicate paths:
-  - `server/scrape.py` is an older monolithic scraper path.
-  - `ui/js/main.js` looks legacy and is not used by current HTMX flow.
-  - `server/contentscraper.py` is only a thin import shim.
-- There are no automated tests in this repo right now.
+  - older notes and diagrams may still mention `server/` and `ui/`; the active code now lives under `backend/` and `frontend/`
+  - `frontend/app/js/main.js` looks legacy and is not used by current HTMX flow.
+  - `backend/contentscraper.py` is only a thin import shim.
+- There are targeted backend tests, but coverage is still limited.
 - `docker-compose.yml` currently contains plaintext secrets; avoid copying or reusing them.
 - PocketBase collection name casing is mixed in code (`days`/`Days`, `report`/`Report`); keep this in mind when changing DB calls.
 

@@ -1,4 +1,4 @@
 FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY ui/ /var/www/html/
+COPY frontend/ /var/www/html/
