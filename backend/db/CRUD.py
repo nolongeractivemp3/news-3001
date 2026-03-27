@@ -55,11 +55,15 @@ class connection:
     def get_day_stats(self, date: str) -> dict:
         return get_day_stats(self.client, date)
 
-    def get_tag_usage_by_day(self, days: int = 30) -> dict:
-        return get_tag_usage_by_day(self.client, days)
+    def get_tag_usage_by_day(
+        self, start_date: str | None = None, end_date: str | None = None
+    ) -> dict:
+        return get_tag_usage_by_day(self.client, start_date, end_date)
 
-    def get_scraper_summary(self, days: int = 30) -> dict:
-        return get_scraper_summary(self.client, days)
+    def get_scraper_summary(
+        self, start_date: str | None = None, end_date: str | None = None
+    ) -> dict:
+        return get_scraper_summary(self.client, start_date, end_date)
 
 
 __all__ = ["connection"]

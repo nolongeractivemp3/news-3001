@@ -1,8 +1,38 @@
 <?php
-$raw_data = @file_get_contents("http://backend:5000/stats/tags/daily");
+$defaultEndDate = date("Y-m-d");
+$defaultStartDate = date("Y-m-d", strtotime("-29 days"));
+
+function normalizeStatsApiDate(string $date, string $fallback): string
+{
+  $dateObject = DateTime::createFromFormat("Y-m-d", $date);
+  if ($dateObject === false || $dateObject->format("Y-m-d") !== $date) {
+    return $fallback;
+  }
+
+  return $date;
+}
+
+$startDate = $startDate ?? normalizeStatsApiDate($_GET["start_date"] ?? $defaultStartDate, $defaultStartDate);
+$endDate = $endDate ?? normalizeStatsApiDate($_GET["end_date"] ?? $defaultEndDate, $defaultEndDate);
+
+if ($startDate > $endDate) {
+  [$startDate, $endDate] = [$endDate, $startDate];
+}
+
+$statsUrl = "http://backend:5000/stats/tags/daily?start_date=" .
+  urlencode($startDate) .
+  "&end_date=" .
+  urlencode($endDate);
+$raw_data = @file_get_contents($statsUrl);
 $parsed_data = json_decode($raw_data ?: "{}", true);
 if (!is_array($parsed_data)) {
   $parsed_data = [];
+}
+$errorMessage = "";
+if ($raw_data === false) {
+  $errorMessage = "Statistiken konnten nicht geladen werden.";
+} elseif (isset($parsed_data["detail"]) && is_string($parsed_data["detail"])) {
+  $errorMessage = $parsed_data["detail"];
 }
 ?>
 
@@ -116,9 +146,19 @@ if (!is_array($parsed_data)) {
   })();
 </script>
 
+<?php if ($errorMessage !== ""): ?>
+  <div class="mt-4 rounded-xl border border-rose-500/30 bg-rose-950/40 px-4 py-3 text-sm text-rose-100">
+    <?php echo htmlspecialchars($errorMessage, ENT_QUOTES, "UTF-8"); ?>
+  </div>
+<?php elseif (!is_array($parsed_data["daily"] ?? null)): ?>
+  <div class="mt-4 rounded-xl border border-slate-700/70 bg-slate-800/70 px-4 py-3 text-sm text-slate-200">
+    Keine Statistikdaten fuer den ausgewaehlten Zeitraum gefunden.
+  </div>
+<?php else: ?>
 <div class="stats-charts-grid">
   <?php include __DIR__ . "/artikelcount.php"; ?>
   <?php include __DIR__ . "/tagged_vs_untagged.php"; ?>
   <?php include __DIR__ . "/top_sources.php"; ?>
   <?php include __DIR__ . "/top_tags.php"; ?>
 </div>
+<?php endif; ?>

@@ -1,11 +1,9 @@
-import datetime
-
 from ._aggregators import aggregate_totals, build_daily_entry, build_day_stats
 from ._helpers import (
     calculate_average,
     parse_date,
+    resolve_date_range,
     sort_counter_by_count,
-    validate_days,
 )
 from ._queries import get_badge_name_map, get_day_by_date, get_days_in_window
 
@@ -20,11 +18,10 @@ def get_day_stats(client, date: str) -> dict:
     return build_day_stats(client, raw_days[0], {})
 
 
-def get_tag_usage_by_day(client, days: int = 30) -> dict:
-    days = validate_days(days)
-    end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=days - 1)
-
+def get_tag_usage_by_day(
+    client, start_date_string: str | None = None, end_date_string: str | None = None
+) -> dict:
+    start_date, end_date = resolve_date_range(start_date_string, end_date_string)
     raw_days = get_days_in_window(client, start_date, end_date)
     cache = {}
     badge_names = get_badge_name_map(client)
@@ -33,7 +30,7 @@ def get_tag_usage_by_day(client, days: int = 30) -> dict:
     ]
 
     return {
-        "days_requested": days,
+        "days_requested": (end_date - start_date).days + 1,
         "start_date": str(start_date),
         "end_date": str(end_date),
         "days_with_data": len(daily),
@@ -41,11 +38,10 @@ def get_tag_usage_by_day(client, days: int = 30) -> dict:
     }
 
 
-def get_scraper_summary(client, days: int = 30) -> dict:
-    days = validate_days(days)
-    end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=days - 1)
-
+def get_scraper_summary(
+    client, start_date_string: str | None = None, end_date_string: str | None = None
+) -> dict:
+    start_date, end_date = resolve_date_range(start_date_string, end_date_string)
     raw_days = get_days_in_window(client, start_date, end_date)
     cache = {}
     day_stats = [build_day_stats(client, raw_day, cache) for raw_day in raw_days]
@@ -54,7 +50,7 @@ def get_scraper_summary(client, days: int = 30) -> dict:
     average_articles = calculate_average(totals["total_articles"], len(day_stats))
 
     return {
-        "days_requested": days,
+        "days_requested": (end_date - start_date).days + 1,
         "start_date": str(start_date),
         "end_date": str(end_date),
         "days_with_data": len(day_stats),

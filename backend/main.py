@@ -115,19 +115,25 @@ def day_stats(date: str = Query(..., description="Date format: YYYY-MM-DD")):
 
 
 @app.get("/stats/tags/daily")
-def daily_tag_stats(days: int = Query(30, ge=1, le=365)):
+def daily_tag_stats(
+    start_date: str | None = Query(None, description="Date format: YYYY-MM-DD"),
+    end_date: str | None = Query(None, description="Date format: YYYY-MM-DD"),
+):
     db = get_database()
     try:
-        return db.get_tag_usage_by_day(days)
+        return db.get_tag_usage_by_day(start_date, end_date)
     except ValueError as exc:
         _raise_stats_exception(exc)
 
 
 @app.get("/stats/summary")
-def stats_summary(days: int = Query(30, ge=1, le=365)):
+def stats_summary(
+    start_date: str | None = Query(None, description="Date format: YYYY-MM-DD"),
+    end_date: str | None = Query(None, description="Date format: YYYY-MM-DD"),
+):
     db = get_database()
     try:
-        return db.get_scraper_summary(days)
+        return db.get_scraper_summary(start_date, end_date)
     except ValueError as exc:
         _raise_stats_exception(exc)
 

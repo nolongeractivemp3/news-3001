@@ -1,6 +1,7 @@
 # news3001
 
 Local news stack with:
+
 - PHP + Nginx UI (`frontend/`)
 - FastAPI read API (`backend/main.py`)
 - FastAPI scraper API (`backend/run_scraper.py`)
