@@ -1,10 +1,31 @@
 <?php
 $isRss = isset($_GET["rss"]);
-$defaultDate = date("Y-m-d");
-$selectedDate = $defaultDate;
+$defaultEndDate = date("Y-m-d");
+$defaultStartDate = date("Y-m-d", strtotime("-29 days"));
+
+function normalizeStatsDate(string $date, string $fallback): string
+{
+    $dateObject = DateTime::createFromFormat("Y-m-d", $date);
+    if ($dateObject === false || $dateObject->format("Y-m-d") !== $date) {
+        return $fallback;
+    }
+
+    return $date;
+}
+
+$startDate = normalizeStatsDate($_GET["start_date"] ?? $defaultStartDate, $defaultStartDate);
+$endDate = normalizeStatsDate($_GET["end_date"] ?? $defaultEndDate, $defaultEndDate);
+
+if ($startDate > $endDate) {
+    [$startDate, $endDate] = [$endDate, $startDate];
+}
 
 $pageTitle = $isRss ? "RSS Feed" : "News Feed 3001";
 $navbarRss = $isRss ? "true" : "false";
+$chartsQuery = "?start_date=" .
+    urlencode($startDate) .
+    "&end_date=" .
+    urlencode($endDate);
 
 ?>
 <!DOCTYPE html>
@@ -64,10 +85,14 @@ $navbarRss = $isRss ? "true" : "false";
 
 
     <main class="w-full flex-1 p-4 flex flex-col">
-        <div hx-get="components/navbar.php?rss=false&selectedDate=false" hx-trigger="load" hx-target="#navbar"></div>
-        <div hx-get="components/stats/charts.php" hx-trigger="load" hx-target="#charts"></div>
+        <div hx-get="components/navbar.php?rss=false&date=false&statsRange=true&startDate=<?php echo urlencode(
+                $startDate,
+            ); ?>&endDate=<?php echo urlencode(
+                $endDate,
+            ); ?>&dropdown=true" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/stats/charts.php<?php echo $chartsQuery; ?>" hx-trigger="load" hx-target="#charts"></div>
         <div hx-get="components/report.php?name=report_modal&date=<?php echo urlencode(
-                $selectedDate,
+                $endDate,
             ); ?>" hx-trigger="load" hx-target="#report"></div>
         <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 
