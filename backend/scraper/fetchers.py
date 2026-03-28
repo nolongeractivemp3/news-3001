@@ -8,13 +8,24 @@ from rss import get_rss_feed
 from .models import ArticleInput
 
 serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+DEFAULT_GOOGLE_SEARCH_QUERY_TEMPLATE = "köpenick news after:{date}"
+
+
+def _get_google_search_query(date_value: str) -> str:
+    template = os.getenv(
+        "SCRAPER_GOOGLE_SEARCH_QUERY",
+        DEFAULT_GOOGLE_SEARCH_QUERY_TEMPLATE,
+    ).strip()
+    if not template:
+        template = DEFAULT_GOOGLE_SEARCH_QUERY_TEMPLATE
+    return template.format(date=date_value)
 
 
 def fetch_google_results() -> list[ArticleInput]:
     yesterdate = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime(
         "%Y-%m-%d"
     )
-    query = f"köpenick news after:{yesterdate}"
+    query = _get_google_search_query(yesterdate)
     print(query)
 
     params = {
