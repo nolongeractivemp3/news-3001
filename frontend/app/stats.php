@@ -85,11 +85,16 @@ $chartsQuery = "?start_date=" .
 
 
     <main class="w-full flex-1 p-4 flex flex-col">
-        <div hx-get="components/navbar.php?rss=false&date=false&statsRange=true&startDate=<?php echo urlencode(
+        <div hx-get="components/navbar.php?rss=false&date=false&statsRange=false&startDate=<?php echo urlencode(
                 $startDate,
             ); ?>&endDate=<?php echo urlencode(
                 $endDate,
             ); ?>&dropdown=true" hx-trigger="load" hx-target="#navbar"></div>
+        <div hx-get="components/stats_range_navbar.php?startDate=<?php echo urlencode(
+                $startDate,
+            ); ?>&endDate=<?php echo urlencode(
+                $endDate,
+            ); ?>" hx-trigger="load" hx-target="#stats-navbar"></div>
         <div hx-get="components/stats/charts.php<?php echo $chartsQuery; ?>" hx-trigger="load" hx-target="#charts"></div>
         <div hx-get="components/report.php?name=report_modal&date=<?php echo urlencode(
                 $endDate,
@@ -97,6 +102,7 @@ $chartsQuery = "?start_date=" .
         <div hx-get="components/settings.php" hx-trigger="load" hx-target="#settings"></div>
 
         <div id="navbar"> </div>
+        <div id="stats-navbar"> </div>
         <div id='charts'></div>
         <div id="report"> </div>
         <div id="settings"> </div>

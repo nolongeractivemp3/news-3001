@@ -11,7 +11,7 @@ $dropdown = $_GET["dropdown"] ?? "false";
         <a href="./index.php?rss" class="btn btn-ghost normal-case px-2 sm:px-3 hidden sm:inline-flex">RSS</a>
         <?php include __DIR__ . "/nav_dropdown.php"; ?>
         <a href="./stats.php" class="btn btn-ghost normal-case px-2 sm:px-3">Stats</a>
-        <?php if ($date === "true" || $statsRange === "true"): ?>
+        <?php if ($date === "true"): ?>
             <div
                 hx-get="components/datepicker.php?selectedDate=<?php echo urlencode(
                     $_GET["selectedDate"] ?? "",
