@@ -1,5 +1,5 @@
 import datetime
-from sqlite3.dbapi2 import Time
+import os
 
 import feedparser
 import tldextract
@@ -7,7 +7,14 @@ from bs4 import BeautifulSoup as bs
 
 from myclasses import News
 
-url = "https://www.google.de/alerts/feeds/17016683277093386427/7293694784079144231"
+DEFAULT_GOOGLE_ALERTS_FEED_URL = (
+    "https://www.google.de/alerts/feeds/17016683277093386427/7293694784079144231"
+)
+
+
+def _get_rss_feed_url() -> str:
+    value = os.getenv("SCRAPER_RSS_FEED_URL", DEFAULT_GOOGLE_ALERTS_FEED_URL).strip()
+    return value or DEFAULT_GOOGLE_ALERTS_FEED_URL
 
 
 def extract_real_url(google_url: str) -> str:
@@ -40,26 +47,30 @@ def check_date(date: str):
 
 
 def get_rss_feed() -> list[News]:
-    feed = feedparser.parse(url)
+    feed = feedparser.parse(_get_rss_feed_url())
     news = []
-    rawnews = feed.items().mapping["entries"]
-    for i in range(len(rawnews)):
-        if check_date(rawnews[i].published):
-            real_link = extract_real_url(rawnews[i].link)
+    rawnews = feed.entries
+    for item in rawnews:
+        if check_date(item.published):
+            real_link = extract_real_url(item.link)
+            description_html = ""
+            if getattr(item, "content", None):
+                description_html = item.content[0].get("value", "")
+            elif getattr(item, "summary", None):
+                description_html = item.summary
+
             news.append(
                 News(
                     full_text="",
                     type="rss",
                     source=str(tldextract.extract(real_link).domain.capitalize()),
-                    title=bs(rawnews[i].title, "html.parser").get_text(),
-                    description=bs(
-                        rawnews[i].content[0]["value"], "html.parser"
-                    ).get_text(),
+                    title=bs(item.title, "html.parser").get_text(),
+                    description=bs(description_html, "html.parser").get_text(),
                     link=real_link,
-                    id=rawnews[i].published,
+                    id=f"{item.published}:{real_link}",
                 )
             )
-        print(rawnews[i])
+        print(item)
     return news
 
 
