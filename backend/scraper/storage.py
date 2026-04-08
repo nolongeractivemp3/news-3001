@@ -5,7 +5,7 @@ import myclasses
 from db import CRUD
 from openrouter import report
 
-openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+openrouter_api_key: str = os.getenv("OPENROUTER_API_KEY", "fuck")
 pocketbase_url = os.getenv("POCKETBASE_URL")
 if not pocketbase_url:
     raise RuntimeError("Missing POCKETBASE_URL environment variable.")
@@ -20,7 +20,7 @@ def get_database():
     return CRUD.connection(pocketbase_url)
 
 
-def create_news_record(article, database) -> myclasses.News:
+def create_news_record(article, database: CRUD.connection) -> myclasses.News:
     news = myclasses.News(
         id="",
         type=article.extra.get("type", "google"),

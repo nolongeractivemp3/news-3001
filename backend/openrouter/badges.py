@@ -3,13 +3,16 @@ from openrouter.openrouter_client import query_openrouter
 
 
 def get_badges(news: News, badges: list[Badge], key: str):
-    systemprompt = """You are a helpful newsassistant that is given a list of News and some information about them
-    your task to is to find all topics that fit the news. the user will give you a a news artical and a list of topics and your
-   goal is to find the best topics for the news article. return the topics in this format topic1id,topic2id,topic3id"""
-    prompt = f"""#News
-    {news.tojson(True)}
-    # badges
-    """
+    systemprompt = """You are a classification specialist.
+    Your task is to identify matching topics for news articles.
+    STRICT RULES:
+    1. ONLY return the topic IDs.
+    2. Separate multiple IDs with a comma (e.g., id1,id2).
+    3. If no topics match, return "keine".
+    4. NEVER include explanations, reasoning, or markdown (no bolding, no bullets).
+    5. DO NOT mention topics that do not apply."""
+    prompt = f"""# News
+    {news.tojson(True)}\n# badges"""
     for badge in badges:
         prompt += f"\n{badge.todict()}"
     response = query_openrouter(prompt, key, system_prompt=systemprompt)
